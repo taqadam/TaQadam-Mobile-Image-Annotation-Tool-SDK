@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="CopyrightManager" default="Wisam Naji">
+    <module2copyright>
+      <element module="All" copyright="Wisam Naji" />
+    </module2copyright>
+  </component>
   <component name="NullableNotNullManager">
     <option name="myDefaultNullable" value="android.support.annotation.Nullable" />
     <option name="myDefaultNotNull" value="android.support.annotation.NonNull" />
