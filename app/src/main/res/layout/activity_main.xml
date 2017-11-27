@@ -66,6 +66,7 @@
                 android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+
                 android:layout_margin="26dp"
                 android:backgroundTint="@color/purple"
                 android:drawableLeft="@drawable/ic_key"
