@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:android.support.design="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android.support.design="http://schemas.android.com/apk/res-auto"
     android:background="#fff">
-
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -13,17 +12,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context="com.ahmadsaifaddin3ma.taqadam2.MainActivity">
-
+        tools:context="com.ahmadsaifaddin3ma.taqadam2.SignUpActivity">
 
         <TextView
-            android:id="@+id/sign_in_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="16dp"
-            android:text="Sign in"
-            android:textColor="#5D133B"/>
+            android:text="Sign Up"
+            android:textColor="@color/purple"/>
 
         <ImageView
             android:layout_width="match_parent"
@@ -35,10 +32,10 @@
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/usre-name_input_layout"
-            android.support.design:hintTextAppearance="@color/purple"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColorHint="#5D133B">
+            android:textColorHint="@color/purple"
+            android.support.design:hintTextAppearance="@color/purple">
 
             <EditText
                 android:id="@+id/user_name"
@@ -48,19 +45,40 @@
                 android:backgroundTint="@color/purple"
                 android:drawableLeft="@drawable/ic_user"
                 android:gravity="top"
-                android:hint="  User Name
-"
-                android:textColor="#5D133B"
-                android:textColorHint="#5D133B"
-                android:textSize="20sp"/>
+                android:hint="  User Name"
+                android:textColor="@color/purple"
+                android:textColorHint="@color/purple"
+                android:textSize="15sp"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/password_input_layout1"
-            android.support.design:hintTextAppearance="@color/purple"
+            android:id="@+id/mail_input_layout1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColorHint="#5D133B">
+            android:textColorHint="@color/purple"
+            android.support.design:hintTextAppearance="@color/purple">
+
+            <EditText
+                android:id="@+id/mail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="26dp"
+                android:backgroundTint="@color/purple"
+                android:drawableLeft="@drawable/ic_mail_"
+                android:gravity="top"
+                android:hint="  Email"
+                android:textColor="@color/purple"
+                android:textColorHint="@color/purple"
+                android:textSize="15sp"/>
+        </android.support.design.widget.TextInputLayout>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/password_input_layout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="@color/purple"
+            android.support.design:hintTextAppearance="@color/purple">
 
             <EditText
                 android:id="@+id/password"
@@ -71,47 +89,28 @@
                 android:drawableLeft="@drawable/ic_key"
                 android:gravity="top"
                 android:hint="  Password"
-                android:textColor="#5D133B"
-                android:textColorHint="#5D133B"
-                android:textSize="20sp"/>
+                android:textColor="@color/purple"
+                android:textColorHint="@color/purple"
+                android:textSize="15sp"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.v7.widget.CardView
-            android.support.design:cardCornerRadius="12dp"
             android:layout_width="200dp"
             android:layout_height="50dp"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            android.support.design:cardCornerRadius="12dp">
 
             <Button
+                android:id="@+id/sign_up"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@color/purple"
-                android:text="Sign In"
+                android:gravity="center"
+                android:text="Sign Up"
                 android:textColor="#fff"/>
+
 
         </android.support.v7.widget.CardView>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="4dp"
-                android:text="Already have an account?"
-                android:textColor="@color/purple"/>
-
-            <Button
-                android:id="@+id/sign_up_main"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#fff"
-                android:text="Sign Up"
-                android:textColor="#000"/>
-        </LinearLayout>
     </LinearLayout>
 </ScrollView>
