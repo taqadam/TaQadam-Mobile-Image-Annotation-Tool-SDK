@@ -3,4 +3,6 @@
     <color name="colorPrimary">#73204C</color>
     <color name="colorPrimaryDark">#73204C</color>
     <color name="colorAccent">#000</color>
+    <color name="payment">#ffffff</color>
+    <color name="colorLogin">#3D5069</color>
 </resources>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:orientation="vertical"
+        android:background="@drawable/color">
+
+        <LinearLayout
+            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_weight="0.3"
+                android:id="@+id/cash"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                app:srcCompat="@drawable/payment_cash" />
+
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cash Out"
+                android:layout_margin="8dp"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:layout_weight="0.5"
+                android:id="@+id/alert"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                app:srcCompat="@drawable/payment_message" />
+
+            <ImageView
+                android:layout_weight="0.5"
+                android:id="@+id/mesg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                app:srcCompat="@drawable/payment_alert" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_marginLeft="100dp"
+            android:layout_marginTop="60dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="Your Current Balance:"
+            android:textColor="#ffffff" />
+
+        <TextView
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="28sp"
+            android:text="99"
+            android:drawableRight="@drawable/payment_dollar"
+            android:textColor="#ffffff" />
+    </LinearLayout>
+
+    <TextView
+        android:text="Please enter the amount you would like to cash out bellow:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#000000"
+        android:textSize="18dp"
+        android:layout_margin="40dp" />
+
+
+    <EditText
+        android:id="@+id/enterpayment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="30dp"
+        android:background="#ffffff"
+        android:hint="Enter Your Amount "
+        android:textSize="16dp" />
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        app:cardBackgroundColor="@color/colorLogin"
+        app:cardCornerRadius="25dp"
+        app:cardElevation="10dp"
+        android:id="@+id/cardView"
+        android:layout_marginBottom="31dp"
+        android:layout_gravity="center">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Confirm"
+                android:textColor="#fff"
+                android:textSize="18sp" />
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:textSize="12dp"
+        android:layout_gravity="center"
+        android:text="By clicking on 'confirm' I agree on the terms and conditions" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:textSize="16dp"
+        android:textColor="@color/colorLogin"
+        android:layout_gravity="center"
+        android:text="Need Help ?" />
+
+</LinearLayout>
