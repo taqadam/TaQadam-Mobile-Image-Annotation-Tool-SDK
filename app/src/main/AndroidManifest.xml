@@ -22,6 +22,8 @@
         </activity>
         <activity android:name=".ProfileActivity">
         </activity>
+        <activity android:name=".PaymentActivity">
+        </activity>
     </application>
 
 </manifest>
