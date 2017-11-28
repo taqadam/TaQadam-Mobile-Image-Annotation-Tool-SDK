@@ -56,7 +56,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:text="Your Current Balance:"
+            android:text="@string/balance"
             android:textColor="#ffffff" />
 
         <TextView
@@ -71,7 +71,7 @@
     </LinearLayout>
 
     <TextView
-        android:text="Please enter the amount you would like to cash out bellow:"
+        android:text="@string/amount_cash_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#000000"
@@ -86,7 +86,7 @@
         android:layout_gravity="center"
         android:layout_marginBottom="30dp"
         android:background="#ffffff"
-        android:hint="Enter Your Amount "
+        android:hint="@string/enter_amount"
         android:textSize="16dp" />
 
 
@@ -109,7 +109,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="Confirm"
+                android:text="@string/conf"
                 android:textColor="#fff"
                 android:textSize="18sp" />
         </RelativeLayout>
@@ -123,7 +123,7 @@
         android:layout_margin="15dp"
         android:textSize="12dp"
         android:layout_gravity="center"
-        android:text="By clicking on 'confirm' I agree on the terms and conditions" />
+        android:text="@string/agree_text" />
 
 
     <TextView
@@ -133,6 +133,6 @@
         android:textSize="16dp"
         android:textColor="@color/colorLogin"
         android:layout_gravity="center"
-        android:text="Need Help ?" />
+        android:text="@string/need_help" />
 
 </LinearLayout>

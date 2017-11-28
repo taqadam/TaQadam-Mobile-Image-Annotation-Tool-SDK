@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">TAQADAM</string>
+    <string name="balance">Your Current Balance:</string>
+    <string name="amount_cash_text">Please enter the amount you would like to cash out bellow:</string>
+    <string name="enter_amount">Enter Your Amount</string>
+    <string name="conf">Confirm</string>
+    <string name="agree_text">By clicking on \'confirm\' I agree on the terms and conditions</string>
+    <string name="need_help">Need Help ?</string>
 </resources>
