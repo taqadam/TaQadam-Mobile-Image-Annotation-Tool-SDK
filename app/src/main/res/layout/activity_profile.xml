@@ -288,7 +288,7 @@
 
                     <TextView
                         style="@style/information_user_text_view_style"
-                        android:text="0033245789"/>
+                        android:text="003324545789" />
 
                     <TextView
                         style="@style/information_user_text_view_style"
