@@ -20,7 +20,7 @@ public class TaskActivity extends AppCompatActivity {
     private static final String TAG = TaskActivity.class.getSimpleName();
     private final static int TOOLBOX_HIDE_DURATION = 600; //Animate in ms
     private final static int TOOLBOX_SHOW_DURATION = 200; //Animate in ms
-    private final static int TOOLBOX_HIDE_TIMEOUT = 3000; //Hide after ms
+    private final static int TOOLBOX_HIDE_TIMEOUT = 2000; //Hide after ms
     private final static int TOOLBOX_HIDE_Y = 100; //Offset out of screen
     private static final int SWIPE_THRESHOLD_VELOCITY = 1500;
 

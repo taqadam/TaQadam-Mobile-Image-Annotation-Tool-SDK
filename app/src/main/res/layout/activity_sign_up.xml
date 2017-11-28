@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:android.support.design="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fff">
@@ -10,9 +10,9 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        tools:context="com.ahmadsaifaddin3ma.taqadam2.SignUpActivity">
+        tools:context=".SignUpActivity">
 
         <TextView
             android:layout_width="wrap_content"
@@ -20,34 +20,35 @@
             android:layout_gravity="center"
             android:layout_margin="16dp"
             android:text="Sign Up"
-            android:textColor="@color/purple"/>
+            android:textColor="@color/colorPrimary"/>
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="190dp"
             android:layout_gravity="center"
             android:scaleType="center"
-            android:src="@drawable/logo"/>
+            android:src="@drawable/banner_taqadam"/>
 
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/usre-name_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColorHint="@color/purple"
-            android.support.design:hintTextAppearance="@color/purple">
+            android:textColorHint="@color/colorPrimary"
+            app:hintTextAppearance="@color/colorPrimary">
 
             <EditText
                 android:id="@+id/user_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="26dp"
-                android:backgroundTint="@color/purple"
+                android:backgroundTint="@color/colorPrimary"
                 android:drawableLeft="@drawable/ic_user"
+                android:drawablePadding="8dp"
                 android:gravity="top"
-                android:hint="  User Name"
-                android:textColor="@color/purple"
-                android:textColorHint="@color/purple"
+                android:hint="User Name"
+                android:textColor="@color/colorPrimary"
+                android:textColorHint="@color/colorPrimary"
                 android:textSize="15sp"/>
         </android.support.design.widget.TextInputLayout>
 
@@ -55,20 +56,21 @@
             android:id="@+id/mail_input_layout1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColorHint="@color/purple"
-            android.support.design:hintTextAppearance="@color/purple">
+            android:textColorHint="@color/colorPrimary"
+            app:hintTextAppearance="@color/colorPrimary">
 
             <EditText
                 android:id="@+id/mail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="26dp"
-                android:backgroundTint="@color/purple"
-                android:drawableLeft="@drawable/ic_mail_"
+                android:backgroundTint="@color/colorPrimary"
+                android:drawableLeft="@drawable/ic_mail"
+                android:drawablePadding="8dp"
                 android:gravity="top"
-                android:hint="  Email"
-                android:textColor="@color/purple"
-                android:textColorHint="@color/purple"
+                android:hint="Email"
+                android:textColor="@color/colorPrimary"
+                android:textColorHint="@color/colorPrimary"
                 android:textSize="15sp"/>
         </android.support.design.widget.TextInputLayout>
 
@@ -77,20 +79,21 @@
             android:id="@+id/password_input_layout1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColorHint="@color/purple"
-            android.support.design:hintTextAppearance="@color/purple">
+            android:textColorHint="@color/colorPrimary"
+            app:hintTextAppearance="@color/colorPrimary">
 
             <EditText
                 android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="26dp"
-                android:backgroundTint="@color/purple"
+                android:backgroundTint="@color/colorPrimary"
                 android:drawableLeft="@drawable/ic_key"
+                android:drawablePadding="8dp"
                 android:gravity="top"
-                android:hint="  Password"
-                android:textColor="@color/purple"
-                android:textColorHint="@color/purple"
+                android:hint="Password"
+                android:textColor="@color/colorPrimary"
+                android:textColorHint="@color/colorPrimary"
                 android:textSize="15sp"/>
         </android.support.design.widget.TextInputLayout>
 
@@ -98,17 +101,17 @@
             android:layout_width="200dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
-            android.support.design:cardCornerRadius="12dp">
+            app:cardCornerRadius="12dp">
 
             <Button
                 android:id="@+id/sign_up"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/purple"
+                android:background="@color/colorPrimary"
                 android:gravity="center"
                 android:text="Sign Up"
                 android:textColor="#fff"/>
-            
+
         </android.support.v7.widget.CardView>
 
     </LinearLayout>
