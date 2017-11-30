@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="220dp"
         android:orientation="vertical"
-        android:background="@drawable/color">
+        android:background="@color/colorPrimary">
 
         <LinearLayout
             android:layout_margin="10dp"
@@ -93,7 +93,7 @@
     <android.support.v7.widget.CardView
         android:layout_width="300dp"
         android:layout_height="50dp"
-        app:cardBackgroundColor="@color/colorLogin"
+        app:cardBackgroundColor="@color/colorPrimary"
         app:cardCornerRadius="25dp"
         app:cardElevation="10dp"
         android:id="@+id/cardView"
@@ -131,7 +131,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:textSize="16dp"
-        android:textColor="@color/colorLogin"
+        android:textColor="@color/colorPrimary"
         android:layout_gravity="center"
         android:text="@string/need_help" />
 
