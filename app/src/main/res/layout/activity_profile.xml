@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#73204C "
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="8dp">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:src="@drawable/ic_reorder_black_24dp"/>
+            android:src="@drawable/ic_reorder_black_24dp" />
 
         <TextView
             android:layout_width="0dp"
@@ -24,33 +25,34 @@
             android:layout_weight="4"
             android:text="Profile"
             android:textColor="#FFFFFF"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_margin="8dp"
-            android:src="@drawable/ic_chat_black_24dp"/>
+            android:src="@drawable/ic_chat_black_24dp" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_margin="8dp"
-            android:src="@drawable/ic_notifications_black_24dp"/>
+            android:src="@drawable/ic_notifications_black_24dp" />
     </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#73204C ">
+        android:background="#73204C "
+        android:padding="8dp">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:src="@drawable/ic_chevron_left_black_24dp"/>
+            android:src="@drawable/ic_chevron_left_black_24dp" />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/worker_image_view"
@@ -65,22 +67,23 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/worker_image_view"
-            android:layout_above="@id/worker_image_view"
+            android:layout_alignBottom="@id/worker_image_view"
             android:gravity="center_horizontal"
             android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:src="@drawable/ic_photo_camera_black_24dp"/>
+                android:layout_marginRight="12dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_photo_camera_black_24dp" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:src="@drawable/ic_verified_user_black_24dp"/>
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_verified_user_black_24dp" />
         </LinearLayout>
     </RelativeLayout>
 
@@ -89,14 +92,15 @@
         android:layout_height="wrap_content"
         android:background="#73204C "
         android:gravity="center_horizontal"
+        android:padding="16dp"
         android:text="Mohammad A."
         android:textColor="#FFFFFF"
-        android:textSize="16sp"/>
+        android:textSize="16sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
+        android:layout_margin="8dp"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -109,7 +113,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:src="@drawable/ic_person_black_24dp"/>
+                android:src="@drawable/ic_person_black_24dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -117,7 +121,7 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
                 android:text="About"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -140,7 +144,7 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
                 android:text="Worker Agreement"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -153,26 +157,30 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:src="@drawable/ic_payment_black_24dp"/>
+                android:src="@drawable/ic_payment_black_24dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:text="Balance"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="16dp">
+        android:layout_margin="8dp"
+        android:elevation="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_margin="8dp"
+            android:orientation="vertical"
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -187,20 +195,22 @@
                     android:gravity="start"
                     android:text="Basic information"
                     android:textSize="16sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:gravity="end"
-                    android:src="@drawable/ic_edit_black_24dp"/>
+                    android:src="@drawable/ic_edit_black_24dp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="0dp"
+                android:layout_weight="6"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -210,27 +220,27 @@
 
                     <ImageView
                         style="@style/information_images_style"
-                        android:src="@drawable/ic_person_outline_black_24dp"/>
+                        android:src="@drawable/ic_person_outline_black_24dp" />
 
                     <ImageView
                         style="@style/information_images_style"
-                        android:src="@drawable/ic_perm_contact_calendar_black_24dp"/>
+                        android:src="@drawable/ic_perm_contact_calendar_black_24dp" />
 
                     <ImageView
                         style="@style/information_images_style"
-                        android:src="@drawable/ic_location_on_black_24dp"/>
+                        android:src="@drawable/ic_location_on_black_24dp" />
 
                     <ImageView
                         style="@style/information_images_style"
-                        android:src="@drawable/ic_loupe_black_24dp"/>
+                        android:src="@drawable/ic_loupe_black_24dp" />
 
                     <ImageView
                         style="@style/information_images_style"
-                        android:src="@drawable/ic_call_black_24dp"/>
+                        android:src="@drawable/ic_call_black_24dp" />
 
                     <ImageView
                         style="@style/information_images_style"
-                        android:src="@drawable/ic_email_black_24dp"/>
+                        android:src="@drawable/ic_email_black_24dp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -241,27 +251,27 @@
 
                     <TextView
                         style="@style/information_text_view_style"
-                        android:text="Full Name"/>
+                        android:text="Full Name" />
 
                     <TextView
                         style="@style/information_text_view_style"
-                        android:text="User Name"/>
+                        android:text="User Name" />
 
                     <TextView
                         style="@style/information_text_view_style"
-                        android:text="Location"/>
+                        android:text="Location" />
 
                     <TextView
                         style="@style/information_text_view_style"
-                        android:text="Age"/>
+                        android:text="Age" />
 
                     <TextView
                         style="@style/information_text_view_style"
-                        android:text="Phone Number"/>
+                        android:text="Phone Number" />
 
                     <TextView
                         style="@style/information_text_view_style"
-                        android:text="Email"/>
+                        android:text="Email" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -272,27 +282,27 @@
 
                     <TextView
                         style="@style/information_user_text_view_style"
-                        android:text="Mohammad Al Jundi"/>
+                        android:text="Mohammad Al Jundi" />
 
                     <TextView
                         style="@style/information_user_text_view_style"
-                        android:text="Mohammad A."/>
+                        android:text="Mohammad A." />
 
                     <TextView
                         style="@style/information_user_text_view_style"
-                        android:text="Lebanon"/>
+                        android:text="Lebanon" />
 
                     <TextView
                         style="@style/information_user_text_view_style"
-                        android:text="21"/>
+                        android:text="21" />
 
                     <TextView
                         style="@style/information_user_text_view_style"
-                        android:text="0033245789"/>
+                        android:text="00332545789" />
 
                     <TextView
                         style="@style/information_user_text_view_style"
-                        android:text="maj@maj.com"/>
+                        android:text="maj@maj.com" />
                 </LinearLayout>
 
 
@@ -306,21 +316,22 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:paddingRight="295dp"
                     android:layout_margin="4dp"
-                    android:paddingRight="280dp"
-                    android:src="@drawable/ic_settings_black_24dp"/>
-
+                    android:src="@drawable/ic_settings_black_24dp" />
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_language_black_24dp"/>
+                    android:src="@drawable/ic_language_black_24dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
                     android:text="EN"
-                    android:textSize="16sp"/>
+                    android:textSize="14sp" />
+
             </LinearLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
