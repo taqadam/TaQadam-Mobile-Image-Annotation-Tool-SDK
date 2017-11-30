@@ -6,11 +6,11 @@ import android.os.Bundle;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewPropertyAnimator;
 import android.widget.ImageButton;
 
 import it.sephiroth.android.library.imagezoom.ImageViewTouch;
@@ -31,6 +31,8 @@ public class TaskActivity extends AppCompatActivity {
     private View.OnClickListener mToolsClickListener;
     private Runnable mToolboxHider;
     private Runnable mToolboxShower;
+    private ViewPropertyAnimator mToolboxAnimator;
+    private boolean mAnimationCancelled;
 
     private int mSelectedId = R.id.button_polygon; //Selected tool id
     private boolean mToolboxVisible = true;
@@ -72,19 +74,31 @@ public class TaskActivity extends AppCompatActivity {
         mCircleButton = mToolbox.findViewById(R.id.button_circle);
         mPolygonButton = mToolbox.findViewById(R.id.button_polygon);
         mEllipseButton = mToolbox.findViewById(R.id.button_ellipse);
+        mToolboxAnimator = mToolbox.animate();
 
         mToolboxHider = new Runnable() {
             @Override
             public void run() {
-                mToolbox.animate().alpha(0).setDuration(TOOLBOX_HIDE_DURATION).setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                        mToolbox.setVisibility(View.GONE);
-                        mToolbox.setAlpha(1);
-                        mToolboxVisible = false;
-                    }
-                });
+                mToolboxAnimator.setDuration(TOOLBOX_HIDE_DURATION)
+                        .setStartDelay(TOOLBOX_HIDE_TIMEOUT)
+                        .alpha(0)
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                if (!mAnimationCancelled) {
+                                    mToolbox.setVisibility(View.GONE);
+                                    mToolboxVisible = false;
+                                } else {
+                                    mToolbox.setAlpha(1);
+                                    mAnimationCancelled = false;
+                                }
+                            }
+
+                            @Override
+                            public void onAnimationCancel(Animator animation) {
+                                mAnimationCancelled = true;
+                            }
+                        });
             }
         };
 
@@ -94,14 +108,17 @@ public class TaskActivity extends AppCompatActivity {
                 if (!mToolboxVisible) {
                     mToolbox.setTranslationY(TOOLBOX_HIDE_Y);
                     mToolbox.setVisibility(View.VISIBLE);
-                    mToolbox.animate().setDuration(TOOLBOX_SHOW_DURATION).translationYBy(-TOOLBOX_HIDE_Y).setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                            mToolboxVisible = true;
-                            toggleToolbox();
-                        }
-                    });
+                    mToolboxAnimator.setDuration(TOOLBOX_SHOW_DURATION)
+                            .setStartDelay(0)
+                            .alpha(1)
+                            .translationYBy(-TOOLBOX_HIDE_Y)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    mToolboxVisible = true;
+                                    toggleToolbox();
+                                }
+                            });
                 }
 
             }
@@ -110,6 +127,10 @@ public class TaskActivity extends AppCompatActivity {
         mToolsClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mToolboxAnimator != null) {
+                    mToolboxAnimator.cancel();
+                    toggleToolbox();
+                }
                 View selected = findViewById(mSelectedId);
                 selected.setAlpha(1);
                 mSelectedId = v.getId();
@@ -126,23 +147,10 @@ public class TaskActivity extends AppCompatActivity {
     }
 
     private void toggleToolbox() {
-        Thread t = new ToolboxAnimator();
-        t.start();
-    }
-
-    class ToolboxAnimator extends Thread {
-        @Override
-        public void run() {
-            if (mToolboxVisible) {
-                try {
-                    Thread.sleep(TOOLBOX_HIDE_TIMEOUT);
-                } catch (InterruptedException e) {
-                    Log.d(TAG, "Toolbox animation/" + e.getMessage());
-                }
-                runOnUiThread(mToolboxHider);
-            } else {
-                runOnUiThread(mToolboxShower);
-            }
+        if (mToolboxVisible) {
+            mToolboxHider.run();
+        } else {
+            mToolboxShower.run();
         }
     }
 
