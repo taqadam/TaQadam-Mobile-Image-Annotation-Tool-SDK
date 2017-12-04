@@ -6,4 +6,27 @@
     <string name="conf">Confirm</string>
     <string name="agree_text">By clicking on \'confirm\' I agree on the terms and conditions</string>
     <string name="need_help">Need Help ?</string>
+    <string name="profile">Profile</string>
+    <string name="about">About</string>
+    <string name="worker_agreement">Worker Agreement</string>
+    <string name="balance_string">Balance</string>
+    <string name="basic_information">Basic information</string>
+    <string name="full_name">Full Name</string>
+    <string name="user_name">User Name</string>
+    <string name="location">Location</string>
+    <string name="age">Age</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="email">Email</string>
+    <string name="mohammad_al_jundi">Mohammad Al Jundi</string>
+    <string name="mohammad_a">Mohammad A.</string>
+    <string name="lebanon">Lebanon</string>
+    <string name="_21">21</string>
+    <string name="_00332545789">00332545789</string>
+    <string name="maj_maj_com">maj@maj.com</string>
+    <string name="en">EN</string>
+    <string name="rectangle_tool">Rectangle Tool</string>
+    <string name="circle_tool">Circle Tool</string>
+    <string name="ellipse_tool">Ellipse Tool</string>
+    <string name="polygon_tool">Polygon Tool</string>
+    <string name="sign_up">Sign Up</string>
 </resources>
