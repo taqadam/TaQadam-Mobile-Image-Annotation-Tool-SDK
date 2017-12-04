@@ -31,7 +31,7 @@
             android:layout_weight="1"
             android:background="@drawable/bg_tool_button_left"
             android:src="@drawable/ic_rect"
-            android:contentDescription="Rectangle Tool"/>
+            android:contentDescription="@string/rectangle_tool" />
 
         <ImageButton
             style="@style/button_toolbox"
@@ -41,7 +41,7 @@
             android:layout_weight="1"
             android:background="@drawable/bg_tool_button_middle"
             android:src="@drawable/ic_circle"
-            android:contentDescription="Circle Tool"/>
+            android:contentDescription="@string/circle_tool" />
 
         <ImageButton
             style="@style/button_toolbox"
@@ -51,7 +51,7 @@
             android:layout_weight="1"
             android:background="@drawable/bg_tool_button_middle"
             android:src="@drawable/ic_ellipse"
-            android:contentDescription="Ellipse Tool"/>
+            android:contentDescription="@string/ellipse_tool" />
 
         <ImageButton
             style="@style/button_toolbox"
@@ -61,6 +61,6 @@
             android:layout_weight="1"
             android:background="@drawable/bg_tool_button_right"
             android:src="@drawable/ic_polygon"
-            android:contentDescription="Polygon Tool"/>
+            android:contentDescription="@string/polygon_tool" />
     </LinearLayout>
 </RelativeLayout>
