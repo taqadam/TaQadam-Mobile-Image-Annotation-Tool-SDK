@@ -2,56 +2,57 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorWhite"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#73204C "
+        android:background="@color/colorPurple"
         android:orientation="horizontal"
-        android:padding="8dp">
+        android:padding="@dimen/padding8dp">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_margin="@dimen/margin8dp"
             android:src="@drawable/ic_reorder_black_24dp" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_margin="8dp"
+            android:layout_margin="@dimen/margin8dp"
             android:layout_weight="4"
-            android:text="Profile"
-            android:textColor="#FFFFFF"
+            android:text="@string/profile"
+            android:textColor="@color/colorWhite"
             android:textSize="16sp" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_margin="8dp"
+            android:layout_margin="@dimen/margin8dp"
             android:src="@drawable/ic_chat_black_24dp" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_margin="8dp"
+            android:layout_margin="@dimen/margin8dp"
             android:src="@drawable/ic_notifications_black_24dp" />
     </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#73204C "
-        android:padding="8dp">
+        android:background="@color/colorPurple"
+        android:padding="@dimen/padding8dp">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_margin="@dimen/margin8dp"
             android:src="@drawable/ic_chevron_left_black_24dp" />
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -75,14 +76,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="12dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/margin8dp"
                 android:src="@drawable/ic_photo_camera_black_24dp" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/margin8dp"
                 android:src="@drawable/ic_verified_user_black_24dp" />
         </LinearLayout>
     </RelativeLayout>
@@ -90,17 +91,17 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#73204C "
+        android:background="@color/colorPurple"
         android:gravity="center_horizontal"
-        android:padding="16dp"
-        android:text="Mohammad A."
-        android:textColor="#FFFFFF"
+        android:padding="@dimen/padding16dp"
+        android:text="@string/mohammad_a"
+        android:textColor="@color/colorWhite"
         android:textSize="16sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_margin="@dimen/margin8dp"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -120,7 +121,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
-                android:text="About"
+                android:text="@string/about"
                 android:textSize="14sp" />
         </LinearLayout>
 
@@ -143,7 +144,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
-                android:text="Worker Agreement"
+                android:text="@string/worker_agreement"
                 android:textSize="14sp" />
         </LinearLayout>
 
@@ -163,7 +164,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="Balance"
+                android:text="@string/balance_string"
                 android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
@@ -171,16 +172,16 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_margin="@dimen/margin8dp"
         android:elevation="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_margin="@dimen/margin8dp"
             android:orientation="vertical"
-            android:paddingBottom="16dp"
-            android:paddingTop="16dp">
+            android:paddingBottom="@dimen/padding16dp"
+            android:paddingTop="@dimen/padding16dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -190,17 +191,17 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
+                    android:layout_margin="@dimen/margin8dp"
                     android:layout_weight="2"
                     android:gravity="start"
-                    android:text="Basic information"
+                    android:text="@string/basic_information"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
+                    android:layout_margin="@dimen/margin8dp"
                     android:gravity="end"
                     android:src="@drawable/ic_edit_black_24dp" />
             </LinearLayout>
@@ -208,9 +209,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:layout_marginBottom="@dimen/margin8dp"
                 android:layout_weight="6"
-                android:orientation="horizontal"
-                android:layout_marginBottom="8dp">
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -219,27 +220,45 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        style="@style/information_images_style"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_margin="@dimen/margin4dp"
+                        android:layout_weight="1"
                         android:src="@drawable/ic_person_outline_black_24dp" />
 
                     <ImageView
-                        style="@style/information_images_style"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_margin="@dimen/margin4dp"
+                        android:layout_weight="1"
                         android:src="@drawable/ic_perm_contact_calendar_black_24dp" />
 
                     <ImageView
-                        style="@style/information_images_style"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_margin="@dimen/margin4dp"
+                        android:layout_weight="1"
                         android:src="@drawable/ic_location_on_black_24dp" />
 
                     <ImageView
-                        style="@style/information_images_style"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_margin="@dimen/margin4dp"
+                        android:layout_weight="1"
                         android:src="@drawable/ic_loupe_black_24dp" />
 
                     <ImageView
-                        style="@style/information_images_style"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_margin="@dimen/margin4dp"
+                        android:layout_weight="1"
                         android:src="@drawable/ic_call_black_24dp" />
 
                     <ImageView
-                        style="@style/information_images_style"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_margin="@dimen/margin4dp"
+                        android:layout_weight="1"
                         android:src="@drawable/ic_email_black_24dp" />
                 </LinearLayout>
 
@@ -251,30 +270,49 @@
 
                     <TextView
                         style="@style/information_text_view_style"
-                        android:text="Full Name" />
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:text="@string/full_name" />
 
                     <TextView
                         style="@style/information_text_view_style"
-                        android:text="User Name" />
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:text="@string/user_name" />
 
                     <TextView
                         style="@style/information_text_view_style"
-                        android:text="Location" />
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:text="@string/location" />
 
                     <TextView
                         style="@style/information_text_view_style"
-                        android:text="Age" />
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:text="@string/age" />
 
                     <TextView
                         style="@style/information_text_view_style"
-                        android:text="Phone Number" />
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:text="@string/phone_number" />
 
                     <TextView
                         style="@style/information_text_view_style"
-                        android:text="Email" />
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:text="@string/email" />
                 </LinearLayout>
 
                 <LinearLayout
+
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="4"
@@ -282,27 +320,45 @@
 
                     <TextView
                         style="@style/information_user_text_view_style"
-                        android:text="Mohammad Al Jundi" />
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:text="@string/mohammad_al_jundi" />
 
                     <TextView
                         style="@style/information_user_text_view_style"
-                        android:text="Mohammad A." />
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:text="@string/mohammad_a" />
 
                     <TextView
                         style="@style/information_user_text_view_style"
-                        android:text="Lebanon" />
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:text="@string/lebanon" />
 
                     <TextView
                         style="@style/information_user_text_view_style"
-                        android:text="21" />
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:text="@string/_21" />
 
                     <TextView
                         style="@style/information_user_text_view_style"
-                        android:text="00332545789" />
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:text="@string/_00332545789" />
 
                     <TextView
                         style="@style/information_user_text_view_style"
-                        android:text="maj@maj.com" />
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:text="@string/maj_maj_com" />
                 </LinearLayout>
 
 
@@ -317,9 +373,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
+                    android:layout_margin="@dimen/margin4dp"
                     android:paddingRight="295dp"
-                    android:layout_margin="4dp"
                     android:src="@drawable/ic_settings_black_24dp" />
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -328,10 +385,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
-                    android:text="EN"
+                    android:layout_margin="@dimen/margin4dp"
+                    android:text="@string/en"
                     android:textSize="14sp" />
-
             </LinearLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
