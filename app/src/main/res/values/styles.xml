@@ -28,4 +28,17 @@
         <item name="android:paddingRight">20dp</item>
         <item name="android:antialias">false</item>
     </style>
+
+    <style name="signup_form_fields" parent="Base.Widget.AppCompat.EditText">
+        <item name="android:drawablePadding">8dp</item>
+        <item name="android:textColor">@color/colorPurple</item>
+        <item name="android:textColorHint">@color/colorPurple</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:layout_marginLeft">30dp</item>
+        <item name="android:layout_marginRight">30dp</item>
+    </style>
+
+    <style name="signup_form_hint_appearance" parent="TextAppearance.Design.Hint">
+        <item name="android:textColor">@color/colorPurple</item>
+    </style>
 </resources>
