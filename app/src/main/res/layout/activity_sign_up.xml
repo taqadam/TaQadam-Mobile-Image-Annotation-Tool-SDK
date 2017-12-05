@@ -1,116 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorWhite">
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorWhite"
+            tools:context=".SignUpActivity">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        tools:context=".SignUpActivity">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="@dimen/margin16dp"
-            android:text="@string/sign_up"
-            android:textColor="@color/colorPurple" />
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:orientation="vertical">
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="190dp"
+            android:layout_height="200dp"
             android:layout_gravity="center"
+            android:contentDescription="Taqadam Logo"
             android:scaleType="center"
-            android:src="@drawable/banner_taqadam" />
+            android:src="@drawable/taqadam_logo_f"/>
 
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/usre-name_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColorHint="@color/colorPurple"
-            app:hintTextAppearance="@color/colorPurple">
+            app:hintTextAppearance="@style/signup_form_hint_appearance">
 
-            <EditText
-                android:id="@+id/user_name"
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/f_email"
+                style="@style/signup_form_fields"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="26dp"
-                android:backgroundTint="@color/colorPurple"
-                android:drawableLeft="@drawable/ic_user"
-                android:drawablePadding="8dp"
-                android:gravity="top"
-                android:hint="User Name"
-                android:textColor="@color/colorPurple"
-                android:textColorHint="@color/colorPurple"
-                android:textSize="15sp" />
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/mail_input_layout1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColorHint="@color/colorPrimary"
-            app:hintTextAppearance="@color/colorPrimary">
-
-            <EditText
-                android:id="@+id/mail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="26dp"
-                android:backgroundTint="@color/colorPrimary"
                 android:drawableLeft="@drawable/ic_mail"
-                android:drawablePadding="8dp"
-                android:gravity="top"
-                android:hint="Email"
-                android:textColor="@color/colorPrimary"
-                android:textColorHint="@color/colorPrimary"
-                android:textSize="15sp" />
+                android:drawableStart="@drawable/ic_mail"
+                android:hint="Email Address"
+                android:inputType="textEmailAddress"
+                app:backgroundTint="@color/colorPurple"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="@color/colorPurple"
+            app:hintTextAppearance="@style/signup_form_hint_appearance">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/f_password"
+                style="@style/signup_form_fields"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_key"
+                android:drawableStart="@drawable/ic_key"
+                android:hint="Password"
+                android:inputType="textPassword"
+                app:backgroundTint="@color/colorPurple"/>
         </android.support.design.widget.TextInputLayout>
 
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/password_input_layout1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColorHint="@color/colorPrimary"
-            app:hintTextAppearance="@color/colorPrimary">
+            android:textColorHint="@color/colorPurple"
+            app:hintTextAppearance="@style/signup_form_hint_appearance"
+            app:passwordToggleEnabled="true">
 
-            <EditText
-                android:id="@+id/password"
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/f_password_confirm"
+                style="@style/signup_form_fields"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="26dp"
-                android:backgroundTint="@color/colorPrimary"
                 android:drawableLeft="@drawable/ic_key"
-                android:drawablePadding="8dp"
-                android:gravity="top"
-                android:hint="Password"
-                android:textColor="@color/colorPrimary"
-                android:textColorHint="@color/colorPrimary"
-                android:textSize="15sp" />
+                android:drawableStart="@drawable/ic_key"
+                android:hint="Confirm Password"
+                android:inputType="textPassword"
+                app:backgroundTint="@color/colorPurple"/>
         </android.support.design.widget.TextInputLayout>
 
-        <android.support.v7.widget.CardView
-            android:layout_width="200dp"
+        <Button
+            android:id="@+id/b_signup"
+            android:layout_width="150dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
-            app:cardCornerRadius="12dp">
+            android:layout_marginTop="60dp"
+            android:background="@drawable/buttons_bg"
+            android:gravity="center"
+            android:text="Sign Up"
+            android:textColor="@color/colorWhite"/>
 
-            <Button
-                android:id="@+id/sign_up"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/colorPrimary"
-                android:gravity="center"
-                android:text="Sign Up"
-                android:textColor="@color/colorWhite" />
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"/>
 
-        </android.support.v7.widget.CardView>
-
+        <com.google.android.gms.common.SignInButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"/>
     </LinearLayout>
 </ScrollView>

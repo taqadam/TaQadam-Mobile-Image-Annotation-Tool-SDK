@@ -29,4 +29,9 @@
     <string name="ellipse_tool">Ellipse Tool</string>
     <string name="polygon_tool">Polygon Tool</string>
     <string name="sign_up">Sign Up</string>
+
+    <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
+    <string name="facebook_app_id" translatable="false">308223343016078</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb308223343016078</string>
+
 </resources>
