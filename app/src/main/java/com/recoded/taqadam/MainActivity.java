@@ -2,8 +2,8 @@ package com.recoded.taqadam;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -11,31 +11,53 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        findViewById(R.id.sign_up).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, SignUpActivity.class));
-            }
-        });
-        findViewById(R.id.task).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, TaskActivity.class));
-            }
-        });
 
-        findViewById(R.id.profile).setOnClickListener(new View.OnClickListener() {
+        final TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tabLayout.getSelectedTabPosition()) {
+                    case 0:
+                        startActivity(new Intent(MainActivity.this, TaskActivity.class));
+                        break;
+                }
             }
-        });
 
-        findViewById(R.id.payment).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, PaymentActivity.class));
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
             }
         });
+//        findViewById(R.id.sign_up).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                startActivity(new Intent(MainActivity.this, SignUpActivity.class));
+//            }
+//        });
+//        findViewById(R.id.task).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                startActivity(new Intent(MainActivity.this, TaskActivity.class));
+//            }
+//        });
+//
+//        findViewById(R.id.profile).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+//            }
+//        });
+//
+//        findViewById(R.id.payment).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                startActivity(new Intent(MainActivity.this, PaymentActivity.class));
+//            }
+//        });
     }
 }
