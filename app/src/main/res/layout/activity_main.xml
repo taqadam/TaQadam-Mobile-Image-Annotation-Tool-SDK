@@ -11,41 +11,4 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"></ListView>
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tabs"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom">
-
-        <android.support.design.widget.TabItem
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Tasks" />
-
-        <android.support.design.widget.TabItem
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Q/A" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Payment" />
-
-        <android.support.design.widget.TabItem
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="message" />
-
-        <android.support.design.widget.TabItem
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="profile" />
-    </android.support.design.widget.TabLayout>
-
 </LinearLayout>
