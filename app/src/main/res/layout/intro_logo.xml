@@ -38,7 +38,7 @@
     <android.support.v7.widget.AppCompatImageView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="4"
+        android:layout_weight="3"
         app:srcCompat="@drawable/taqadam_logo_f"
         tools:ignore="VectorDrawableCompat"/>
 
