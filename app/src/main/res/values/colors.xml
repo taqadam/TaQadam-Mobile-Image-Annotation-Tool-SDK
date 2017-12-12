@@ -6,4 +6,5 @@
     <color name="colorPurple">@color/colorPrimary</color>
     <color name="colorGrey">#EFEFEF</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorMaron">#73204C</color>
 </resources>
