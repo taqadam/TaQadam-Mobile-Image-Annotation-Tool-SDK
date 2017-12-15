@@ -5,45 +5,37 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/colorMaron"
+    android:background="#E20049"
     android:gravity="center"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
-    <!--TODO translate to arabic-->
+    android:orientation="vertical">
 
+    <!--TODO translate to arabic-->
 
     <android.support.v7.widget.AppCompatImageView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:layout_weight="1"
         android:scaleType="center"
-        app:srcCompat="@drawable/registration_slide_img"/>
+        app:srcCompat="@drawable/sign_in"/>
 
-    <LinearLayout
+    <!--TODO translate to arabic-->
+
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_margin="16dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
-        <!--TODO translate to arabic-->
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="Registration"
+        android:textAlignment="center"
+        android:textColor="#fff"
+        android:textSize="30sp"
+        android:textStyle="bold"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="Registration"
-            android:textAlignment="center"
-            android:textColor="#fff"
-            android:textSize="40sp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="Register : It's easy! You can do it using your facebook account or email and password."
-            android:textAlignment="center"
-            android:textColor="#fff"
-            android:textSize="20sp"/>
-    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="It's easy! You can do it using your facebook account or email and password."
+        android:textAlignment="center"
+        android:textColor="#fff"
+        android:textSize="16sp"/>
 </LinearLayout>

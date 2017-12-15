@@ -41,4 +41,9 @@
     <style name="signup_form_hint_appearance" parent="TextAppearance.Design.Hint">
         <item name="android:textColor">@color/colorPurple</item>
     </style>
+
+    <style name="Theme.MyDialog" parent="@style/Theme.AppCompat.Light.Dialog">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 </resources>

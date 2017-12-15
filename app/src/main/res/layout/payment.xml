@@ -4,40 +4,34 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:background="@color/colorMaron"
     android:orientation="vertical">
 
     <android.support.v7.widget.AppCompatImageView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:scaleType="centerCrop"
-        app:srcCompat="@drawable/payment_slide_img"/>
+        android:layout_height="wrap_content"
+        android:scaleType="center"
+        app:srcCompat="@drawable/hand_dollar"/>
 
-    <LinearLayout
+    <!--TODO translate to arabic-->
+
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
-        <!--TODO translate to arabic-->
+        android:layout_height="wrap_content"
+        android:text="Get Paid!"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:textColor="@color/colorWhite"
+        android:layout_marginTop="16dp"
+        android:textSize="30sp"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Get Paid!"
-            android:textAlignment="center"
-            android:textStyle="bold"
-            android:textColor="@color/colorWhite"
-            android:layout_marginTop="16dp"
-            android:textSize="35sp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="Hooray! Collect your achieved earnings from the nearest OMT outlet accross Lebanon!"
-            android:textAlignment="center"
-            android:textColor="@color/colorWhite"
-            android:textSize="20sp"/>
-    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="Hooray! Collect your achieved earnings from the nearest OMT outlet accross Lebanon!"
+        android:textAlignment="center"
+        android:textColor="@color/colorWhite"
+        android:textSize="16sp"/>
 </LinearLayout>
