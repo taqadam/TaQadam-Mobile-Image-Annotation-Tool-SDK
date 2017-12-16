@@ -98,7 +98,7 @@ public class IntroActivity extends AppIntro {
 
         }
 
-        //cc
+        //c
     }
 
 }
