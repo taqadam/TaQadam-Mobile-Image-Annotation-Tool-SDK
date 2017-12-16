@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scaleType="center"
-        app:srcCompat="@drawable/hand_dollar"/>
+        app:srcCompat="@drawable/ic_get_paid"/>
 
     <!--TODO translate to arabic-->
 

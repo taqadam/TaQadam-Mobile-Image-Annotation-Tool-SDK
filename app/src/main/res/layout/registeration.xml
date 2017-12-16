@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:scaleType="center"
-        app:srcCompat="@drawable/sign_in"/>
+        app:srcCompat="@drawable/ic_registration"/>
 
     <!--TODO translate to arabic-->
 
