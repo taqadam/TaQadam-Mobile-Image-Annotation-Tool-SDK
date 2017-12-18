@@ -2,8 +2,16 @@
 <resources>
     <color name="colorPrimary">#73204C</color>
     <color name="colorPrimaryDark">#4d0f30</color>
-    <color name="colorAccent">#4d0f30</color>
+    <color name="colorAccent">@color/colorMaroon</color>
     <color name="colorPurple">@color/colorPrimary</color>
     <color name="colorGrey">#EFEFEF</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorMaroon">#800000</color>
+    <color name="colorPwShort">#A20025</color>
+    <color name="colorPwWeak">#A20025</color>
+    <color name="colorPwMedium">#FA6800</color>
+    <color name="colorPwFair">#E3C800</color>
+    <color name="colorPwStrong">#008A00</color>
+    <color name="colorErrorText">#e6712e</color>
+    <color name="colorMaterialError">#F4511E</color>
 </resources>
