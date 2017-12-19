@@ -16,6 +16,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name=".Intro.IntroActivity"
+                  android:theme="@style/Theme.MyDialog">
+        </activity>
         <activity android:name=".TaskActivity">
         </activity>
         <activity android:name=".ProfileActivity">

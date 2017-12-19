@@ -14,4 +14,7 @@
     <color name="colorPwStrong">#008A00</color>
     <color name="colorErrorText">#e6712e</color>
     <color name="colorMaterialError">#F4511E</color>
+    <color name="colorSlide2">#E20049</color>
+    <color name="colorSlide3">#F79F24</color>
+    <color name="colorSlide4">#336598</color>
 </resources>
