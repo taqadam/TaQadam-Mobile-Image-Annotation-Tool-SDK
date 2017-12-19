@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#E20049"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <!--TODO translate to arabic-->
+
+    <android.support.v7.widget.AppCompatImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:scaleType="center"
+        app:srcCompat="@drawable/ic_registration"/>
+
+    <!--TODO translate to arabic-->
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="Registration"
+        android:textAlignment="center"
+        android:textColor="#fff"
+        android:textSize="30sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="It's easy! You can do it using your facebook account or email and password."
+        android:textAlignment="center"
+        android:textColor="#fff"
+        android:textSize="16sp"/>
+</LinearLayout>

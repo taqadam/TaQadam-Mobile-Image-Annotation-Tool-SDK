@@ -1,9 +1,13 @@
 package com.recoded.taqadam;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+
+import com.recoded.taqadam.Intro.IntroActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -11,6 +15,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+                Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                boolean isFirstTime = preferences.getBoolean("first", true);
+
+                if (isFirstTime) {
+                    startActivity(new Intent(MainActivity.this, IntroActivity.class));
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putBoolean("first", false);
+                    editor.apply();
+                }
+            }
+        });
+        thread.start();
+
+
         findViewById(R.id.sign_up).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -28,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+
             }
         });
 

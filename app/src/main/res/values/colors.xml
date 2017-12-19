@@ -6,4 +6,8 @@
     <color name="colorPurple">@color/colorPrimary</color>
     <color name="colorGrey">#EFEFEF</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorMaron">#73204C</color>
+    <color name="colorSlide2">#E20049</color>
+    <color name="colorSlide3">#F79F24</color>
+    <color name="colorSlide4">#336598</color>
 </resources>
