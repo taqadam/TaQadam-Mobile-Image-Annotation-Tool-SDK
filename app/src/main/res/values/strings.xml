@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">TAQADAM</string>
+    <string name="title_home">Home</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="hello_tasks_fragment">Hello tasks fragment</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="balance">Your Current Balance:</string>
     <string name="amount_cash_text">Please enter the amount you would like to cash out bellow:</string>
     <string name="enter_amount">Enter Your Amount</string>

@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/action_search"
+        android:id="@+id/navigation_tasks"
         android:icon="@drawable/ic_assignment_black_24dp"
         android:title="Tasks"
 
         />
     <item
-        android:id="@+id/action_favorite"
+        android:id="@+id/navigation_qa"
         android:icon="@drawable/ic_help_black_24dp"
         android:title="help/FQA" />
     <item
-        android:id="@+id/action_casho_out"
+        android:id="@+id/navigation_cash_out"
         android:icon="@drawable/ic_attach_money_black_24dp"
         android:title="Cash out" />
     <item
-        android:id="@+id/action_discuss"
+        android:id="@+id/navigation_discuss"
         android:icon="@drawable/ic_sms_black_24dp"
         android:title="Discuss" />
     <item
-        android:id="@+id/action_profile"
+        android:id="@+id/navigation_profile"
         android:icon="@drawable/ic_person_outline_black_24dp"
-        android:title="Cash out" />
+        android:title="Profile" />
 </menu>

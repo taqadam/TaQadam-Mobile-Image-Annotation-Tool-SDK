@@ -18,8 +18,6 @@
         </activity>
         <activity android:name=".TaskActivity" />
         <activity android:name=".SignUpActivity" />
-        <activity android:name=".ProfileActivity" />
-        <activity android:name=".PaymentActivity" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -41,7 +39,6 @@
                 <data android:scheme="@string/facebook_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".QaActivity"></activity>
     </application>
 
 </manifest>
