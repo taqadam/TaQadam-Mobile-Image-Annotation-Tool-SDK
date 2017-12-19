@@ -34,4 +34,24 @@
     <string name="facebook_app_id" translatable="false">308223343016078</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb308223343016078</string>
 
+    <!-- Cities of Lebanon -->
+    <string name="city_Select">Select City</string>
+    <string name="city_Aley">Aley</string>
+    <string name="city_Baalbek">Baalbek</string>
+    <string name="city_Batroun">Batroun</string>
+    <string name="city_Beirut">Beirut</string>
+    <string name="city_Byblos">Byblos</string>
+    <string name="city_Jounieh">Jounieh</string>
+    <string name="city_Nabatieh">Nabatieh</string>
+    <string name="city_Sidon">Sidon</string>
+    <string name="city_Tripoli">Tripoli</string>
+    <string name="city_Tyre">Tyre</string>
+    <string name="city_Zahle">Zahle</string>
+    <string name="city_Zgharta">Zgharta</string>
+
+    <!-- Genders -->
+    <string name="gender_Not_Specified">Gender</string>
+    <string name="gender_Male">Male</string>
+    <string name="gender_Female">Female</string>
+
 </resources>

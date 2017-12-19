@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.sign_up).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, SignUpActivity.class));
+                startActivity(new Intent(MainActivity.this, RegisterActivity.class));
             }
         });
         findViewById(R.id.task).setOnClickListener(new View.OnClickListener() {
@@ -50,15 +50,16 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.profile).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
-
+                startActivity(new Intent(MainActivity.this, SigninActivity.class));
             }
         });
 
         findViewById(R.id.payment).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, PaymentActivity.class));
+                Intent i = new Intent(MainActivity.this, ConfirmProfileActivity.class);
+                i.putExtra("EDIT_MODE", true);
+                startActivity(i);
             }
         });
     }

@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -29,6 +29,10 @@
         <item name="android:antialias">false</item>
     </style>
 
+    <style name="AppTheme.Button" parent="Base.Widget.AppCompat.Button">
+        <item name="android:backgroundTint">@color/colorMaroon</item>
+    </style>
+
     <style name="signup_form_fields" parent="Base.Widget.AppCompat.EditText">
         <item name="android:drawablePadding">8dp</item>
         <item name="android:textColor">@color/colorPurple</item>
@@ -39,7 +43,12 @@
     </style>
 
     <style name="signup_form_hint_appearance" parent="TextAppearance.Design.Hint">
-        <item name="android:textColor">@color/colorPurple</item>
+        <item name="android:textColor">@color/colorWhite</item>
+    </style>
+
+    <style name="AppTheme.ErrorTextAppearance" parent="TextAppearance.AppCompat">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Caption</item>
+        <item name="android:textColor">@color/colorErrorText</item>
     </style>
 
     <style name="Theme.MyDialog" parent="@style/Theme.AppCompat.Light.Dialog">
