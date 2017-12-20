@@ -161,10 +161,9 @@ public class SplashActivity extends AppCompatActivity {
         boolean isFirstRun = preferences.getBoolean("firstRun", true);
 
         if (isFirstRun) {
-            //TODO-Wisam: Uncomment first run sp
-            //SharedPreferences.Editor editor = preferences.edit();
-            //editor.putBoolean("firstRun", false);
-            //editor.apply();
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean("firstRun", false);
+            editor.apply();
         }
         return isFirstRun;
     }
