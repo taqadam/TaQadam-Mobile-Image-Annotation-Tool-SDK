@@ -54,4 +54,8 @@
     <string name="gender_Male">Male</string>
     <string name="gender_Female">Female</string>
 
+    <string name="title_activity_splash">TAQADAM</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
 </resources>
