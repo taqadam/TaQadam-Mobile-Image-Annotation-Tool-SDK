@@ -22,6 +22,7 @@ import java.util.Locale;
 
 public class User implements Serializable {
     private static final String TAG = User.class.getSimpleName();
+    private static User currentUser;
     private String mFName, mLName, mDName, mEMailAddr;
     private String mPhoneNumber;
     private String mUserAddress;
@@ -30,6 +31,14 @@ public class User implements Serializable {
     private Gender mGender;
     private boolean mAccountApproved = false, mEmailVerified = false, mPhoneNumberVerified = false, mCompleteProfile = false;
     private transient Wallet mWallet;
+
+    public static User getCurrentUser() {
+        return currentUser;
+    }
+
+    public static void setCurrentUser(User currentUser) {
+        User.currentUser = currentUser;
+    }
 
     public String getFirstName() {
         return mFName;

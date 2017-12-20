@@ -14,7 +14,9 @@
     <color name="colorPwStrong">#008A00</color>
     <color name="colorErrorText">#e6712e</color>
     <color name="colorMaterialError">#F4511E</color>
-    <color name="colorSlide2">#E20049</color>
-    <color name="colorSlide3">#F79F24</color>
-    <color name="colorSlide4">#336598</color>
+
+    <color name="colorIntroRegister">#5c8900</color>
+    <color name="colorIntroPractice">#9c27b0</color>
+    <color name="colorIntroWork">#336598</color>
+    <color name="colorIntroPayment">@color/colorPrimary</color>
 </resources>

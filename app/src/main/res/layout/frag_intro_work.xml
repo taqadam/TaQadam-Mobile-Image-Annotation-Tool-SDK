@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorIntroWork"
+    android:orientation="vertical">
+
+    <!--TODO translate to arabic-->
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="32dp"
+        android:textAlignment="center"
+        android:textColor="#fff"
+        android:textSize="45sp"
+        android:textStyle="bold"
+        android:text="Work"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="45dp"
+        android:layout_gravity="center_horizontal"
+        android:scaleType="center"
+        android:src="@drawable/ic_intro_work"/>
+
+    <!--TODO translate to arabic-->
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:padding="16dp"
+        android:textAlignment="center"
+        android:textColor="#fff"
+        android:textSize="20sp"
+        android:text="Simply, put your practice into paid simple tasks! Just make sure to be as precise as you can."/>
+</LinearLayout>

@@ -63,6 +63,14 @@ public class SigninActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.b_signup).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SigninActivity.this, RegisterActivity.class));
+                finish();
+            }
+        });
+
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Signing in");
         progressDialog.setMessage("Please wait..");

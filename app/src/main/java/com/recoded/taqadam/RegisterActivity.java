@@ -81,6 +81,13 @@ public class RegisterActivity extends AppCompatActivity {
         setupForm();
         setupFbAuth();
         bSignin = findViewById(R.id.b_signin);
+        bSignin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(RegisterActivity.this, SigninActivity.class));
+                finish();
+            }
+        });
 
         mCreatingAccountProgressDialog = new ProgressDialog(this);
         mCreatingAccountProgressDialog.setCancelable(false);
