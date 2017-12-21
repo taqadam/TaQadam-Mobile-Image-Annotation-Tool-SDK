@@ -1,149 +1,260 @@
 package com.recoded.taqadam.models.auth;
 
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.util.Log;
+
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.auth.FacebookAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.ProviderQueryResult;
+import com.google.firebase.database.DataSnapshot;
+import com.recoded.taqadam.models.FacebookUser;
+import com.recoded.taqadam.models.User;
+import com.recoded.taqadam.models.db.UserDbHandler;
+
+import java.util.HashMap;
+
 /**
- * Created by wisam on Dec 16 17.
+ * Created by wisam on Dec 21 17.
  */
 
 public class UserAuthHandler {
-    /*
     private static final String TAG = UserAuthHandler.class.getSimpleName();
+    private static UserAuthHandler instance;
+
+    private FirebaseAuth mAuth;
     private String mUid;
-    private User mCurrentUser;
-    private static FirebaseAuth mAuth;
-
-    private static UserAuthHandler authHandler;
-
-    public enum UserState{
-        NOT_EXIST, //goto sign in activity
-        EXIST_NO_PROFILE, //Goto confirm activity
-        EXIST_PROFILE_OK, //Goto main activity
-        DISABLED //goto contact us
-    }
-
-
-    //TODO-wisam : Do this !
+    private User currentUser;
+    private Task<User> initTask;
 
     public static UserAuthHandler getInstance() {
-        if(authHandler == null){
-            authHandler = new UserAuthHandler();
+        if (instance == null) {
+            instance = new UserAuthHandler();
+            instance.initializeAuth();
         }
-        return authHandler;
+        return instance;
     }
 
-    public Task<UserState> signIn(String email, String pw){
-        final TaskCompletionSource<UserState> authTask = new TaskCompletionSource<>();
-        mAuth.signInWithEmailAndPassword(email, pw).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-            @Override
-            public void onSuccess(final AuthResult authResult) {
-                try {
-                    initAuth().addOnSuccessListener(new OnSuccessListener<UserState>() {
-                        @Override
-                        public void onSuccess(UserState userState) {
-                            authTask.setResult(userState);
-                        }
-                    });
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                authTask.setException(e);
-            }
-        });
-        return authTask.getTask();
-    }
-
-    public Task<UserState> signIn(AccessToken fbToken){
-        final TaskCompletionSource<UserState> authTask = new TaskCompletionSource<>();
-
-        AuthCredential credential = FacebookAuthProvider.getCredential(fbToken.getToken());
-        mAuth.signInWithCredential(credential).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-            @Override
-            public void onSuccess(AuthResult authResult) {
-                try {
-                    initAuth().addOnSuccessListener(new OnSuccessListener<UserState>() {
-                        @Override
-                        public void onSuccess(UserState userState) {
-                            authTask.setResult(userState);
-                        }
-                    });
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                authTask.setException(e);
-            }
-        });
-
-        return authTask.getTask();
-    }
-
-
-
-    public static Task<UserState> initAuth() throws Exception {
-        if (authHandler.getCurrentUser() != null) {
-            throw new Exception("Already initialized");
-        }
-        if(mAuth == null) mAuth = FirebaseAuth.getInstance();
-        final TaskCompletionSource<UserState> authTask = new TaskCompletionSource<>();
-
-        if (mAuth.getCurrentUser() == null) {
-            authTask.setResult(UserState.NOT_EXIST);
-        } else {
-            mAuth.getCurrentUser().getIdToken(true).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
-                @Override
-                public void onComplete(@NonNull Task<GetTokenResult> task) {
-                    if(!task.isSuccessful()){
-                        if(task.getException() != null){
-                            if(((FirebaseAuthInvalidUserException) task.getException()).getErrorCode().contains("disabled")){
-                                authTask.setResult(UserState.DISABLED);
-                            } else {
-                                authTask.setResult(UserState.NOT_EXIST);
-                            }
-                        } else {
-                            authTask.setResult(UserState.NOT_EXIST);
-                        }
-                    } else { //User exists and legit
-                        authHandler.mUid = mAuth.getUid();
-                        UserDbHandler.getInstance().fetchUserNode().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
-                            @Override
-                            public void onSuccess(DataSnapshot dataSnapshot) {
-                                if(dataSnapshot.exists()){
-                                    authTask.setResult(UserState.EXIST_PROFILE_OK);
-                                    authHandler.mCurrentUser = User.fromMap((HashMap) dataSnapshot.getValue());
-                                } else {
-                                    authTask.setResult(UserState.EXIST_NO_PROFILE);
-                                }
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                authTask.setException(e);
-                                Log.d(TAG, "Error while fetching user node from db: " + e.getMessage());
-                            }
-                        });
-                    }
-                }
-            });
-        }
-
-        return authTask.getTask();
+    private UserAuthHandler() {
+        mAuth = FirebaseAuth.getInstance();
     }
 
     public String getUid() {
         return mUid;
     }
 
-    private UserAuthHandler() {
+    public User getCurrentUser() {
+        return currentUser;
     }
 
-    public User getCurrentUser(){
-        return mCurrentUser;
+    public Task<User> getInitTask() {
+        return initTask;
     }
-    */
+
+    private void initializeAuth() {
+        final TaskCompletionSource<User> initTask = new TaskCompletionSource<>();
+        if (mAuth.getCurrentUser() == null) {
+            initTask.setResult(null);
+        } else {
+            mUid = mAuth.getUid();
+            UserDbHandler.getInstance().fetchUserNode().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                @Override
+                public void onSuccess(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        currentUser = User.fromMap((HashMap) dataSnapshot.getValue());
+                        currentUser.setCompleteProfile(true);
+                        initTask.setResult(currentUser);
+                    } else {
+                        currentUser = new User(mAuth.getCurrentUser());
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    initTask.setException(e);
+                    Log.d(TAG, "Error initializing auth - fetchUserNode Failed: " + e.getMessage());
+                }
+            });
+        }
+        this.initTask = initTask.getTask();
+    }
+
+    public Task<User> signIn(String userName, String pw) {
+        final TaskCompletionSource<User> signInTask = new TaskCompletionSource<>();
+        if (currentUser != null) {
+            signInTask.setResult(currentUser);
+        } else {
+            mAuth.signInWithEmailAndPassword(userName, pw).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                @Override
+                public void onSuccess(final AuthResult authResult) {
+                    UserDbHandler.getInstance().fetchUserNode().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                        @Override
+                        public void onSuccess(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                currentUser = User.fromMap((HashMap) dataSnapshot.getValue());
+                                currentUser.setCompleteProfile(true);
+                                signInTask.setResult(currentUser);
+                            } else {
+                                currentUser = new User(authResult.getUser());
+                                signInTask.setResult(currentUser);
+                            }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            signInTask.setException(e);
+                            Log.d(TAG, "Error signing in user with pw - fetchUserNode Failed: " + e.getMessage());
+                        }
+                    });
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    signInTask.setException(e);
+                    Log.d(TAG, "Error signing in user with pw: " + e.getMessage());
+                }
+            });
+        }
+
+        return signInTask.getTask();
+    }
+
+    public Task<User> signIn(final AccessToken accessToken) {
+        final TaskCompletionSource<User> signInTask = new TaskCompletionSource<>();
+        if (currentUser != null) {
+            signInTask.setResult(currentUser);
+        } else {
+            AuthCredential creds = FacebookAuthProvider.getCredential(accessToken.getToken());
+            mAuth.signInWithCredential(creds).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                @Override
+                public void onSuccess(final AuthResult authResult) {
+                    UserDbHandler.getInstance().fetchUserNode().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                        @Override
+                        public void onSuccess(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                currentUser = User.fromMap((HashMap) dataSnapshot.getValue());
+                                currentUser.setCompleteProfile(true);
+                                signInTask.setResult(currentUser);
+                            } else {
+                                fetchFbData(accessToken).addOnSuccessListener(new OnSuccessListener<User>() {
+                                    @Override
+                                    public void onSuccess(User user) {
+                                        currentUser = user;
+                                        signInTask.setResult(currentUser);
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        signInTask.setException(e);
+                                        Log.d(TAG, "Error signing in user with fb - fetchFbData Failed: " + e.getMessage());
+                                    }
+                                });
+                            }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            signInTask.setException(e);
+                            Log.d(TAG, "Error signing in user with fb - fetchUserNode Failed: " + e.getMessage());
+                        }
+                    });
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    signInTask.setException(e);
+                    Log.d(TAG, "Error signing in user with fb: " + e.getMessage());
+                }
+            });
+        }
+        return signInTask.getTask();
+    }
+
+    public Task<User> signUp(final String userName, String pw) {
+        final TaskCompletionSource<User> signUpTask = new TaskCompletionSource<>();
+        mAuth.createUserWithEmailAndPassword(userName, pw).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+            @Override
+            public void onSuccess(AuthResult authResult) {
+                currentUser = new User(authResult.getUser());
+                signUpTask.setResult(currentUser);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                mAuth.fetchProvidersForEmail(userName).addOnSuccessListener(new OnSuccessListener<ProviderQueryResult>() {
+                    @Override
+                    public void onSuccess(ProviderQueryResult res) {
+                        if (res.getProviders() != null && !res.getProviders().isEmpty()) {
+                            if (res.getProviders().contains(FacebookAuthProvider.PROVIDER_ID)
+                                    && res.getProviders().contains(EmailAuthProvider.PROVIDER_ID)) {
+                                signUpTask.setException(new AuthSignUpException(AuthSignUpException.EMAIL_ASSOC_FB_PW_WRONG));
+                            } else if (res.getProviders().contains(EmailAuthProvider.PROVIDER_ID)) {
+                                signUpTask.setException(new AuthSignUpException(AuthSignUpException.PW_WRONG));
+                            } else if (res.getProviders().contains(FacebookAuthProvider.PROVIDER_ID)) {
+                                signUpTask.setException(new AuthSignUpException(AuthSignUpException.EMAIL_ASSOC_FB));
+                            }
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        signUpTask.setException(e);
+                        Log.d(TAG, "Error signing up user user with pw - fetchProvidersForEmail Failed: " + e.getMessage());
+                    }
+                });
+            }
+        });
+        return signUpTask.getTask();
+    }
+
+    @NonNull
+    private Task<User> fetchFbData(AccessToken token) {
+        final TaskCompletionSource<User> fbTask = new TaskCompletionSource<>();
+        GraphRequest request = GraphRequest.newGraphPathRequest(
+                token,
+                "/me/",
+                new GraphRequest.Callback() {
+                    @Override
+                    public void onCompleted(GraphResponse response) {
+                        if (response.getError() == null && response.getJSONObject() != null) {
+                            User user = User.fromFacebookUser(new FacebookUser(response.getJSONObject()));
+                            fbTask.setResult(user);
+                        } else {
+                            fbTask.setException(response.getError().getException());
+                        }
+                    }
+                });
+
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "first_name,last_name,name,gender,picture.width(2000).height(2000){width,height,url,is_silhouette},verified,birthday,email,id");
+        request.setParameters(parameters);
+        request.executeAsync();
+
+        return fbTask.getTask();
+    }
+
+    private class AuthSignUpException extends Exception {
+        public static final int PW_WRONG = 2001;
+        public static final int EMAIL_ASSOC_FB = 2000;
+        public static final int EMAIL_ASSOC_FB_PW_WRONG = 2002;
+        private int errorCode;
+
+        public AuthSignUpException(int errorCode) {
+            this.errorCode = errorCode;
+        }
+
+        public int getErrorCode() {
+            return errorCode;
+        }
+    }
 }
