@@ -27,15 +27,11 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.EmailAuthProvider;
-import com.google.firebase.auth.FacebookAuthProvider;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
-import com.google.firebase.auth.ProviderQueryResult;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.recoded.taqadam.models.User;
+import com.recoded.taqadam.models.auth.UserAuthHandler;
+import com.recoded.taqadam.models.auth.UserAuthHandler.AuthSignUpException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -43,25 +39,20 @@ import java.io.InputStreamReader;
 
 public class RegisterActivity extends AppCompatActivity {
     private static final String TAG = RegisterActivity.class.getSimpleName();
-    private static final String EMAIL_REGEX = "^[a-zA-Z]+[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.{1}[a-zA-Z0-9-.]{2,}(?<!\\.)$";
+    private static final String EMAIL_REGEX = "^[a-zA-Z]+[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]{2,}(?<!\\.)$";
     private static final String PASSWORD_REGEX_MED = "^(?=.*[A-Za-z])(?=.*[0-9]).{6,}$";
     private static final String PASSWORD_REGEX_FAIR = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z]).{7,}$";
     private static final String PASSWORD_REGEX_STRONG = "^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z]).{8,}$";
 
 
     private CallbackManager mCallbackManager;
-    private FirebaseAuth mAuth;
+    private UserAuthHandler mAuth;
     private boolean agreementSigned = true; //TODO-wisam: Implement proper check
     private EditText etEmailField, etPwField;
     private TextInputLayout etEmailLayout, etPwLayout;
     private TextView tvPwMeter;
     private LoginButton bFbLogin;
     private Button bSignin;
-
-    private OnCompleteListener<AuthResult> mAuthCompleteListener;
-    private OnCompleteListener<ProviderQueryResult> mAuthProblemResolverCompletionListener;
-
-    private String mSubmittedEmail;
 
     ProgressDialog mCreatingAccountProgressDialog;
 
@@ -70,10 +61,16 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mAuth = FirebaseAuth.getInstance();
+        mAuth = UserAuthHandler.getInstance();
         //TODO-wisam: add a reloader for user on applictaion start
         if (mAuth.getCurrentUser() != null) {
-            startActivity(new Intent(this, ConfirmProfileActivity.class));
+            if (!mAuth.getCurrentUser().isCompleteProfile()) {
+                startActivity(new Intent(this, ConfirmProfileActivity.class));
+            } else {
+                Intent i = new Intent(this, MainActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(i);
+            }
             finish();
         }
         setContentView(R.layout.activity_signup);
@@ -93,132 +90,8 @@ public class RegisterActivity extends AppCompatActivity {
         mCreatingAccountProgressDialog.setCancelable(false);
         mCreatingAccountProgressDialog.setTitle("Creating Account");
         mCreatingAccountProgressDialog.setCanceledOnTouchOutside(false);
+        mCreatingAccountProgressDialog.setMessage("Please wait");
 
-        setupAuthListener();
-
-        setupAuthResolverListener();
-
-    }
-
-    private void setupAuthResolverListener() {
-        mAuthProblemResolverCompletionListener = new OnCompleteListener<ProviderQueryResult>() {
-            @Override
-            public void onComplete(@NonNull Task<ProviderQueryResult> task) {
-                mCreatingAccountProgressDialog.dismiss();
-
-                if (task.isSuccessful() && task.getResult().getProviders() != null) {
-                    //Start building the alert dialog. TODO: Extract strings
-                    final AlertDialog.Builder db = new AlertDialog.Builder(RegisterActivity.this);
-                    db.setIcon(getResources().getDrawable(R.drawable.ic_error));
-                    db.setTitle("Error");
-                    db.setCancelable(false);
-
-                    //if this email is associated with both password and fb, he can sign in with fb or reset password
-                    if (task.getResult().getProviders().contains(FacebookAuthProvider.PROVIDER_ID)
-                            && task.getResult().getProviders().contains(EmailAuthProvider.PROVIDER_ID)) {
-                        db.setMessage("This email is already registered and connected to a Facebook account.");
-                        db.setPositiveButton("Sign in with Facebook", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                bFbLogin.performClick();
-                            }
-                        });
-                        db.setNeutralButton("Forgot Password", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                //TODO: implement the intent to pw reset activity
-                                dialog.dismiss();
-                                resetPassword(mSubmittedEmail);
-                            }
-                        });
-                        db.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-
-                        db.create().show();
-
-                        //else if associated with only password means he already signed up. show him only reset pw
-                    } else if (task.getResult().getProviders().contains(EmailAuthProvider.PROVIDER_ID)) {
-                        db.setMessage("This email is already registered. Do you want to sign in?");
-                        db.setPositiveButton("Sign in", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                bSignin.performClick();
-                            }
-                        });
-                        db.setNeutralButton("Forgot Password", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                //TODO: implement the intent to pw reset activity
-                                dialog.dismiss();
-                                resetPassword(mSubmittedEmail);
-                            }
-                        });
-                        db.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-
-                        db.create().show();
-
-                        //else if associated with fb only, offer him to signin with fb
-                    } else if (task.getResult().getProviders().contains(FacebookAuthProvider.PROVIDER_ID)) {
-                        db.setMessage("This email is associated with a registered Facebook account. Do you want to sign in with Facebook instead?");
-                        db.setPositiveButton("Sign in with Facebook", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                bFbLogin.performClick();
-                            }
-                        });
-
-                        db.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-
-                        db.create().show();
-                    }
-                }
-            }
-        };
-    }
-
-    private void setupAuthListener() {
-        mAuthCompleteListener = new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    mCreatingAccountProgressDialog.dismiss();
-                    //TODO: Send the user to profile editor activity to confirm email and phone number
-                    //TODO: IF using Facebook check if he's already confirmed so no need for profile editor
-                    // Sign in/up success, update UI with the signed-in user's information
-                    Log.d(TAG, "signInWithCredential:success");
-                    startActivity(new Intent(RegisterActivity.this, ConfirmProfileActivity.class));
-                    finish();
-                } else {
-                    mCreatingAccountProgressDialog.setMessage("Resolving problems...");
-                    // If sign in fails, display a message to the user.
-                    Log.w(TAG, "signInWithCredential:failure", task.getException());
-                    if (task.getException() instanceof FirebaseAuthUserCollisionException) {
-
-                        //We'll check for the provider. If it's facebook then we will ask the user to connect them.
-                        FirebaseAuth.getInstance().fetchProvidersForEmail(mSubmittedEmail).addOnCompleteListener(RegisterActivity.this, mAuthProblemResolverCompletionListener);
-                    }
-                }
-
-                // ...
-            }
-        };
     }
 
     private void resetPassword(String mSubmittedEmail) {
@@ -268,24 +141,139 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    private void handleEmailAndPassword(String email, String pw) {
-        mCreatingAccountProgressDialog.setMessage("Please wait");
+    private void handleEmailAndPassword(final String email, String pw) {
         mCreatingAccountProgressDialog.show();
 
-        Log.d(TAG, "handleEmailAndPassword:" + email);
-        mSubmittedEmail = email;
-        mAuth.createUserWithEmailAndPassword(email, pw).addOnCompleteListener(this, mAuthCompleteListener);
+        mAuth.signUp(email, pw).addOnSuccessListener(this, new OnSuccessListener<User>() {
+            @Override
+            public void onSuccess(User user) {
+                mCreatingAccountProgressDialog.dismiss();
+                // Sign up success, update UI with the signed-in user's information
+                if (!user.isCompleteProfile()) {
+                    startActivity(new Intent(RegisterActivity.this, ConfirmProfileActivity.class));
+                } else {
+                    Intent i = new Intent(RegisterActivity.this, MainActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    startActivity(i);
+                }
+                finish();
+            }
+        }).addOnFailureListener(this, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                mCreatingAccountProgressDialog.dismiss();
+                if (e instanceof AuthSignUpException) {
+                    //Start building the alert dialog. TODO: Extract strings
+                    final AlertDialog.Builder db = new AlertDialog.Builder(RegisterActivity.this);
+                    db.setIcon(getResources().getDrawable(R.drawable.ic_error));
+                    db.setTitle("Error");
+                    db.setCancelable(false);
+                    AuthSignUpException ex = (AuthSignUpException) e;
+
+                    if (ex.getErrorCode() == AuthSignUpException.EMAIL_ASSOC_FB_PW_WRONG) {
+                        //if this email is associated with both password and fb, he can sign in with fb or reset password
+                        db.setMessage("This email is already registered and connected to a Facebook account.");
+                        db.setPositiveButton("Sign in with Facebook", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                bFbLogin.performClick();
+                            }
+                        });
+                        db.setNeutralButton("Forgot Password", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //TODO: implement the intent to pw reset activity
+                                dialog.dismiss();
+                                resetPassword(email);
+                            }
+                        });
+                        db.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                        db.create().show();
+
+                    } else if (ex.getErrorCode() == AuthSignUpException.PW_WRONG) {
+                        //else if associated with only password means he already signed up. show him only reset pw
+                        db.setMessage("This email is already registered. Do you want to sign in?");
+                        db.setPositiveButton("Sign in", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                bSignin.performClick();
+                            }
+                        });
+                        db.setNeutralButton("Forgot Password", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //TODO: implement the intent to pw reset activity
+                                dialog.dismiss();
+                                resetPassword(email);
+                            }
+                        });
+                        db.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                        db.create().show();
+
+                    } else if (ex.getErrorCode() == AuthSignUpException.EMAIL_ASSOC_FB) {
+                        //else if associated with fb only, offer him to signin with fb
+                        db.setMessage("This email is associated with a registered Facebook account. Do you want to sign in with Facebook instead?");
+                        db.setPositiveButton("Sign in with Facebook", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                bFbLogin.performClick();
+                            }
+                        });
+
+                        db.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                        db.create().show();
+                    }
+                } else {
+                    Toast.makeText(RegisterActivity.this, "Error while resolving problem!", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     private void handleFacebookAccessToken(AccessToken token) {
-        mCreatingAccountProgressDialog.setMessage("Please wait");
         mCreatingAccountProgressDialog.show();
-
-        Log.d(TAG, "handleFacebookAccessToken:" + token);
-
-        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-
-        mAuth.signInWithCredential(credential).addOnCompleteListener(this, mAuthCompleteListener);
+        mAuth.signIn(token).addOnSuccessListener(this, new OnSuccessListener<User>() {
+            @Override
+            public void onSuccess(User user) {
+                mCreatingAccountProgressDialog.dismiss();
+                // Sign up success, update UI with the signed-in user's information
+                if (!user.isCompleteProfile()) {
+                    startActivity(new Intent(RegisterActivity.this, ConfirmProfileActivity.class));
+                } else {
+                    Intent i = new Intent(RegisterActivity.this, MainActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    startActivity(i);
+                }
+                finish();
+            }
+        }).addOnFailureListener(this, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                mCreatingAccountProgressDialog.dismiss();
+                Toast.makeText(RegisterActivity.this, "Error signing in with Facebook", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     //Agreement parts for later

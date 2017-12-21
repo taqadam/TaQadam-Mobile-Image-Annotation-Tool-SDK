@@ -97,6 +97,7 @@ public class UserAuthHandler {
             mAuth.signInWithEmailAndPassword(userName, pw).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                 @Override
                 public void onSuccess(final AuthResult authResult) {
+                    mUid = mAuth.getUid();
                     UserDbHandler.getInstance().fetchUserNode().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                         @Override
                         public void onSuccess(DataSnapshot dataSnapshot) {
@@ -138,6 +139,7 @@ public class UserAuthHandler {
             mAuth.signInWithCredential(creds).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                 @Override
                 public void onSuccess(final AuthResult authResult) {
+                    mUid = mAuth.getUid();
                     UserDbHandler.getInstance().fetchUserNode().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                         @Override
                         public void onSuccess(DataSnapshot dataSnapshot) {
@@ -155,7 +157,8 @@ public class UserAuthHandler {
                                 }).addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        signInTask.setException(e);
+                                        currentUser = new User(authResult.getUser());
+                                        signInTask.setResult(currentUser);
                                         Log.d(TAG, "Error signing in user with fb - fetchFbData Failed: " + e.getMessage());
                                     }
                                 });
@@ -185,6 +188,7 @@ public class UserAuthHandler {
         mAuth.createUserWithEmailAndPassword(userName, pw).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
+                mUid = mAuth.getUid();
                 currentUser = new User(authResult.getUser());
                 signUpTask.setResult(currentUser);
             }
@@ -243,7 +247,7 @@ public class UserAuthHandler {
         return fbTask.getTask();
     }
 
-    private class AuthSignUpException extends Exception {
+    public static class AuthSignUpException extends Exception {
         public static final int PW_WRONG = 2001;
         public static final int EMAIL_ASSOC_FB = 2000;
         public static final int EMAIL_ASSOC_FB_PW_WRONG = 2002;

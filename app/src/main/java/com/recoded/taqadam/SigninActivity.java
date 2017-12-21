@@ -18,11 +18,11 @@ import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FacebookAuthProvider;
-import com.google.firebase.auth.FirebaseAuth;
+import com.recoded.taqadam.models.User;
+import com.recoded.taqadam.models.auth.UserAuthHandler;
 
 public class SigninActivity extends AppCompatActivity {
     private static final String TAG = SigninActivity.class.getSimpleName();
@@ -31,7 +31,7 @@ public class SigninActivity extends AppCompatActivity {
     private EditText etEmailField, etPwField;
     private LoginButton bFbLogin;
 
-    private FirebaseAuth mAuth;
+    private UserAuthHandler mAuth;
     private CallbackManager mCallbackManager;
     private OnCompleteListener<AuthResult> mAuthCompleteListener;
     private ProgressDialog progressDialog;
@@ -41,13 +41,12 @@ public class SigninActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin);
 
-        mAuth = FirebaseAuth.getInstance();
+        mAuth = UserAuthHandler.getInstance();
         if (mAuth.getCurrentUser() != null) {
             //Already signed in
             exit();
         }
 
-        setupAuthListener();
         setupFbAuth();
 
         etEmailLayout = findViewById(R.id.et_email);
@@ -80,7 +79,7 @@ public class SigninActivity extends AppCompatActivity {
     }
 
     private void handleEmailAndPw() {
-        String email = etEmailField.getText().toString();
+        final String email = etEmailField.getText().toString();
         String pw = etPwField.getText().toString();
         if (email.isEmpty() || pw.isEmpty()) {
             indicateError("Please enter both fields");
@@ -88,33 +87,38 @@ public class SigninActivity extends AppCompatActivity {
         }
         progressDialog.show();
         indicateError("");
-        mAuth.signInWithEmailAndPassword(email, pw)
-                .addOnCompleteListener(mAuthCompleteListener);
-    }
-
-    private void setupAuthListener() {
-        mAuthCompleteListener = new OnCompleteListener<AuthResult>() {
+        mAuth.signIn(email, pw)
+                .addOnSuccessListener(this, new OnSuccessListener<User>() {
+                    @Override
+                    public void onSuccess(User user) {
+                        progressDialog.dismiss();
+                        exit();
+                    }
+                }).addOnFailureListener(this, new OnFailureListener() {
             @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    exit();
-                } else {
-                    progressDialog.dismiss();
-                    indicateError(task.getException().getMessage());
-                }
-
-                // ...
+            public void onFailure(@NonNull Exception e) {
+                progressDialog.dismiss();
+                indicateError(e.getMessage());
             }
-        };
+        });
     }
 
     private void handleFacebookAccessToken(AccessToken token) {
         progressDialog.show();
-        Log.d(TAG, "handleFacebookAccessToken:" + token);
-
-        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-
-        mAuth.signInWithCredential(credential).addOnCompleteListener(this, mAuthCompleteListener);
+        mAuth.signIn(token).addOnSuccessListener(this, new OnSuccessListener<User>() {
+            @Override
+            public void onSuccess(User user) {
+                progressDialog.dismiss();
+                // Sign up success, update UI with the signed-in user's information
+                exit();
+            }
+        }).addOnFailureListener(this, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                progressDialog.dismiss();
+                indicateError(e.getMessage());
+            }
+        });
     }
 
     private void setupFbAuth() {
@@ -160,9 +164,15 @@ public class SigninActivity extends AppCompatActivity {
     }
 
     private void exit() {
-        Intent i = new Intent(this, ConfirmProfileActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        startActivity(i);
-        finish();
+        if (mAuth.getCurrentUser().isCompleteProfile()) {
+            Intent i = new Intent(this, MainActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            startActivity(i);
+            finish();
+        } else {
+            Intent i = new Intent(this, ConfirmProfileActivity.class);
+            startActivity(i);
+            finish();
+        }
     }
 }

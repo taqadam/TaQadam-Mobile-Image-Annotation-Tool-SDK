@@ -1,6 +1,7 @@
 package com.recoded.taqadam;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,17 +29,12 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.AccessToken;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.storage.UploadTask;
 import com.recoded.taqadam.databinding.ActivityConfirmProfileBinding;
-import com.recoded.taqadam.models.FacebookUser;
 import com.recoded.taqadam.models.User;
+import com.recoded.taqadam.models.auth.UserAuthHandler;
 import com.recoded.taqadam.models.db.UserDbHandler;
 import com.recoded.taqadam.models.storage.UserStorageHandler;
 import com.squareup.picasso.Callback;
@@ -49,7 +45,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
 
 public class ConfirmProfileActivity extends AppCompatActivity {
@@ -73,6 +68,7 @@ public class ConfirmProfileActivity extends AppCompatActivity {
     private Uri cameraOutputFile; //Because there is no access to it;
 
     private boolean mEditMode; // This activity Will Be Used for editing profile as well
+    private ProgressDialog mCreatingAccountProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,9 +78,6 @@ public class ConfirmProfileActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_confirm_profile);
 
         this.mEditMode = getIntent().getBooleanExtra("EDIT_MODE", false);
-
-        toggleProgressLayout();
-        getUserProfile();
 
         if (mEditMode) {
             binding.tvReady.setText("Edit profile");
@@ -153,67 +146,57 @@ public class ConfirmProfileActivity extends AppCompatActivity {
             }
         });
         setupUserDbCreationListener();
+        setUser();
+
+        mCreatingAccountProgressDialog = new ProgressDialog(this);
+        mCreatingAccountProgressDialog.setCancelable(false);
+        mCreatingAccountProgressDialog.setTitle("Updating Account");
+        mCreatingAccountProgressDialog.setCanceledOnTouchOutside(false);
+        mCreatingAccountProgressDialog.setMessage("Please wait");
     }
 
-    private void getUserProfile() {
-        try {
-            UserDbHandler.getInstance().fetchUserNode().addOnCompleteListener(this, new OnCompleteListener<DataSnapshot>() {
+    private void checkAuthorized() {
+        if (UserAuthHandler.getInstance().getCurrentUser() == null) {
+            user = new User();
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Error!");
+            builder.setIcon(R.drawable.ic_error);
+            builder.setMessage("You are not logged in!");
+            builder.setPositiveButton("Login", new DialogInterface.OnClickListener() {
                 @Override
-                public void onComplete(@NonNull Task<DataSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        if (task.getResult().exists()) { //user already has a profile
-                            if (mEditMode) populateEditor(task.getResult().getValue());
-                            else exit();
-                        } else { //user profile is empty so show form
-                            if (AccessToken.getCurrentAccessToken() != null && !AccessToken.getCurrentAccessToken().isExpired()) {
-                                fetchFbData(AccessToken.getCurrentAccessToken());
-                            } else {
-                                user = new User(FirebaseAuth.getInstance().getCurrentUser());
-                                binding.setUser(user);
-                                toggleProgressLayout();
-                            }
-                        }
-                    } else {
-                        Log.d(TAG, "Error while fetching user profile from db: " + task.getException());
-                    }
+                public void onClick(DialogInterface dialog, int which) {
+                    startActivity(new Intent(ConfirmProfileActivity.this, SigninActivity.class));
+                    finish();
                 }
             });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    //For edit mode
-    private void populateEditor(Object value) {
-        if (value instanceof HashMap) {
-            user = User.fromMap((HashMap) value);
-            binding.setUser(user);
-            if (user.getGender() == User.Gender.MALE) {
-                binding.spinnerGender.setSelection(1);
-            } else if (user.getGender() == User.Gender.FEMALE) {
-                binding.spinnerGender.setSelection(2);
-            }
-            ArrayAdapter adapter = (ArrayAdapter) binding.spinnerCities.getAdapter();
-            binding.spinnerCities.setSelection(adapter.getPosition(user.getUserAddress()));
-            binding.ivDisplayImage.setTag(user.getPicturePath());
-            loadImage();
-            if (user.getDateOfBirth() != null) {
-                mCalendar.setTime(user.getDateOfBirth());
-                updateDobField();
-            }
-            toggleProgressLayout();
-        }
-    }
-
-    private void exit() {
-        if (mEditMode) {
-            finish();
+            builder.setNegativeButton("Register", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    startActivity(new Intent(ConfirmProfileActivity.this, RegisterActivity.class));
+                    finish();
+                }
+            });
+            builder.setCancelable(false);
+            builder.create().show();
         } else {
-            Intent i = new Intent(this, MainActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-            startActivity(i);
-            finish();
+            user = UserAuthHandler.getInstance().getCurrentUser();
+        }
+    }
+
+    private void setUser() {
+        binding.setUser(user);
+        if (user.getGender() == User.Gender.MALE) {
+            binding.spinnerGender.setSelection(1);
+        } else if (user.getGender() == User.Gender.FEMALE) {
+            binding.spinnerGender.setSelection(2);
+        }
+        ArrayAdapter adapter = (ArrayAdapter) binding.spinnerCities.getAdapter();
+        binding.spinnerCities.setSelection(adapter.getPosition(user.getUserAddress()));
+        binding.ivDisplayImage.setTag(user.getPicturePath());
+        loadImage();
+        if (user.getDateOfBirth() != null) {
+            mCalendar.setTime(user.getDateOfBirth());
+            updateDobField();
         }
     }
 
@@ -345,87 +328,24 @@ public class ConfirmProfileActivity extends AppCompatActivity {
         return diff < acceptableDiff;
     }
 
-    private void checkAuthorized() {
-        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Error!");
-            builder.setIcon(R.drawable.ic_error);
-            builder.setMessage("You are not logged in!");
-            builder.setPositiveButton("Login", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    startActivity(new Intent(ConfirmProfileActivity.this, SigninActivity.class));
-                    finish();
-                }
-            });
-            builder.setNegativeButton("Register", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    startActivity(new Intent(ConfirmProfileActivity.this, RegisterActivity.class));
-                    finish();
-                }
-            });
-            builder.setCancelable(false);
-            builder.create().show();
-        }
-    }
-
     private void setupUserDbCreationListener() {
         mUserCreatedListener = new OnCompleteListener<Void>() {
 
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    //TODO-wisam: Start the profile activity
-                    startActivity(new Intent(ConfirmProfileActivity.this, MainActivity.class));
+                    mCreatingAccountProgressDialog.dismiss();
                     Toast.makeText(ConfirmProfileActivity.this, "User Created Successfully!", Toast.LENGTH_LONG).show();
+                    Intent i = new Intent(ConfirmProfileActivity.this, MainActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    startActivity(i);
                     finish();
+                } else {
+                    Log.d(TAG, "Error writing user data to Firebase db: " + task.getException());
+                    Toast.makeText(ConfirmProfileActivity.this, "Error updating account", Toast.LENGTH_LONG).show();
                 }
             }
         };
-    }
-
-    private void fetchFbData(final AccessToken accessToken) {
-        GraphRequest request = GraphRequest.newGraphPathRequest(
-                accessToken,
-                "/me/",
-                new GraphRequest.Callback() {
-                    @Override
-                    public void onCompleted(GraphResponse response) {
-                        user = User.fromFacebookUser(new FacebookUser(response.getJSONObject()));
-                        binding.setUser(user);
-                        if (user.getPicturePath() != null) {
-                            //TODO-wisam: upload image to fire storage instead of keeping fb link
-                            binding.ivDisplayImage.setTag(user.getPicturePath());
-                        }
-                        loadImage();
-                        if (user.getDateOfBirth() != null) {
-                            mCalendar.setTime(user.getDateOfBirth());
-                            updateDobField();
-                        }
-                        if (user.getGender() == User.Gender.MALE) {
-                            binding.spinnerGender.setSelection(1);
-                        } else if (user.getGender() == User.Gender.FEMALE) {
-                            binding.spinnerGender.setSelection(2);
-                        }
-                        toggleProgressLayout();
-                    }
-                });
-
-        Bundle parameters = new Bundle();
-        parameters.putString("fields", "first_name,last_name,name,gender,picture.width(2000).height(2000){width,height,url,is_silhouette},verified,birthday,email,id");
-        request.setParameters(parameters);
-        request.executeAsync();
-    }
-
-    private void toggleProgressLayout() {
-        if (binding.progressBarContainer.getVisibility() == View.GONE) {
-            binding.progressBarContainer.setVisibility(View.VISIBLE);
-            binding.mainLayoutContainer.setVisibility(View.GONE);
-        } else {
-            binding.progressBarContainer.setVisibility(View.GONE);
-            binding.mainLayoutContainer.setVisibility(View.VISIBLE);
-        }
     }
 
     private void loadImage() {
@@ -644,14 +564,14 @@ public class ConfirmProfileActivity extends AppCompatActivity {
                 user.setGender(User.Gender.FEMALE);
                 break;
         }
-        if (!mEditMode) {
+        if (!user.isCompleteProfile()) {
             Log.d(TAG, "Creating user");
             UserDbHandler.getInstance().writeNewUser(user).addOnCompleteListener(ConfirmProfileActivity.this, mUserCreatedListener);
-            toggleProgressLayout();
+            mCreatingAccountProgressDialog.show();
         } else {
             Log.d(TAG, "Updating user");
             UserDbHandler.getInstance().updateUser(user).addOnCompleteListener(ConfirmProfileActivity.this, mUserCreatedListener);
-            toggleProgressLayout();
+            mCreatingAccountProgressDialog.show();
         }
 
 
