@@ -1,4 +1,4 @@
-package com.recoded.taqadam;
+package com.recoded.taqadam.models;
 
 /**
  * Created by HP PC on 12/17/2017.
