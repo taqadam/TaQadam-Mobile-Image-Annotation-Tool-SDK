@@ -1,51 +1,52 @@
 package com.recoded.taqadam;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import com.recoded.taqadam.models.Task;
 
 import java.util.List;
 
-/**
- * Created by HP PC on 12/17/2017.
- */
+public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
+    private Context ctx;
+    private List<Task> dataSet;
 
-public class TaskAdapter extends ArrayAdapter<Task> {
-    private Context context;
-    private int resource;
-    private List<Task> task;
-
-
-    public TaskAdapter(@NonNull Context context, int resource, @NonNull List<Task> task) {
-        super(context, resource, task);
-        this.context = context;
-        this.resource = resource;
-        this.task = task;
+    public TaskAdapter(Context c, List<Task> list) {
+        this.ctx = c;
+        this.dataSet = list;
     }
 
-    @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        if (convertView == null) {
-            LayoutInflater layoutInflater = LayoutInflater.from(context);
-            convertView = layoutInflater.inflate(R.layout.task, parent, false);
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(ctx).inflate(R.layout.task_item, parent, false);
+        return new ViewHolder(v);
+    }
 
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        Task task = dataSet.get(position);
+        holder.taskType.setText(task.getType());
+        holder.taskDesc.setText(task.getDescription());
+        holder.taskTitle.setText(task.getTitle());
+    }
+
+    @Override
+    public int getItemCount() {
+        return dataSet.size();
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder {
+        TextView taskType, taskTitle, taskDesc;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            taskType = itemView.findViewById(R.id.task_type);
+            taskTitle = itemView.findViewById(R.id.task_title);
+            taskDesc = itemView.findViewById(R.id.task_disc);
         }
-        TextView type = (TextView) convertView.findViewById(R.id.task_type);
-        TextView title = (TextView) convertView.findViewById(R.id.task_title);
-        TextView desc = (TextView) convertView.findViewById(R.id.task_disc);
-
-        Task taskPosition = task.get(position);
-
-        type.setText(taskPosition.getType());
-        title.setText(taskPosition.getTitle());
-        desc.setText(taskPosition.getDescription());
-
-        return convertView;
     }
 }

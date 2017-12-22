@@ -3,10 +3,10 @@ package com.recoded.taqadam.models.storage;
 import android.net.Uri;
 
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.recoded.taqadam.models.auth.UserAuthHandler;
 
 /**
  * Created by wisam on Dec 16 17.
@@ -29,18 +29,13 @@ public class UserStorageHandler {
     }
 
     private UserStorageHandler() {
-        this.mUid = FirebaseAuth.getInstance().getUid();
+        this.mUid = UserAuthHandler.getInstance().getUid();
     }
 
-    public Task<UploadTask.TaskSnapshot> uploadFile(String fileName, Uri filePath)
-            throws Exception {
-        if (mUid != null) {
-            StorageReference userFilesRef = FirebaseStorage.getInstance().getReference().child(USERS_FILES_ROOT);
-            StorageReference imageRef = userFilesRef.child(mUid).child(fileName);
-            return imageRef.putFile(filePath);
-        } else {
-            throw new Exception("User not signed in");
-        }
+    public Task<UploadTask.TaskSnapshot> uploadFile(String fileName, Uri filePath) {
+        StorageReference userFilesRef = FirebaseStorage.getInstance().getReference().child(USERS_FILES_ROOT);
+        StorageReference imageRef = userFilesRef.child(mUid).child(fileName);
+        return imageRef.putFile(filePath);
     }
 
     public Task<UploadTask.TaskSnapshot> uploadDisplayImage(Uri filePath) throws Exception {

@@ -4,10 +4,13 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
+
+import com.recoded.taqadam.models.Task;
 
 import java.util.ArrayList;
 
@@ -68,9 +71,10 @@ public class FragmentTasks extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fragment_tasks, container, false);
 
-        ListView listView = (ListView) view.findViewById(R.id.list_view);
-        ArrayList<Task> array = new ArrayList<Task>();
-        //we have many task types based on user performance (Tutorial,training,qualifier,locked)
+        RecyclerView recyclerView = view.findViewById(R.id.tasks_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        ArrayList<Task> array = new ArrayList<>();
+        //we have many task_item types based on user performance (Tutorial,training,qualifier,locked)
 
         array.add(new Task("Tutorial", "Bounding Box", "Learn how to draw boxes around objects"));
         array.add(new Task("Tutorial", "Labeling", "Learn how to draw boxes around objects"));
@@ -80,8 +84,8 @@ public class FragmentTasks extends Fragment {
         array.add(new Task("Qualifier", "Labeling", "put your skills in work to label objects"));
         array.add(new Task("Qualifier", "categorization", "categorize objects in the given image"));
         array.add(new Task("Qualifier", "Image validation", "choose the valid image from the given images "));
-        TaskAdapter taskAdapter = new TaskAdapter(getActivity(), R.layout.task, array);
-        listView.setAdapter(taskAdapter);
+        TaskAdapter taskAdapter = new TaskAdapter(getActivity(), array);
+        recyclerView.setAdapter(taskAdapter);
 
         return view;
 

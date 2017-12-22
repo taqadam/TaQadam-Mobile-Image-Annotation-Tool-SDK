@@ -21,6 +21,10 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.recoded.taqadam.models.User;
+import com.recoded.taqadam.models.auth.UserAuthHandler;
+
 public class SplashActivity extends AppCompatActivity {
 
     private Runnable mBackgroundColorAnimation = new Runnable() {
@@ -121,21 +125,27 @@ public class SplashActivity extends AppCompatActivity {
             });
             dialog.create().show();
         } else {
-            new Thread(new Runnable() {
+            UserAuthHandler.getInstance().getInitTask().addOnSuccessListener(this, new OnSuccessListener<User>() {
                 @Override
-                public void run() {
-                    try {
-                        Thread.sleep(1500);
-                        if (firstRun()) {
-                            gotoIntro();
-                        } else {
-                            gotoSignIn();
+                public void onSuccess(User user) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                Thread.sleep(1000);
+                                if (firstRun()) {
+                                    gotoIntro();
+                                } else {
+                                    start();
+                                }
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                         }
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    }).start();
                 }
-            }).start();
+            });
+
         }
     }
 
@@ -151,8 +161,17 @@ public class SplashActivity extends AppCompatActivity {
         startActivityForResult(new Intent(this, IntroActivity.class), 1500);
     }
 
-    private void gotoSignIn() {
-        startActivity(new Intent(this, SigninActivity.class));
+    private void start() {
+        if (UserAuthHandler.getInstance().getCurrentUser() == null) {
+            Intent i = new Intent(this, SigninActivity.class);
+            startActivity(i);
+        } else if (!UserAuthHandler.getInstance().getCurrentUser().isCompleteProfile()) {
+            Intent i = new Intent(this, ConfirmProfileActivity.class);
+            startActivity(i);
+        } else {
+            Intent i = new Intent(this, MainActivity.class);
+            startActivity(i);
+        }
         finish();
     }
 
@@ -161,10 +180,9 @@ public class SplashActivity extends AppCompatActivity {
         boolean isFirstRun = preferences.getBoolean("firstRun", true);
 
         if (isFirstRun) {
-            //TODO-Wisam: Uncomment first run sp
-            //SharedPreferences.Editor editor = preferences.edit();
-            //editor.putBoolean("firstRun", false);
-            //editor.apply();
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean("firstRun", false);
+            editor.apply();
         }
         return isFirstRun;
     }

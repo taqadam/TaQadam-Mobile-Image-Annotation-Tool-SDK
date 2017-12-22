@@ -62,5 +62,8 @@
     <string name="title_activity_splash">TAQADAM</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
+
+    <string name="action_settings">Settings</string>
 
 </resources>

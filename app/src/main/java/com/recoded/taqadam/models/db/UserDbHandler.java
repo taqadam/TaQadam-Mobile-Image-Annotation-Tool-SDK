@@ -1,15 +1,19 @@
 package com.recoded.taqadam.models.db;
 
+import android.net.Uri;
+
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.recoded.taqadam.models.User;
+import com.recoded.taqadam.models.auth.UserAuthHandler;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,6 +50,8 @@ public class UserDbHandler {
 
     private DatabaseReference mDbReference;
 
+    private ChildEventListener userListener;
+
     public static UserDbHandler getInstance() {
         if (handler == null) {
             handler = new UserDbHandler();
@@ -54,8 +60,9 @@ public class UserDbHandler {
     }
 
     private UserDbHandler() {
-        String mUid = FirebaseAuth.getInstance().getUid();
+        String mUid = UserAuthHandler.getInstance().getUid();
         this.mDbReference = FirebaseDatabase.getInstance().getReference().child("Users").child(mUid);
+        setupUserListener();
     }
 
     public Task<Void> writeNewUser(User user) {
@@ -107,5 +114,90 @@ public class UserDbHandler {
         });
 
         return source.getTask();
+    }
+
+    private void setupUserListener() {
+        this.userListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                updateCurrentUser(dataSnapshot);
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        mDbReference.addChildEventListener(this.userListener);
+    }
+
+    public void detachListeners() {
+        mDbReference.removeEventListener(this.userListener);
+        handler = null;
+    }
+
+    private void updateCurrentUser(DataSnapshot data) {
+        String key = data.getKey();
+        switch (key) {
+            case FIRST_NAME:
+                UserAuthHandler.getInstance().getCurrentUser().setFirstName((String) data.getValue());
+                break;
+            case LAST_NAME:
+                UserAuthHandler.getInstance().getCurrentUser().setLastName((String) data.getValue());
+                break;
+            case DISPLAY_NAME:
+                UserAuthHandler.getInstance().getCurrentUser().setDisplayName((String) data.getValue());
+                break;
+            case EMAIL_ADDRESS:
+                UserAuthHandler.getInstance().getCurrentUser().setEmailAddress((String) data.getValue());
+                break;
+            case EMAIL_CONFIRMED:
+                UserAuthHandler.getInstance().getCurrentUser().setEmailVerified((boolean) data.getValue());
+                break;
+            case PHONE_NUMBER:
+                UserAuthHandler.getInstance().getCurrentUser().setPhoneNumber((String) data.getValue());
+                break;
+            case PHONE_CONFIRMED:
+                UserAuthHandler.getInstance().getCurrentUser().setPhoneNumberVerified((boolean) data.getValue());
+                break;
+            case USER_ADDRESS:
+                UserAuthHandler.getInstance().getCurrentUser().setUserAddress((String) data.getValue());
+                break;
+            case USER_DOB_TS:
+                UserAuthHandler.getInstance().getCurrentUser().setDateOfBirth(new Date((long) data.getValue()));
+                break;
+            case DISPLAY_IMAGE:
+                UserAuthHandler.getInstance().getCurrentUser().setPicturePath(Uri.parse((String) data.getValue()));
+                break;
+            case USER_GENDER:
+                String gender = (String) data.getValue();
+                switch (gender) {
+                    case "Male":
+                        UserAuthHandler.getInstance().getCurrentUser().setGender(User.Gender.MALE);
+                        break;
+                    case "Female":
+                        UserAuthHandler.getInstance().getCurrentUser().setGender(User.Gender.FEMALE);
+                        break;
+                    default:
+                        UserAuthHandler.getInstance().getCurrentUser().setGender(User.Gender.NOT_SPECIFIED);
+                        break;
+                }
+                break;
+        }
     }
 }

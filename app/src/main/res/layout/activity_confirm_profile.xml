@@ -16,29 +16,6 @@
         android:layout_height="match_parent"
         android:background="@color/colorPurple">
 
-        <RelativeLayout
-            android:id="@+id/progress_bar_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorPurple"
-            android:visibility="gone">
-
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginBottom="8dp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/progress_bar"
-                android:layout_centerHorizontal="true"
-                android:text="Please wait.."
-                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"/>
-        </RelativeLayout>
-
         <ScrollView
             android:id="@+id/main_layout_container"
             android:layout_width="match_parent"
