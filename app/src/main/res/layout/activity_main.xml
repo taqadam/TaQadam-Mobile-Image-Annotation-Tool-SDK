@@ -6,6 +6,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context="com.recoded.taqadam.MainActivity">
 
     <android.support.design.widget.CoordinatorLayout
@@ -29,15 +30,16 @@
                 android:id="@+id/frame_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_above="@id/navigation"/>
+                android:layout_above="@id/bottom_navigation"/>
 
             <android.support.design.widget.BottomNavigationView
-                android:id="@+id/navigation"
+                android:id="@+id/bottom_navigation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:background="@color/colorWhite"
-                app:menu="@menu/tabs_menu"/>
+                android:background="@color/colorDarkGrey"
+                app:elevation="8dp"
+                app:menu="@menu/bottom_nav_menu"/>
         </RelativeLayout>
     </android.support.design.widget.CoordinatorLayout>
 
@@ -47,7 +49,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer">
+        app:menu="@menu/drawer_menu">
     </android.support.design.widget.NavigationView>
 </android.support.v4.widget.DrawerLayout>

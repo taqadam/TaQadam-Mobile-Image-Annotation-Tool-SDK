@@ -7,6 +7,7 @@ import android.util.Log;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -247,6 +248,16 @@ public class UserAuthHandler {
         return fbTask.getTask();
     }
 
+    public void signOut() {
+        UserDbHandler.getInstance().detachListeners();
+        currentUser = null;
+        mUid = null;
+        if (AccessToken.getCurrentAccessToken() != null) {
+            LoginManager.getInstance().logOut();
+        }
+        mAuth.signOut();
+    }
+
     public static class AuthSignUpException extends Exception {
         public static final int PW_WRONG = 2001;
         public static final int EMAIL_ASSOC_FB = 2000;
@@ -259,6 +270,12 @@ public class UserAuthHandler {
 
         public int getErrorCode() {
             return errorCode;
+        }
+    }
+
+    public void updateCurrentUser(User user) {
+        if (user.isCompleteProfile()) {
+            currentUser = user;
         }
     }
 }

@@ -47,6 +47,10 @@ public class User implements Serializable {
         this.mLName = mLName;
     }
 
+    public String getFullName() {
+        return getFirstName() + " " + getLastName();
+    }
+
     public String getDisplayName() {
         return mDName;
     }
@@ -59,12 +63,32 @@ public class User implements Serializable {
         return mEMailAddr;
     }
 
+    public String getEmailString() {
+        String ret = getEmailAddress().concat(" ");
+        if (isEmailVerified()) {
+            ret += "(Verified)";
+        } else {
+            ret += "(Not Verified)";
+        }
+        return ret;
+    }
+
     public void setEmailAddress(String mEMailAddr) {
         this.mEMailAddr = mEMailAddr;
     }
 
     public String getPhoneNumber() {
         return mPhoneNumber;
+    }
+
+    public String getPhoneNumberString() {
+        String ret = getPhoneNumber().concat(" ");
+        if (isPhoneNumberVerified()) {
+            ret += "(Verified)";
+        } else {
+            ret += "(Not Verified)";
+        }
+        return ret;
     }
 
     public void setPhoneNumber(String mPhoneNumber) {
@@ -89,6 +113,26 @@ public class User implements Serializable {
 
     public Date getDateOfBirth() {
         return mDateOfBirth;
+    }
+
+    public String getAgeString() {
+        String ageString;
+
+        Calendar dob = Calendar.getInstance();
+        Calendar today = Calendar.getInstance();
+
+        dob.setTime(getDateOfBirth());
+        int age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
+
+        if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)) {
+            age--;
+        }
+
+        String format = "dd/MM/yyyy";
+        SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
+        ageString = sdf.format(dob.getTime()) + " (" + age + " years)";
+
+        return ageString;
     }
 
     public void setDateOfBirth(Date mDateOfBirth) {
@@ -166,6 +210,7 @@ public class User implements Serializable {
         u.mUserAddress = (String) map.get(UserDbHandler.USER_ADDRESS);
         u.mPhoneNumberVerified = (boolean) map.get(UserDbHandler.PHONE_CONFIRMED);
         u.mEmailVerified = (boolean) map.get(UserDbHandler.EMAIL_CONFIRMED);
+        u.mAccountApproved = (boolean) map.get(UserDbHandler.IS_APPROVED);
         switch ((String) map.get(UserDbHandler.USER_GENDER)) {
             case "Male":
                 u.mGender = Gender.MALE;

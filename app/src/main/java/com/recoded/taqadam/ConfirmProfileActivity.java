@@ -335,7 +335,9 @@ public class ConfirmProfileActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     mCreatingAccountProgressDialog.dismiss();
-                    Toast.makeText(ConfirmProfileActivity.this, "User Created Successfully!", Toast.LENGTH_LONG).show();
+                    if (!user.isCompleteProfile()) {
+                        Toast.makeText(ConfirmProfileActivity.this, "User Created Successfully!", Toast.LENGTH_LONG).show();
+                    }
                     Intent i = new Intent(ConfirmProfileActivity.this, MainActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     startActivity(i);

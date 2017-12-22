@@ -6,35 +6,9 @@
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:background="?attr/colorPrimary"
+    android:background="@color/colorPrimary"
     app:popupTheme="@style/AppTheme.PopupOverlay"
-    tools:showIn="@layout/activity_main">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:text="@string/app_name"
-            android:textColor="@color/colorWhite"/>
-
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:src="@drawable/ic_chat_black_24dp"/>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:src="@drawable/ic_notifications_black_24dp"/>
-    </LinearLayout>
+    app:layout_collapseMode="pin"
+    tools:showIn="@layout/activity_profile">
 </android.support.v7.widget.Toolbar>
         

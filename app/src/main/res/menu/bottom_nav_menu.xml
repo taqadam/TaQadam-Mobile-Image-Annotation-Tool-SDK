@@ -3,13 +3,11 @@
     <item
         android:id="@+id/navigation_tasks"
         android:icon="@drawable/ic_assignment_black_24dp"
-        android:title="Tasks"
-
-        />
+        android:title="Tasks"/>
     <item
         android:id="@+id/navigation_qa"
         android:icon="@drawable/ic_help_black_24dp"
-        android:title="help/FQA" />
+        android:title="Help/FAQ"/>
     <item
         android:id="@+id/navigation_cash_out"
         android:icon="@drawable/ic_attach_money_black_24dp"
@@ -17,9 +15,5 @@
     <item
         android:id="@+id/navigation_discuss"
         android:icon="@drawable/ic_sms_black_24dp"
-        android:title="Discuss" />
-    <item
-        android:id="@+id/navigation_profile"
-        android:icon="@drawable/ic_person_outline_black_24dp"
-        android:title="Profile" />
+        android:title="Discussion"/>
 </menu>

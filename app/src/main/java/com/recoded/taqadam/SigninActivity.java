@@ -41,6 +41,12 @@ public class SigninActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin);
 
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Signing in");
+        progressDialog.setMessage("Please wait..");
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+
         mAuth = UserAuthHandler.getInstance();
         if (mAuth.getCurrentUser() != null) {
             //Already signed in
@@ -69,13 +75,6 @@ public class SigninActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Signing in");
-        progressDialog.setMessage("Please wait..");
-        progressDialog.setCancelable(false);
-        progressDialog.setCanceledOnTouchOutside(false);
-
     }
 
     private void handleEmailAndPw() {
@@ -122,6 +121,7 @@ public class SigninActivity extends AppCompatActivity {
     }
 
     private void setupFbAuth() {
+        //Redundant
         if (AccessToken.getCurrentAccessToken() != null && !AccessToken.getCurrentAccessToken().isExpired()) {
             handleFacebookAccessToken(AccessToken.getCurrentAccessToken());
             return;
