@@ -9,19 +9,45 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.recoded.taqadam.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"/>
+        </provider>
+
+        <activity
+            android:name=".SplashActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".Intro.IntroActivity"
-                  android:theme="@style/Theme.MyDialog">
+        <activity
+            android:name=".IntroActivity"
+            android:theme="@style/AppTheme.IntroDialog">
+        </activity>
+        <activity
+            android:name=".RegisterActivity"
+            android:windowSoftInputMode="adjustResize">
+        </activity>
+        <activity
+            android:name=".ConfirmProfileActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+        </activity>
+        <activity
+            android:name=".SigninActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+        </activity>
+        <activity android:name=".MainActivity">
         </activity>
         <activity android:name=".TaskActivity">
-        </activity>
-        <activity android:name=".SignUpActivity">
         </activity>
         <activity android:name=".ProfileActivity">
         </activity>
@@ -34,8 +60,7 @@
 
         <activity
             android:name="com.facebook.FacebookActivity"
-            android:configChanges=
-                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"/>
         <activity
             android:name="com.facebook.CustomTabActivity"
@@ -49,7 +74,6 @@
                 <data android:scheme="@string/facebook_login_protocol_scheme"/>
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

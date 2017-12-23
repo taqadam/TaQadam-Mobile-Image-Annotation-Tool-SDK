@@ -1,23 +1,12 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
-    </style>
-
-    <style name="information_text_view_style">
-        <item name="android:textSize">14sp</item>
-        <item name="android:layout_margin">@dimen/margin4dp</item>
-    </style>
-
-    <style name="information_user_text_view_style">
-        <item name="android:textSize">16sp</item>
-        <item name="android:layout_margin">@dimen/margin4dp</item>
-        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="button_toolbox" parent="Base.Widget.AppCompat.Button.Borderless">
@@ -27,6 +16,10 @@
         <item name="android:paddingLeft">20dp</item>
         <item name="android:paddingRight">20dp</item>
         <item name="android:antialias">false</item>
+    </style>
+
+    <style name="AppTheme.Button" parent="Base.Widget.AppCompat.Button">
+        <item name="android:backgroundTint">@color/colorMaroon</item>
     </style>
 
     <style name="signup_form_fields" parent="Base.Widget.AppCompat.EditText">
@@ -39,11 +32,34 @@
     </style>
 
     <style name="signup_form_hint_appearance" parent="TextAppearance.Design.Hint">
-        <item name="android:textColor">@color/colorPurple</item>
+        <item name="android:textColor">@color/colorWhite</item>
     </style>
 
-    <style name="Theme.MyDialog" parent="@style/Theme.AppCompat.Light.Dialog">
+    <style name="AppTheme.ErrorTextAppearance" parent="TextAppearance.AppCompat">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Caption</item>
+        <item name="android:textColor">@color/colorErrorText</item>
+    </style>
+
+    <style name="AppTheme.IntroDialog" parent="Theme.AppCompat.Dialog">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:backgroundDimAmount">0.6</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <style name="AppTheme.ProfileLineText" parent="Base.TextAppearance.AppCompat.Body1">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:drawablePadding">8dp</item>
+        <item name="android:drawableTint">@color/colorWhite</item>
+        <item name="android:layout_marginTop">8dp</item>
+    </style>
+
+    <style name="AppTheme.ProfileDetailsText" parent="Base.TextAppearance.AppCompat.Body2">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_marginLeft">162dp</item>
+        <item name="android:layout_marginStart">162dp</item>
     </style>
 </resources>
