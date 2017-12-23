@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_tasks"
+        android:icon="@drawable/ic_assignment_black_24dp"
+        android:title="Tasks"/>
+    <item
+        android:id="@+id/navigation_qa"
+        android:icon="@drawable/ic_help_black_24dp"
+        android:title="Help/FAQ"/>
+    <item
+        android:id="@+id/navigation_cash_out"
+        android:icon="@drawable/ic_attach_money_black_24dp"
+        android:title="Cash out" />
+    <item
+        android:id="@+id/navigation_discuss"
+        android:icon="@drawable/ic_sms_black_24dp"
+        android:title="Discussion"/>
+</menu>

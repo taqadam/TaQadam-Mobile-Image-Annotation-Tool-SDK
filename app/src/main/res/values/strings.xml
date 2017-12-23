@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">TAQADAM</string>
+    <string name="title_home">Home</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="hello_tasks_fragment">Hello tasks fragment</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="balance">Your Current Balance:</string>
     <string name="amount_cash_text">Please enter the amount you would like to cash out bellow:</string>
     <string name="enter_amount">Enter Your Amount</string>
@@ -33,5 +38,32 @@
     <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
     <string name="facebook_app_id" translatable="false">308223343016078</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb308223343016078</string>
+
+    <!-- Cities of Lebanon -->
+    <string name="city_Select">Select City</string>
+    <string name="city_Aley">Aley</string>
+    <string name="city_Baalbek">Baalbek</string>
+    <string name="city_Batroun">Batroun</string>
+    <string name="city_Beirut">Beirut</string>
+    <string name="city_Byblos">Byblos</string>
+    <string name="city_Jounieh">Jounieh</string>
+    <string name="city_Nabatieh">Nabatieh</string>
+    <string name="city_Sidon">Sidon</string>
+    <string name="city_Tripoli">Tripoli</string>
+    <string name="city_Tyre">Tyre</string>
+    <string name="city_Zahle">Zahle</string>
+    <string name="city_Zgharta">Zgharta</string>
+
+    <!-- Genders -->
+    <string name="gender_Not_Specified">Gender</string>
+    <string name="gender_Male">Male</string>
+    <string name="gender_Female">Female</string>
+
+    <string name="title_activity_splash">TAQADAM</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
+
+    <string name="action_settings">Settings</string>
 
 </resources>

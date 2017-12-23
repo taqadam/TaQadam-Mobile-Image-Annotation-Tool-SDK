@@ -1,4 +1,4 @@
-package com.recoded.taqadam.Intro;
+package com.recoded.taqadam;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,18 +8,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder;
+
 /**
  * Created by Ahmad Siafaddin on 12/12/2017.
  */
 
-public class SlideMaker extends Fragment {
+public class SlideFragment extends Fragment implements ISlideBackgroundColorHolder {
 
     private static final String ARG_LAYOUT_RES_ID = "layoutResId";
     private int layoutResId;
-    private int screenId = 0;
+    private int screenId;
 
-    public static SlideMaker newInstance(int layoutResId, int id) {
-        SlideMaker sampleSlide = new SlideMaker();
+    public static SlideFragment newInstance(int layoutResId, int id) {
+        SlideFragment sampleSlide = new SlideFragment();
         sampleSlide.setScreenId(id);
         Bundle args = new Bundle();
         args.putInt(ARG_LAYOUT_RES_ID, layoutResId);
@@ -52,5 +54,25 @@ public class SlideMaker extends Fragment {
 
     public void setScreenId(int screenId) {
         this.screenId = screenId;
+    }
+
+    //Todo-wisam: implement color transition
+    @Override
+    public int getDefaultBackgroundColor() {
+        switch (screenId) {
+            case 0:
+                return getContext().getResources().getColor(R.color.colorIntroRegister);
+            case 1:
+                return getContext().getResources().getColor(R.color.colorIntroPractice);
+            case 2:
+                return getContext().getResources().getColor(R.color.colorIntroWork);
+            default:
+                return getContext().getResources().getColor(R.color.colorIntroPayment);
+        }
+    }
+
+    @Override
+    public void setBackgroundColor(int backgroundColor) {
+        getView().setBackgroundColor(backgroundColor);
     }
 }
