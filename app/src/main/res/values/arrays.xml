@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="cities_lebanon">
+        <item>@string/city_Select</item>
+        <item>@string/city_Aley</item>
+        <item>@string/city_Baalbek</item>
+        <item>@string/city_Batroun</item>
+        <item>@string/city_Beirut</item>
+        <item>@string/city_Byblos</item>
+        <item>@string/city_Jounieh</item>
+        <item>@string/city_Nabatieh</item>
+        <item>@string/city_Sidon</item>
+        <item>@string/city_Tripoli</item>
+        <item>@string/city_Tyre</item>
+        <item>@string/city_Zahle</item>
+        <item>@string/city_Zgharta</item>
+    </string-array>
+
+    <string-array name="genders">
+        <item>@string/gender_Not_Specified</item>
+        <item>@string/gender_Male</item>
+        <item>@string/gender_Female</item>
+    </string-array>
+</resources>

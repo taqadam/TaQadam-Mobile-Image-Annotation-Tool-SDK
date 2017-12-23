@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by Wisam Naji on 11/13/17 7:00 PM.
+  ~ Copyright (c) 2017. All rights reserved.
+  ~ Copying, redistribution or usage of material used in this file is free for educational purposes ONLY and should not be used in profitable context.
+  ~
+  ~ Last modified on 11/13/17 7:00 PM
+  -->
+
+<paths>
+    <external-path
+        name="product_images"
+        path="Android/data/com.recoded.taqadam/files/Pictures/"/>
+</paths>

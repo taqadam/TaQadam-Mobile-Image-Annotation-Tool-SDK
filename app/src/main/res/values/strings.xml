@@ -1,3 +1,69 @@
 <resources>
     <string name="app_name">TAQADAM</string>
+    <string name="title_home">Home</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="hello_tasks_fragment">Hello tasks fragment</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="balance">Your Current Balance:</string>
+    <string name="amount_cash_text">Please enter the amount you would like to cash out bellow:</string>
+    <string name="enter_amount">Enter Your Amount</string>
+    <string name="conf">Confirm</string>
+    <string name="agree_text">By clicking on \'confirm\' I agree on the terms and conditions</string>
+    <string name="need_help">Need Help ?</string>
+    <string name="profile">Profile</string>
+    <string name="about">About</string>
+    <string name="worker_agreement">Worker Agreement</string>
+    <string name="balance_string">Balance</string>
+    <string name="basic_information">Basic information</string>
+    <string name="full_name">Full Name</string>
+    <string name="user_name">User Name</string>
+    <string name="location">Location</string>
+    <string name="age">Age</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="email">Email</string>
+    <string name="mohammad_al_jundi">Mohammad Al Jundi</string>
+    <string name="mohammad_a">Mohammad A.</string>
+    <string name="lebanon">Lebanon</string>
+    <string name="_21">21</string>
+    <string name="_00332545789">00332545789</string>
+    <string name="maj_maj_com">maj@maj.com</string>
+    <string name="en">EN</string>
+    <string name="rectangle_tool">Rectangle Tool</string>
+    <string name="circle_tool">Circle Tool</string>
+    <string name="ellipse_tool">Ellipse Tool</string>
+    <string name="polygon_tool">Polygon Tool</string>
+    <string name="sign_up">Sign Up</string>
+
+    <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
+    <string name="facebook_app_id" translatable="false">308223343016078</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb308223343016078</string>
+
+    <!-- Cities of Lebanon -->
+    <string name="city_Select">Select City</string>
+    <string name="city_Aley">Aley</string>
+    <string name="city_Baalbek">Baalbek</string>
+    <string name="city_Batroun">Batroun</string>
+    <string name="city_Beirut">Beirut</string>
+    <string name="city_Byblos">Byblos</string>
+    <string name="city_Jounieh">Jounieh</string>
+    <string name="city_Nabatieh">Nabatieh</string>
+    <string name="city_Sidon">Sidon</string>
+    <string name="city_Tripoli">Tripoli</string>
+    <string name="city_Tyre">Tyre</string>
+    <string name="city_Zahle">Zahle</string>
+    <string name="city_Zgharta">Zgharta</string>
+
+    <!-- Genders -->
+    <string name="gender_Not_Specified">Gender</string>
+    <string name="gender_Male">Male</string>
+    <string name="gender_Female">Female</string>
+
+    <string name="title_activity_splash">TAQADAM</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
+
+    <string name="action_settings">Settings</string>
+
 </resources>

@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="User"
+            type="com.recoded.taqadam.models.User"/>
+    </data>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.recoded.taqadam.ProfileActivity">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appbar_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            app:elevation="12dp">
+
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:id="@+id/collapsing_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:contentScrim="@color/colorPrimary"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:scrimVisibleHeightTrigger="?attr/actionBarSize"
+                app:title="@{User.displayName}"
+                app:toolbarId="@id/toolbar">
+
+                <LinearLayout
+                    android:id="@+id/collapsing_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:layout_marginTop="?attr/actionBarSize"
+                    android:background="@color/colorPrimary"
+                    android:fitsSystemWindows="true"
+                    android:orientation="vertical"
+                    app:layout_collapseMode="parallax">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/iv_display_image"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="8dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/no_image"
+                        app:civ_border_color="@color/colorPwStrong"
+                        app:civ_border_width="2dp"/>
+
+                    <TextView
+                        android:id="@+id/tv_verified_indicator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal|bottom"
+                        android:drawableEnd="@drawable/ic_verified_user_black_24dp"
+                        android:drawablePadding="8dp"
+                        android:drawableRight="@drawable/ic_verified_user_black_24dp"
+                        android:gravity="center_vertical"
+                        android:text="Verified"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                        android:textStyle="bold"
+                        tools:text="Verified"/>
+                </LinearLayout>
+
+                <include
+                    android:id="@+id/toolbar"
+                    layout="@layout/toolbar"/>
+            </android.support.design.widget.CollapsingToolbarLayout>
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorDarkGrey"
+                android:orientation="vertical"
+                android:paddingTop="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="1"
+                        android:drawableTint="@color/colorPrimary"
+                        android:drawableTop="@drawable/ic_person_black_24dp"
+                        android:gravity="center_horizontal"
+                        android:text="About"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="14sp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="1"
+                        android:drawableTint="@color/colorWhite"
+                        android:drawableTop="@drawable/ic_assignment_black_24dp"
+                        android:gravity="center_horizontal"
+                        android:text="Worker Agreement"
+                        android:textSize="14sp"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="1"
+                        android:drawableTint="@color/colorWhite"
+                        android:drawableTop="@drawable/ic_payment_black_24dp"
+                        android:gravity="center_horizontal"
+                        android:text="Balance"
+                        android:textSize="14sp"/>
+                </LinearLayout>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    app:cardElevation="8dp">
+
+                    <android.support.constraint.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="8dp">
+
+                        <TextView
+                            android:id="@+id/tv_basic_info"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableEnd="@drawable/ic_basic_profile"
+                            android:drawableRight="@drawable/ic_basic_profile"
+                            android:drawableTint="@color/colorWhite"
+                            android:gravity="center_vertical"
+                            android:text="Basic information"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"/>
+
+                        <TextView
+                            android:id="@+id/tv_full_name_line"
+                            style="@style/AppTheme.ProfileLineText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="24dp"
+                            android:drawableLeft="@drawable/ic_person_outline_black_24dp"
+                            android:drawableStart="@drawable/ic_person_outline_black_24dp"
+                            android:text="Full Name"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_basic_info"/>
+
+                        <TextView
+                            android:id="@+id/tv_full_name"
+                            style="@style/AppTheme.ProfileDetailsText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{User.fullName}"
+                            app:layout_constraintBottom_toBottomOf="@id/tv_full_name_line"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/tv_full_name_line"
+                            tools:text="Wisam Naji"/>
+
+                        <TextView
+                            android:id="@+id/tv_user_name_line"
+                            style="@style/AppTheme.ProfileLineText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_perm_contact_calendar_black_24dp"
+                            android:drawableStart="@drawable/ic_perm_contact_calendar_black_24dp"
+                            android:text="Display Name"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_full_name_line"/>
+
+                        <TextView
+                            android:id="@+id/tv_user_name"
+                            style="@style/AppTheme.ProfileDetailsText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{User.displayName}"
+                            app:layout_constraintBottom_toBottomOf="@id/tv_user_name_line"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/tv_user_name_line"
+                            tools:text="Wisam Naji"/>
+
+                        <TextView
+                            android:id="@+id/tv_user_location_line"
+                            style="@style/AppTheme.ProfileLineText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_location_on_black_24dp"
+                            android:drawableStart="@drawable/ic_location_on_black_24dp"
+                            android:text="Location"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_user_name_line"/>
+
+                        <TextView
+                            android:id="@+id/tv_user_location"
+                            style="@style/AppTheme.ProfileDetailsText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{User.userAddress}"
+                            app:layout_constraintBottom_toBottomOf="@id/tv_user_location_line"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/tv_user_location_line"
+                            tools:text="Beirut"/>
+
+                        <TextView
+                            android:id="@+id/tv_user_gender_line"
+                            style="@style/AppTheme.ProfileLineText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_gender"
+                            android:drawableStart="@drawable/ic_gender"
+                            android:text="Gender"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_user_location_line"/>
+
+                        <TextView
+                            android:id="@+id/tv_user_gender"
+                            style="@style/AppTheme.ProfileDetailsText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{User.gender.genderName}"
+                            app:layout_constraintBottom_toBottomOf="@id/tv_user_gender_line"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/tv_user_gender_line"
+                            tools:text="Male"/>
+
+                        <TextView
+                            android:id="@+id/tv_user_age_line"
+                            style="@style/AppTheme.ProfileLineText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_loupe_black_24dp"
+                            android:drawableStart="@drawable/ic_loupe_black_24dp"
+                            android:text="Age"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_user_gender_line"/>
+
+                        <TextView
+                            android:id="@+id/tv_user_age"
+                            style="@style/AppTheme.ProfileDetailsText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{User.ageString}"
+                            app:layout_constraintBottom_toBottomOf="@id/tv_user_age_line"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/tv_user_age_line"
+                            tools:text="28"/>
+
+                        <TextView
+                            android:id="@+id/tv_user_phone_line"
+                            style="@style/AppTheme.ProfileLineText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_call_black_24dp"
+                            android:drawableStart="@drawable/ic_call_black_24dp"
+                            android:text="Phone Number"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_user_age_line"/>
+
+                        <ImageView
+                            android:id="@+id/iv_phone_verified"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_error_orange"
+                            android:tooltipText="Not Verified"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginLeft="8dp"
+                            app:layout_constraintStart_toEndOf="@id/tv_user_phone_line"
+                            app:layout_constraintBottom_toBottomOf="@id/tv_user_phone_line"
+                            app:layout_constraintTop_toTopOf="@id/tv_user_phone_line"/>
+
+                        <TextView
+                            android:id="@+id/tv_user_phone"
+                            style="@style/AppTheme.ProfileDetailsText"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@{User.phoneNumber}"
+                            app:layout_constraintBottom_toBottomOf="@id/tv_user_phone_line"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/tv_user_phone_line"
+                            tools:text="+9647702710512"/>
+
+
+                        <TextView
+                            android:id="@+id/tv_user_email_line"
+                            style="@style/AppTheme.ProfileLineText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_email_black_24dp"
+                            android:drawableStart="@drawable/ic_email_black_24dp"
+                            android:text="E-Mail Address"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_user_phone_line"/>
+
+                        <ImageView
+                            android:id="@+id/iv_email_verified"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_error_orange"
+                            android:tooltipText="Not Verified"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginLeft="8dp"
+                            app:layout_constraintStart_toEndOf="@id/tv_user_email_line"
+                            app:layout_constraintBottom_toBottomOf="@id/tv_user_email_line"
+                            app:layout_constraintTop_toTopOf="@id/tv_user_email_line"/>
+
+                        <TextView
+                            android:id="@+id/tv_user_email"
+                            style="@style/AppTheme.ProfileDetailsText"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@{User.emailAddress}"
+                            app:layout_constraintBottom_toBottomOf="@id/tv_user_email_line"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/tv_user_email_line"
+                            tools:text="wisam.mae@gmail.com"/>
+                    </android.support.constraint.ConstraintLayout>
+
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_edit_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:src="@drawable/ic_edit_black_24dp"
+            app:layout_anchor="@id/appbar_main"
+            app:layout_anchorGravity="bottom|right|end"/>
+
+    </android.support.design.widget.CoordinatorLayout>
+</layout>

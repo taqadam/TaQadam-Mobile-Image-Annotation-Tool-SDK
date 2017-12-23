@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="User"
+            type="com.recoded.taqadam.models.User"/>
+    </data>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPurple">
+
+        <ScrollView
+            android:id="@+id/main_layout_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context="com.recoded.taqadam.ConfirmProfileActivity">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/header_wrapper"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_ready"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="Ready?"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="42sp"
+                        android:textStyle="bold"/>
+
+                    <LinearLayout
+                        android:id="@+id/profile_image_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="16dp"
+                        android:orientation="vertical">
+
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal">
+
+                            <de.hdodenhof.circleimageview.CircleImageView
+                                android:id="@+id/iv_display_image"
+                                android:layout_width="140dp"
+                                android:layout_height="140dp"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginBottom="8dp"
+                                android:paddingTop="30dp"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/no_image"
+                                app:civ_border_color="@color/colorPwWeak"
+                                app:civ_border_width="2dp"
+                                tools:src="@drawable/no_image"/>
+
+                            <ProgressBar
+                                android:id="@+id/pb_display_image"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone"
+                                android:layout_marginTop="11dp"
+                                android:layout_gravity="center"/>
+
+                            <android.support.design.widget.FloatingActionButton
+                                android:id="@+id/b_change_picture"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom|end"
+                                android:layout_margin="3dp"
+                                android:src="@drawable/ic_camera"
+                                android:tint="@color/colorWhite"
+                                app:borderWidth="2dp"
+                                app:fabSize="mini"/>
+                        </FrameLayout>
+
+                        <EditText
+                            android:id="@+id/et_display_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:hint="Display Name"
+                            android:inputType="textNoSuggestions"
+                            android:minWidth="150dp"
+                            android:text="@{User.displayName}"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+                            android:textColor="@color/colorWhite"
+                            tools:text="Wisso Mechano"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tv_almost_there"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="8dp"
+                        android:gravity="center"
+                        android:text="Almost There!\nJust finish this form!"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="19sp"/>
+                </LinearLayout>
+
+                <android.support.constraint.ConstraintLayout
+                    android:id="@+id/form"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/et_email"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        app:hintTextAppearance="@style/signup_form_hint_appearance"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <EditText
+                            android:id="@+id/eti_email"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="E-Mail Address"
+                            android:inputType="textEmailAddress"
+                            android:text="@{User.emailAddress}"
+                            android:textColor="@color/colorWhite"/>
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/et_f_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        app:hintTextAppearance="@style/signup_form_hint_appearance"
+                        app:layout_constraintEnd_toStartOf="@id/et_l_name"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/et_email">
+
+                        <EditText
+                            android:id="@+id/eti_f_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="First Name"
+                            android:inputType="textNoSuggestions"
+                            android:text="@{User.firstName}"
+                            android:textColor="@color/colorWhite"/>
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/et_l_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="8dp"
+                        app:hintTextAppearance="@style/signup_form_hint_appearance"
+                        app:layout_constraintBottom_toBottomOf="@id/et_f_name"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/et_f_name"
+                        app:layout_constraintTop_toTopOf="@id/et_f_name">
+
+                        <EditText
+                            android:id="@+id/eti_l_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Last Name"
+                            android:inputType="textNoSuggestions"
+                            android:text="@{User.lastName}"
+                            android:textColor="@color/colorWhite"/>
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/et_phone_number"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        app:hintTextAppearance="@style/signup_form_hint_appearance"
+                        app:layout_constraintEnd_toStartOf="@id/spinner_gender"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/et_f_name">
+
+                        <EditText
+                            android:id="@+id/eti_phone_number"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Phone Number"
+                            android:inputType="phone"
+                            android:text="@{User.phoneNumber}"
+                            android:textColor="@color/colorWhite"/>
+                    </android.support.design.widget.TextInputLayout>
+
+                    <Spinner
+                        android:id="@+id/spinner_gender"
+                        style="@style/Widget.AppCompat.Spinner"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:entries="@array/genders"
+                        android:spinnerMode="dropdown"
+                        app:layout_constraintBottom_toBottomOf="@id/et_phone_number"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/et_phone_number"
+                        app:layout_constraintTop_toTopOf="@id/et_phone_number"/>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/et_dob"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:clickable="false"
+                        android:focusable="false"
+                        app:errorEnabled="true"
+                        app:errorTextAppearance="@style/AppTheme.ErrorTextAppearance"
+                        app:hintTextAppearance="@style/signup_form_hint_appearance"
+                        app:layout_constraintEnd_toStartOf="@id/spinner_cities_container"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/et_phone_number">
+
+                        <EditText
+                            android:id="@+id/eti_dob"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:focusable="false"
+                            android:hint="Date of Birth"
+                            android:inputType="none"
+                            android:textColor="@color/colorWhite"/>
+                    </android.support.design.widget.TextInputLayout>
+
+                    <LinearLayout
+                        android:id="@+id/spinner_cities_container"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="8dp"
+                        android:orientation="vertical"
+                        app:layout_constraintBottom_toBottomOf="@id/et_dob"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/et_dob"
+                        app:layout_constraintTop_toTopOf="@id/et_dob">
+
+                        <Spinner
+                            android:id="@+id/spinner_cities"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="top|start"
+                            android:layout_marginBottom="12dp"
+                            android:layout_marginTop="8dp"
+                            android:entries="@array/cities_lebanon"
+                            android:spinnerMode="dropdown"/>
+
+                        <TextView
+                            android:id="@+id/tv_spinner_cities_error"
+                            style="@style/AppTheme.ErrorTextAppearance"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/b_submit"
+                        style="@style/Widget.AppCompat.Button.Colored"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="Submit"
+                        android:textColor="@color/colorWhite"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/et_dob"/>
+                </android.support.constraint.ConstraintLayout>
+            </LinearLayout>
+
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/intents_chooser_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhite"
+            android:orientation="horizontal"
+            app:layout_behavior="@string/bottom_sheet_behavior"
+            app:layout_dodgeInsetEdges="top">
+
+            <TextView
+                android:id="@+id/intent_camera"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="24dp"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:drawablePadding="8dp"
+                android:drawableTop="@mipmap/ic_launcher"
+                android:focusable="true"
+                android:gravity="center_horizontal"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead.Inverse"
+                tools:text="Camera"/>
+
+            <TextView
+                android:id="@+id/intent_gallery"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="24dp"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:drawablePadding="8dp"
+                android:drawableTop="@mipmap/ic_launcher"
+                android:focusable="true"
+                android:gravity="center_horizontal"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead.Inverse"
+                tools:text="Gallery"/>
+
+            <TextView
+                android:id="@+id/intent_files"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="24dp"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:drawablePadding="8dp"
+                android:drawableTop="@mipmap/ic_launcher"
+                android:focusable="true"
+                android:gravity="center_horizontal"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead.Inverse"
+                tools:text="Files"/>
+        </LinearLayout>
+    </android.support.design.widget.CoordinatorLayout>
+</layout>
