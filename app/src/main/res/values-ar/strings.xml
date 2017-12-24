@@ -1,0 +1,69 @@
+<resources>
+    <string name="app_name">تقدّم</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="hello_tasks_fragment">مرحبا!</string>
+    <string name="hello_blank_fragment">مرحبا!</string>
+    <string name="balance">الرصيد الحالي:</string>
+    <string name="amount_cash_text">ادخل قيمة الرصيد التي ترغب بسحبه في الاسفل</string>
+    <string name="enter_amount">ادخل قيمة الرصيد</string>
+    <string name="conf">تأكيد</string>
+    <string name="agree_text">بالضغط على "تأكيد" انا اوافق على الشوط والاحكام </string>
+    <string name="need_help">تحتاج للمساعدة؟</string>
+    <string name="profile">الملف الشخصي</string>
+    <string name="about">حول</string>
+    <string name="worker_agreement">اتفاقية العاملين</string>
+    <string name="balance_string">الرصيد</string>
+    <string name="basic_information">المعلومات الاساسية</string>
+    <string name="full_name">الاسم الكامل</string>
+    <string name="user_name">اسم المستخدم</string>
+    <string name="location">المنطقة</string>
+    <string name="age">العمر</string>
+    <string name="phone_number">رقم الهاتف</string>
+    <string name="email">البريد الالكتروني</string>
+    <string name="mohammad_al_jundi">Mohammad Al Jundi</string>
+    <string name="mohammad_a">Mohammad A.</string>
+    <string name="lebanon">Lebanon</string>
+    <string name="_21">21</string>
+    <string name="_00332545789">00332545789</string>
+    <string name="maj_maj_com">maj@maj.com</string>
+    <string name="en">EN</string>
+    <string name="rectangle_tool">مستطيل</string>
+    <string name="circle_tool">دائرة</string>
+    <string name="ellipse_tool">شكل بيضوي</string>
+    <string name="polygon_tool">شكل مضلّع</string>
+    <string name="sign_up">إنشاء حساب</string>
+
+    <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
+    <string name="facebook_app_id" translatable="false">308223343016078</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb308223343016078</string>
+
+    <!-- Cities of Lebanon -->
+    <string name="city_Select">اختر منطقة</string>
+    <string name="city_Aley">عالية</string>
+    <string name="city_Baalbek">بعلبك</string>
+    <string name="city_Batroun">البترون</string>
+    <string name="city_Beirut">بيروت</string>
+    <string name="city_Byblos">جبيل(بيبلوس)</string>
+    <string name="city_Jounieh">جونية</string>
+    <string name="city_Nabatieh">النبطية</string>
+    <string name="city_Sidon">صيدا</string>
+    <string name="city_Tripoli">طرابلس</string>
+    <string name="city_Tyre">صور</string>
+    <string name="city_Zahle">زحلة</string>
+    <string name="city_Zgharta">زغرتا</string>
+
+    <!-- Genders -->
+    <string name="gender_Not_Specified">الجنس</string>
+    <string name="gender_Male">ذكر</string>
+    <string name="gender_Female">انثى</string>
+
+    <string name="title_activity_splash">TAQADAM</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
+
+    <string name="action_settings">الإعدادات</string>
+
+
+</resources>
