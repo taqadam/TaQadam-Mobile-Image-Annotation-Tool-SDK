@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="28dp"
-                android:text="Taqadam!"
+                android:text="@string/taqadam"
                 android:textColor="@color/colorWhite"
                 android:textSize="42sp"/>
 
@@ -54,7 +54,7 @@
                 android:gravity="center"
                 android:layout_margin="8dp"
                 android:textAppearance="@style/AppTheme.ErrorTextAppearance"
-                tools:text="error"/>
+                tools:text="@string/error"/>
 
             <LinearLayout
                 android:id="@+id/etc_email"
@@ -78,7 +78,7 @@
                         android:layout_marginEnd="8dp"
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="8dp"
-                        android:contentDescription="E-Mail Field"
+                        android:contentDescription="@string/e_mail_field"
                         android:src="@drawable/ic_email_black_24dp"
                         android:tint="@color/colorWhite"/>
 
@@ -121,7 +121,7 @@
                         android:layout_marginEnd="8dp"
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="8dp"
-                        android:contentDescription="Password Field"
+                        android:contentDescription="@string/password_field"
                         android:src="@drawable/ic_key"
                         android:tint="@color/colorWhite"/>
 
@@ -176,7 +176,7 @@
                 android:id="@+id/tv_forgot_pw"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Forgot Password?"
+                android:text="@string/forgot_password"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
 
             <Button
@@ -203,7 +203,7 @@
                 android:id="@+id/tv_not_registered"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Don't have an account?"
+                android:text="@string/don_t_have_an_account"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
 
             <Button
@@ -213,7 +213,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginStart="16dp"
-                android:text="Sign up"
+                android:text="@string/sign_up"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textStyle="bold"/>
         </LinearLayout>

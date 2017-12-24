@@ -39,7 +39,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:text="Ready?"
+                        android:text="@string/ready"
                         android:textColor="@color/colorWhite"
                         android:textSize="42sp"
                         android:textStyle="bold"/>
@@ -95,7 +95,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:hint="Display Name"
+                            android:hint="@string/display_name"
                             android:inputType="textNoSuggestions"
                             android:minWidth="150dp"
                             android:text="@{User.displayName}"
@@ -111,7 +111,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginBottom="8dp"
                         android:gravity="center"
-                        android:text="Almost There!\nJust finish this form!"
+                        android:text="@string/almost_profile"
                         android:textColor="@color/colorWhite"
                         android:textSize="19sp"/>
                 </LinearLayout>
@@ -137,7 +137,7 @@
                             android:id="@+id/eti_email"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="E-Mail Address"
+                            android:hint="@string/e_mail_address"
                             android:inputType="textEmailAddress"
                             android:text="@{User.emailAddress}"
                             android:textColor="@color/colorWhite"/>
@@ -159,7 +159,7 @@
                             android:id="@+id/eti_f_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="First Name"
+                            android:hint="@string/first_name"
                             android:inputType="textNoSuggestions"
                             android:text="@{User.firstName}"
                             android:textColor="@color/colorWhite"/>
@@ -181,7 +181,7 @@
                             android:id="@+id/eti_l_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Last Name"
+                            android:hint="@string/last_name"
                             android:inputType="textNoSuggestions"
                             android:text="@{User.lastName}"
                             android:textColor="@color/colorWhite"/>
@@ -203,7 +203,7 @@
                             android:id="@+id/eti_phone_number"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Phone Number"
+                            android:hint="@string/phone_number"
                             android:inputType="phone"
                             android:text="@{User.phoneNumber}"
                             android:textColor="@color/colorWhite"/>
@@ -245,7 +245,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:focusable="false"
-                            android:hint="Date of Birth"
+                            android:hint="@string/date_of_birth"
                             android:inputType="none"
                             android:textColor="@color/colorWhite"/>
                     </android.support.design.widget.TextInputLayout>
@@ -320,7 +320,7 @@
                 android:focusable="true"
                 android:gravity="center_horizontal"
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead.Inverse"
-                tools:text="Camera"/>
+                tools:text="@string/camera"/>
 
             <TextView
                 android:id="@+id/intent_gallery"
@@ -334,7 +334,7 @@
                 android:focusable="true"
                 android:gravity="center_horizontal"
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead.Inverse"
-                tools:text="Gallery"/>
+                tools:text="@string/gallery"/>
 
             <TextView
                 android:id="@+id/intent_files"
@@ -348,7 +348,7 @@
                 android:focusable="true"
                 android:gravity="center_horizontal"
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead.Inverse"
-                tools:text="Files"/>
+                tools:text="@string/files"/>
         </LinearLayout>
     </android.support.design.widget.CoordinatorLayout>
 </layout>
