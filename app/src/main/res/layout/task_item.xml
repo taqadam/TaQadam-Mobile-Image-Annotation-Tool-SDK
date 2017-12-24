@@ -21,7 +21,7 @@
             android:layout_margin="8dp"
             android:background="@color/colorPrimary"
             android:padding="8dp"
-            android:text="task type"
+            android:text="@string/task_type"
             android:textColor="@color/colorWhite" />
 
         <View
@@ -47,7 +47,7 @@
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:text="description"
+            android:text="@string/description"
             android:textSize="16sp" />
 
     </LinearLayout>

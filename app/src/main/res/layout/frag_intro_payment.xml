@@ -16,7 +16,7 @@
         android:textColor="#fff"
         android:textSize="45sp"
         android:textStyle="bold"
-        android:text="Get Paid!"/>
+        android:text="@string/get_paid"/>
 
     <ImageView
         android:layout_width="wrap_content"
@@ -37,5 +37,5 @@
         android:textAlignment="center"
         android:textColor="#fff"
         android:textSize="20sp"
-        android:text="Hooray! Collect your achieved earnings from the nearest OMT outlet accross Lebanon!"/>
+        android:text="@string/get_paid_des"/>
 </LinearLayout>

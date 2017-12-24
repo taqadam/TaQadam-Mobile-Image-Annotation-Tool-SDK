@@ -75,6 +75,7 @@ public class SigninActivity extends AppCompatActivity {
                 finish();
             }
         });
+
     }
 
     private void handleEmailAndPw() {

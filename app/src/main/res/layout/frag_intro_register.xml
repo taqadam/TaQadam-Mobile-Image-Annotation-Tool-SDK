@@ -16,7 +16,7 @@
         android:textColor="#fff"
         android:textSize="45sp"
         android:textStyle="bold"
-        android:text="Register"/>
+        android:text="@string/register"/>
 
     <ImageView
         android:layout_width="wrap_content"
@@ -37,5 +37,5 @@
         android:textAlignment="center"
         android:textColor="#fff"
         android:textSize="20sp"
-        android:text="It's easy! You can do it using your Facebook account or email and password."/>
+        android:text="@string/register_des"/>
 </LinearLayout>

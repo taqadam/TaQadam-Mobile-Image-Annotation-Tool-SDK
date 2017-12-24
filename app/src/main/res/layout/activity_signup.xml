@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="28dp"
-                android:text="Taqadam!"
+                android:text="@string/taqadam"
                 android:textColor="@color/colorWhite"
                 android:textSize="42sp"/>
 
@@ -67,7 +67,7 @@
                         android:layout_marginEnd="8dp"
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="-8dp"
-                        android:contentDescription="E-Mail Field"
+                        android:contentDescription="@string/e_mail_field"
                         android:src="@drawable/ic_email_black_24dp"
                         android:tint="@color/colorWhite"/>
 
@@ -83,7 +83,7 @@
                             android:id="@+id/eti_email"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="E-Mail Address"
+                            android:hint="@string/e_mail_address"
                             android:inputType="textEmailAddress"
                             android:textColor="@color/colorWhite"/>
                     </android.support.design.widget.TextInputLayout>
@@ -112,7 +112,7 @@
                         android:layout_marginEnd="8dp"
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="-8dp"
-                        android:contentDescription="Password Field"
+                        android:contentDescription="@string/password_field"
                         android:src="@drawable/ic_key"
                         android:tint="@color/colorWhite"/>
 
@@ -129,7 +129,7 @@
                             android:id="@+id/eti_pw"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Password"
+                            android:hint="@string/password"
                             android:inputType="textPassword"
                             android:textColor="@color/colorWhite"/>
                     </android.support.design.widget.TextInputLayout>
@@ -145,7 +145,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="4dp"
-                        android:text="Password Strength: "
+                        android:text="@string/password_strength"
                         android:textColor="@color/colorWhite"/>
 
                     <TextView
@@ -168,7 +168,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:textColor="@color/colorWhite"
-                android:text="Sign Up"/>
+                android:text="@string/sign_up"/>
 
             <com.facebook.login.widget.LoginButton
                 android:id="@+id/b_fb"
@@ -191,7 +191,7 @@
                 android:id="@+id/tv_registerd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Already registered?"
+                android:text="@string/already_registered"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
 
             <Button
@@ -201,7 +201,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginStart="16dp"
-                android:text="Sign in"
+                android:text="@string/sign_in"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textStyle="bold"/>
         </LinearLayout>

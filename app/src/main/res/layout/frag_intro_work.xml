@@ -16,7 +16,7 @@
         android:textColor="#fff"
         android:textSize="45sp"
         android:textStyle="bold"
-        android:text="Work"/>
+        android:text="@string/work"/>
 
     <ImageView
         android:layout_width="wrap_content"
@@ -37,5 +37,5 @@
         android:textAlignment="center"
         android:textColor="#fff"
         android:textSize="20sp"
-        android:text="Simply, put your practice into paid simple tasks! Just make sure to be as precise as you can."/>
+        android:text="@string/work_des"/>
 </LinearLayout>
