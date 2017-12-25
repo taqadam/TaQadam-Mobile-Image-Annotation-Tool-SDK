@@ -42,7 +42,7 @@ public class PostDbHandler {
 
     private static PostDbHandler handler;
     private HashMap<String, Post> postsList;
-    private Task<Void> latestPostsTask;
+    private Task<List<Post>> latestPostsTask;
 
     private String mUid;
     private DatabaseReference mThreadsDbRef, mDataDbRef;
@@ -70,7 +70,7 @@ public class PostDbHandler {
         //Threads will be categorized by year-month, i.e. 2017-12
         //Read the latest posts (current month)
         mThreadsDbRef.child(getCurrentTimeCycle()).addChildEventListener(mThreadsListener);
-        final TaskCompletionSource<Void> fetcher = new TaskCompletionSource<>();
+        final TaskCompletionSource<List<Post>> fetcher = new TaskCompletionSource<>();
         mThreadsDbRef.child(getCurrentTimeCycle()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -92,14 +92,14 @@ public class PostDbHandler {
                         @Override
                         public void onComplete(@NonNull Task<HashMap<String, Post>> task) {
                             if (task.isSuccessful()) {
-                                fetcher.setResult(null);
+                                fetcher.setResult(getRecentPosts());
                             } else {
                                 fetcher.setException(task.getException());
                             }
                         }
                     });
                 } else {
-                    fetcher.setResult(null);
+                    fetcher.setResult(getRecentPosts());
                 }
             }
 
@@ -110,6 +110,18 @@ public class PostDbHandler {
         });
 
         latestPostsTask = fetcher.getTask();
+    }
+
+    public List<Post> getRecentPosts() {
+        List<Post> res = new ArrayList<>();
+        for (String key : postsList.keySet()) {
+            res.add(postsList.get(key));
+        }
+        return res;
+    }
+
+    public Task<List<Post>> getRecentPostsTask() {
+        return latestPostsTask;
     }
 
     //This will be used to read more older posts only
