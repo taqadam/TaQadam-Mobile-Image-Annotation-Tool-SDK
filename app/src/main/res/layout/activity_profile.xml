@@ -63,7 +63,7 @@
                         android:drawablePadding="8dp"
                         android:drawableRight="@drawable/ic_verified_user_black_24dp"
                         android:gravity="center_vertical"
-                        android:text="Verified"
+                        android:text="@string/verified"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                         android:textStyle="bold"
                         tools:text="Verified"/>
@@ -102,7 +102,7 @@
                         android:drawableTint="@color/colorPrimary"
                         android:drawableTop="@drawable/ic_person_black_24dp"
                         android:gravity="center_horizontal"
-                        android:text="About"
+                        android:text="@string/about"
                         android:textColor="@color/colorPrimary"
                         android:textSize="14sp"/>
 
@@ -114,7 +114,7 @@
                         android:drawableTint="@color/colorWhite"
                         android:drawableTop="@drawable/ic_assignment_black_24dp"
                         android:gravity="center_horizontal"
-                        android:text="Worker Agreement"
+                        android:text="@string/worker_agreement"
                         android:textSize="14sp"/>
 
                     <TextView
@@ -125,7 +125,7 @@
                         android:drawableTint="@color/colorWhite"
                         android:drawableTop="@drawable/ic_payment_black_24dp"
                         android:gravity="center_horizontal"
-                        android:text="Balance"
+                        android:text="@string/balance_profile"
                         android:textSize="14sp"/>
                 </LinearLayout>
 
@@ -148,7 +148,7 @@
                             android:drawableRight="@drawable/ic_basic_profile"
                             android:drawableTint="@color/colorWhite"
                             android:gravity="center_vertical"
-                            android:text="Basic information"
+                            android:text="@string/basic_information"
                             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"/>
@@ -161,7 +161,7 @@
                             android:layout_marginTop="24dp"
                             android:drawableLeft="@drawable/ic_person_outline_black_24dp"
                             android:drawableStart="@drawable/ic_person_outline_black_24dp"
-                            android:text="Full Name"
+                            android:text="@string/full_name"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_basic_info"/>
 
@@ -183,7 +183,7 @@
                             android:layout_height="wrap_content"
                             android:drawableLeft="@drawable/ic_perm_contact_calendar_black_24dp"
                             android:drawableStart="@drawable/ic_perm_contact_calendar_black_24dp"
-                            android:text="Display Name"
+                            android:text="@string/display_name"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_full_name_line"/>
 
@@ -205,7 +205,7 @@
                             android:layout_height="wrap_content"
                             android:drawableLeft="@drawable/ic_location_on_black_24dp"
                             android:drawableStart="@drawable/ic_location_on_black_24dp"
-                            android:text="Location"
+                            android:text="@string/location"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_user_name_line"/>
 
@@ -227,7 +227,7 @@
                             android:layout_height="wrap_content"
                             android:drawableLeft="@drawable/ic_gender"
                             android:drawableStart="@drawable/ic_gender"
-                            android:text="Gender"
+                            android:text="@string/gender"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_user_location_line"/>
 
@@ -249,7 +249,7 @@
                             android:layout_height="wrap_content"
                             android:drawableLeft="@drawable/ic_loupe_black_24dp"
                             android:drawableStart="@drawable/ic_loupe_black_24dp"
-                            android:text="Age"
+                            android:text="@string/age"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_user_gender_line"/>
 
@@ -271,7 +271,7 @@
                             android:layout_height="wrap_content"
                             android:drawableLeft="@drawable/ic_call_black_24dp"
                             android:drawableStart="@drawable/ic_call_black_24dp"
-                            android:text="Phone Number"
+                            android:text="@string/phone_number"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_user_age_line"/>
 
@@ -306,7 +306,7 @@
                             android:layout_height="wrap_content"
                             android:drawableLeft="@drawable/ic_email_black_24dp"
                             android:drawableStart="@drawable/ic_email_black_24dp"
-                            android:text="E-Mail Address"
+                            android:text="@string/e_mail_address"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_user_phone_line"/>
 

@@ -153,17 +153,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (UserAuthHandler.getInstance().getCurrentUser() == null) {
             user = new User();
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Error!");
+            builder.setTitle(R.string.error);
             builder.setIcon(R.drawable.ic_error);
-            builder.setMessage("You are not logged in!");
-            builder.setPositiveButton("Login", new DialogInterface.OnClickListener() {
+            builder.setMessage(R.string.not_logged_in);
+            builder.setPositiveButton(R.string.login, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     startActivity(new Intent(MainActivity.this, SigninActivity.class));
                     finish();
                 }
             });
-            builder.setNegativeButton("Register", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(R.string.register, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     startActivity(new Intent(MainActivity.this, RegisterActivity.class));

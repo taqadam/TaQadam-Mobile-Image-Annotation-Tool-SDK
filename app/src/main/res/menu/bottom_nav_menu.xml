@@ -3,17 +3,17 @@
     <item
         android:id="@+id/navigation_tasks"
         android:icon="@drawable/ic_assignment_black_24dp"
-        android:title="Tasks"/>
+        android:title="@string/tasks" />
     <item
         android:id="@+id/navigation_qa"
         android:icon="@drawable/ic_help_black_24dp"
-        android:title="Help/FAQ"/>
+        android:title="@string/help_faq" />
     <item
         android:id="@+id/navigation_cash_out"
         android:icon="@drawable/ic_attach_money_black_24dp"
-        android:title="Cash out" />
+        android:title="@string/cash_out" />
     <item
         android:id="@+id/navigation_discuss"
         android:icon="@drawable/ic_sms_black_24dp"
-        android:title="Discussion"/>
+        android:title="@string/discussion" />
 </menu>

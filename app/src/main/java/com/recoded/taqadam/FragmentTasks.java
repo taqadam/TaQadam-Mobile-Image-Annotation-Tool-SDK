@@ -76,14 +76,14 @@ public class FragmentTasks extends Fragment {
         ArrayList<Task> array = new ArrayList<>();
         //we have many task_item types based on user performance (Tutorial,training,qualifier,locked)
 
-        array.add(new Task("Tutorial", "Bounding Box", "Learn how to draw boxes around objects"));
-        array.add(new Task("Tutorial", "Labeling", "Learn how to draw boxes around objects"));
-        array.add(new Task("Tutorial", "categorization", "Learn how to categorize objects "));
-        array.add(new Task("Tutorial", "Image validation", "Learn how to validate images"));
-        array.add(new Task("Qualifier", "Bounding Box", "test your bounding boxes skills for identifying items within an image"));
-        array.add(new Task("Qualifier", "Labeling", "put your skills in work to label objects"));
-        array.add(new Task("Qualifier", "categorization", "categorize objects in the given image"));
-        array.add(new Task("Qualifier", "Image validation", "choose the valid image from the given images "));
+        array.add(new Task(getString(R.string.tutorial), "Bounding Box", "Learn how to draw boxes around objects"));
+        array.add(new Task(getString(R.string.tutorial), "Labeling", "Learn how to draw boxes around objects"));
+        array.add(new Task(getString(R.string.tutorial), "categorization", "Learn how to categorize objects "));
+        array.add(new Task(getString(R.string.tutorial), "Image validation", "Learn how to validate images"));
+        array.add(new Task(getString(R.string.qualifier), "Bounding Box", "test your bounding boxes skills for identifying items within an image"));
+        array.add(new Task(getString(R.string.qualifier), "Labeling", "put your skills in work to label objects"));
+        array.add(new Task(getString(R.string.qualifier), "categorization", "categorize objects in the given image"));
+        array.add(new Task(getString(R.string.qualifier), "Image validation", "choose the valid image from the given images "));
         TaskAdapter taskAdapter = new TaskAdapter(getActivity(), array);
         recyclerView.setAdapter(taskAdapter);
 

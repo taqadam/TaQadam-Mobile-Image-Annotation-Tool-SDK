@@ -67,13 +67,13 @@ public class ProfileActivity extends AppCompatActivity {
         if (user.isEmailVerified()) {
             binding.ivEmailVerified.setImageResource(R.drawable.ic_check_circle);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                binding.ivEmailVerified.setTooltipText("Verified");
+                binding.ivEmailVerified.setTooltipText(getString(R.string.verified));
             }
         }
         if (user.isPhoneNumberVerified()) {
             binding.ivPhoneVerified.setImageResource(R.drawable.ic_check_circle);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                binding.ivPhoneVerified.setTooltipText("Verified");
+                binding.ivPhoneVerified.setTooltipText(getString(R.string.verified));
             }
         }
     }
