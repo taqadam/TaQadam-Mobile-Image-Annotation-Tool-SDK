@@ -42,8 +42,8 @@ public class SigninActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signin);
 
         progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Signing in");
-        progressDialog.setMessage("Please wait..");
+        progressDialog.setTitle(getString(R.string.Signingin));
+        progressDialog.setMessage(getString(R.string.Please_wait));
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
 
@@ -82,7 +82,7 @@ public class SigninActivity extends AppCompatActivity {
         final String email = etEmailField.getText().toString();
         String pw = etPwField.getText().toString();
         if (email.isEmpty() || pw.isEmpty()) {
-            indicateError("Please enter both fields");
+            indicateError(getString(R.string.please_enter_both_fields));
             return;
         }
         progressDialog.show();

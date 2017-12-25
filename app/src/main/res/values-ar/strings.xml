@@ -32,7 +32,7 @@
     <string name="circle_tool">دائرة</string>
     <string name="ellipse_tool">شكل بيضوي</string>
     <string name="polygon_tool">شكل مضلّع</string>
-    <string name="sign_up">إنشاء حساب</string>
+    <string name="sign_up">إنشاء حساب </string>
 
     <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
     <string name="facebook_app_id" translatable="false">308223343016078</string>
@@ -64,6 +64,92 @@
     <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
 
     <string name="action_settings">الإعدادات</string>
+    <string name="ready">جاهز؟</string>
+    <string name="almost_profile">أوشكت على الانتهاء! فقط املأ المعلومات التالية!</string>
+    <string name="first_name">الاسم</string>
+    <string name="last_name">اسم العائلة</string>
+    <string name="date_of_birth">تارخ الميلاد</string>
+    <string name="camera">الكاميرا</string>
+    <string name="gallery">المعرض</string>
+    <string name="files">الملفات</string>
+    <string name="verified">مؤهل</string>
+    <string name="balance_profile">الرصيد</string>
+
+    <string name="error">خطأ</string>
+    <string name="password_field">كلمة المرور</string>
+    <string name="forgot_password">نسيت كلمة المرور؟</string>
+    <string name="don_t_have_an_account">ليس لديك حساب؟</string>
+    <string name="taqadam">تقدّم!</string>
+    <string name="e_mail_field">البريد الألكتروني</string>
+    <string name="e_mail_address">ادخل البريد الألكتروني</string>
+    <string name="password">ادخل كلمة المرور</string>
+    <string name="password_strength">قوة كلمة المرور:</string>
+    <string name="already_registered">لديك حساب مسبقا"؟</string>
+    <string name="sign_in">تسجيل الدخول</string>
+    <string name="get_paid_des">مرحى! اجني الارباح و احصل عليها من اقرب مركز OMT في لبنان!</string>
+    <string name="get_paid">أجمع المال!</string>
+    <string name="practice">تمرّن</string>
+    <string name="practice_des">تابع اقسام التمارين والتدريبات لتحسن مستواك وتكسب اكثر! </string>
+    <string name="register">سجّل</string>
+    <string name="register_des">انه سهل! يمكنك التسجيل باستخدام حساب الفيسبوك الخاص بك أو البريد الإلكتروني مع كلمة المرور</string>
+    <string name="work">اعمل</string>
+    <string name="work_des">ببساطة، استخدم مهاراتك في مهام بسيطة مدفوعة! فقط تأكد أن تكون دقيقة قدر المستطاع.</string>
+    <string name="task_type">نوع المهمة</string>
+    <string name="description">الوصف</string>
+    <string name="pas_short">قصيرة</string>
+    <string name="Signingin">يتم تسجيل الدخول</string>
+    <string name="Please_wait">يرجى الانتظار..</string>
+    <string name="please_enter_both_fields">يجب ملئ الحقلين</string>
+    <string name="No_internet">غير متصل بالانترنت!</string>
+    <string name="no_internet">لايوجد اتصال بالانترنت يرجى التحقق واعادة المحاولة</string>
+    <string name="retry">اعادة المحاولة</string>
+    <string name="quit">خروج</string>
+    <string name="reset">اعادة تعيين</string>
+    <string name="submit">تأكيد</string>
+    <string name="creatingAccount">يتم انشاء حساب</string>
+    <string name="short_email_errorm">البريد الألكتروني قصير جدا!</string>
+    <string name="email_format_errorm">البريد الألكتروني غير صحيح يجب ان يكون على الصيغة:john@example.com</string>
+    <string name="short_pass_errorm">كلمة المرور قصيرة جدا!  يجب ان تكون اكثر من 5 احرف </string>
+    <string name="pass_instruction_errorm">كلمة المرور يجب انت تكون اكثر من 6 احرف ويجب ان تحتوي على رقم واحد وحرف واحد على الأقل</string>
+    <string name="write_email_errorm">اكتب البريد الألكتروني</string>
+    <string name="allready_registed_email_errorm">البريد الألكتروني مسجل سابقا و مرتبط بحساب فيس بوك</string>
+    <string name="sign_in_with_facebook">تسجيل الدخول باستخدام فيس بوك</string>
+    <string name="already_registed_signin_errorm">البريد الألكتروني مسجل مسبقا هل تريد تسجيل الدخول؟</string>
+    <string name="signin_facebook_instead_errorm">البريد الألكتروني مرتبط بحساب فيس بوك مسجل هل تريد تسجيل الدخول باستخدام فيس بوك بدلا من ذلك؟</string>
+    <string name="signin_facebook">تسجيل الدخول باستخام فيس بوك</string>
+    <string name="cancel">الغاء</string>
+    <string name="error_signin_with_fb_errorm">حدث خطأ اثناء تسجيل الدخول باستخدام فيس بوك</string>
+    <string name="accept">قبول</string>
+    <string name="decline">رفض</string>
+    <string name="pas_strong">قوية</string>
+    <string name="pas_fair">معتدلة</string>
+    <string name="pas_medium">متوسطة</string>
+    <string name="pas_weak">ضعيفة</string>
+    <string name="resolving_errorm">حدث خطأ اثناء حل المشكلة</string>
+    <string name="edit_profile">تعديل الملف الشخصي</string>
+    <string name="updating_account">يتم تحديث الحساب</string>
+    <string name="please_wait">يرجى الانتظار..</string>
+    <string name="not_logged_in">لم يتم تسجيل الدخول</string>
+    <string name="login">تسجيل الدخول</string>
+    <string name="this_field_is_required">هذا الحقل مطلوب</string>
+    <string name="invalid_input">ادخال خاطئ</string>
+    <string name="age_less_than13">العمر أقل من 13 سنة</string>
+    <string name="select_valid_city">يرجى اختيار منطقة صحيحة</string>
+    <string name="user_created">تم انشاء المستخدم بنجاح!</string>
+    <string name="error_updating_account">حدث خطأ اثناء تحديث الحساب</string>
+    <string name="tutorial">تمرين</string>
+    <string name="qualifier">مؤهل</string>
+    <string name="tasks">المهام</string>
+    <string name="help_faq">المساعدة</string>
+    <string name="cash_out">سحب رصيد</string>
+    <string name="discussion">المناقشة</string>
+    <string name="notification">التنبيهات</string>
+    <string name="setting">الاعدادات</string>
+    <string name="help">المساعدة</string>
+    <string name="feedback">ارسل ملاحظاتك حول التطبيق</string>
+    <string name="log_out">تسجيل الخروج</string>
+    <string name="notifications">التنبيهات</string>
+    <string name="discussions">المناقشة</string>
 
 
 </resources>

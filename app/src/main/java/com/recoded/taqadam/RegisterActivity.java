@@ -88,7 +88,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         mCreatingAccountProgressDialog = new ProgressDialog(this);
         mCreatingAccountProgressDialog.setCancelable(false);
-        mCreatingAccountProgressDialog.setTitle("Creating Account");
+        mCreatingAccountProgressDialog.setTitle(getString(R.string.creatingAccount));
         mCreatingAccountProgressDialog.setCanceledOnTouchOutside(false);
         mCreatingAccountProgressDialog.setMessage("Please wait");
 
@@ -114,11 +114,11 @@ public class RegisterActivity extends AppCompatActivity {
 
         String validationMsgs[] = new String[5];
         //TODO-wisam: Change to resources
-        validationMsgs[0] = "E-Mail is too short!";
-        validationMsgs[1] = "E-Mail address is invalid. Should be in the format: john@example.com";
-        validationMsgs[2] = "Password is too short! Should be more than 5 characters";
-        validationMsgs[3] = "Password Must be 6 characters long and should contain at least one letter and one number";
-        validationMsgs[4] = "Write your E-Mail address!";
+        validationMsgs[0] = getString(R.string.short_email_errorm);
+        validationMsgs[1] = getString(R.string.email_format_errorm);
+        validationMsgs[2] = getString(R.string.short_pass_errorm);
+        validationMsgs[3] = getString(R.string.pass_instruction_errorm);
+        validationMsgs[4] = getString(R.string.write_email_errorm);
 
         String emailAddr = etEmailField.getText().toString();
         String password = etPwField.getText().toString();
@@ -172,8 +172,8 @@ public class RegisterActivity extends AppCompatActivity {
 
                     if (ex.getErrorCode() == AuthSignUpException.EMAIL_ASSOC_FB_PW_WRONG) {
                         //if this email is associated with both password and fb, he can sign in with fb or reset password
-                        db.setMessage("This email is already registered and connected to a Facebook account.");
-                        db.setPositiveButton("Sign in with Facebook", new DialogInterface.OnClickListener() {
+                        db.setMessage(R.string.allready_registed_email_errorm);
+                        db.setPositiveButton(R.string.sign_in_with_facebook, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
@@ -199,7 +199,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                     } else if (ex.getErrorCode() == AuthSignUpException.PW_WRONG) {
                         //else if associated with only password means he already signed up. show him only reset pw
-                        db.setMessage("This email is already registered. Do you want to sign in?");
+                        db.setMessage(R.string.already_registed_signin_errorm);
                         db.setPositiveButton("Sign in", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -226,8 +226,8 @@ public class RegisterActivity extends AppCompatActivity {
 
                     } else if (ex.getErrorCode() == AuthSignUpException.EMAIL_ASSOC_FB) {
                         //else if associated with fb only, offer him to signin with fb
-                        db.setMessage("This email is associated with a registered Facebook account. Do you want to sign in with Facebook instead?");
-                        db.setPositiveButton("Sign in with Facebook", new DialogInterface.OnClickListener() {
+                        db.setMessage(R.string.signin_facebook_instead_errorm);
+                        db.setPositiveButton(R.string.signin_facebook, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
@@ -235,7 +235,7 @@ public class RegisterActivity extends AppCompatActivity {
                             }
                         });
 
-                        db.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        db.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
@@ -245,7 +245,7 @@ public class RegisterActivity extends AppCompatActivity {
                         db.create().show();
                     }
                 } else {
-                    Toast.makeText(RegisterActivity.this, "Error while resolving problem!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(RegisterActivity.this, R.string.resolving_errorm, Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -271,7 +271,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                 mCreatingAccountProgressDialog.dismiss();
-                Toast.makeText(RegisterActivity.this, "Error signing in with Facebook", Toast.LENGTH_LONG).show();
+                Toast.makeText(RegisterActivity.this, R.string.error_signin_with_fb_errorm, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -281,15 +281,15 @@ public class RegisterActivity extends AppCompatActivity {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar_MinWidth);
         builder.setMessage(getAgreement())
-                .setTitle("Workers Agreement")
-                .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
+                .setTitle(R.string.worker_agreement)
+                .setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Toast.makeText(RegisterActivity.this, "Accepted", Toast.LENGTH_LONG).show();
                     }
                 })
-                .setNegativeButton("Decline", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.decline, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Toast.makeText(RegisterActivity.this, "Declined", Toast.LENGTH_LONG).show();
+                        Toast.makeText(RegisterActivity.this, R.string.decline, Toast.LENGTH_LONG).show();
                         dialog.dismiss();
                     }
                 })
@@ -397,22 +397,22 @@ public class RegisterActivity extends AppCompatActivity {
                 //TODO-wisam: change to resources
                 String pw = s.toString();
                 if (pw.matches(PASSWORD_REGEX_STRONG)) {
-                    tvPwMeter.setText("STRONG");
+                    tvPwMeter.setText(R.string.pas_strong);
                     tvPwMeter.setTextColor(getResources().getColor(R.color.colorPwStrong));
                     return;
                 } else if (pw.matches(PASSWORD_REGEX_FAIR)) {
-                    tvPwMeter.setText("FAIR");
+                    tvPwMeter.setText(R.string.pas_fair);
                     tvPwMeter.setTextColor(getResources().getColor(R.color.colorPwFair));
                     return;
                 } else if (pw.matches(PASSWORD_REGEX_MED)) {
-                    tvPwMeter.setText("MEDIUM");
+                    tvPwMeter.setText(R.string.pas_medium);
                     tvPwMeter.setTextColor(getResources().getColor(R.color.colorPwMedium));
                     return;
                 } else if (pw.length() > 5) {
-                    tvPwMeter.setText("WEAK");
+                    tvPwMeter.setText(R.string.pas_weak);
                     tvPwMeter.setTextColor(getResources().getColor(R.color.colorPwWeak));
                 } else {
-                    tvPwMeter.setText("SHORT");
+                    tvPwMeter.setText(R.string.pas_short);
                     tvPwMeter.setTextColor(getResources().getColor(R.color.colorMaroon));
                 }
             }

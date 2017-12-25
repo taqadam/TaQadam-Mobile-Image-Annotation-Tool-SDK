@@ -92,7 +92,7 @@
                             android:id="@+id/eti_email"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="E-Mail Address"
+                            android:hint="@string/e_mail_field"
                             android:inputType="textEmailAddress"
                             android:textColor="@color/colorWhite"/>
                     </android.support.design.widget.TextInputLayout>
@@ -136,7 +136,7 @@
                             android:id="@+id/eti_pw"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Password"
+                            android:hint="@string/password"
                             android:inputType="textPassword"
                             android:textColor="@color/colorWhite"/>
                     </android.support.design.widget.TextInputLayout>
@@ -153,7 +153,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:textColor="@color/colorWhite"
-                android:text="Sign in"/>
+                android:text="@string/sign_in" />
 
             <com.facebook.login.widget.LoginButton
                 android:id="@+id/b_fb"
@@ -186,7 +186,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginStart="16dp"
-                android:text="Reset"
+                android:text="@string/reset"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textStyle="bold"/>
         </LinearLayout>

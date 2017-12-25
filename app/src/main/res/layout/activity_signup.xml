@@ -152,7 +152,7 @@
                         android:id="@+id/tv_pw_strength"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="SHORT"
+                        android:text="@string/pas_short"
                         android:textColor="@color/colorMaroon"
                         android:textStyle="bold"/>
                 </LinearLayout>
