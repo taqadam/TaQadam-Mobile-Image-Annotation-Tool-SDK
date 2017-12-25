@@ -16,7 +16,7 @@
         android:textColor="#fff"
         android:textSize="45sp"
         android:textStyle="bold"
-        android:text="Practice"/>
+        android:text="@string/practice"/>
 
     <ImageView
         android:layout_width="wrap_content"
@@ -37,5 +37,5 @@
         android:textAlignment="center"
         android:textColor="#fff"
         android:textSize="20sp"
-        android:text="Follow our tutorials and practice sets to advance your level and earn more!"/>
+        android:text="@string/practice_des"/>
 </LinearLayout>

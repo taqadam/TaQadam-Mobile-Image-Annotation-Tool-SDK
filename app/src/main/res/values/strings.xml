@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">TAQADAM</string>
-    <string name="title_home">Home</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="hello_tasks_fragment">Hello tasks fragment</string>
@@ -15,12 +14,7 @@
     <string name="about">About</string>
     <string name="worker_agreement">Worker Agreement</string>
     <string name="balance_string">Balance</string>
-    <string name="basic_information">Basic information</string>
-    <string name="full_name">Full Name</string>
     <string name="user_name">User Name</string>
-    <string name="location">Location</string>
-    <string name="age">Age</string>
-    <string name="phone_number">Phone Number</string>
     <string name="email">Email</string>
     <string name="mohammad_al_jundi">Mohammad Al Jundi</string>
     <string name="mohammad_a">Mohammad A.</string>
@@ -33,7 +27,6 @@
     <string name="circle_tool">Circle Tool</string>
     <string name="ellipse_tool">Ellipse Tool</string>
     <string name="polygon_tool">Polygon Tool</string>
-    <string name="sign_up">Sign Up</string>
 
     <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
     <string name="facebook_app_id" translatable="false">308223343016078</string>
@@ -65,5 +58,99 @@
     <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
 
     <string name="action_settings">Settings</string>
+    <string name="ready">Ready?</string>
+    <string name="almost_profile">Almost There! Just finish this form!</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="date_of_birth">Date of Birth</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="files">Files</string>
+    <string name="verified">Verified</string>
+    <string name="balance_profile">Balance</string>
+    <string name="basic_information">Basic information</string>
+    <string name="full_name">Full Name</string>
+    <string name="display_name">Display Name</string>
+    <string name="location">Location</string>
+    <string name="gender">Gender</string>
+    <string name="age">Age</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="error">error</string>
+    <string name="password_field">Password Field</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="taqadam">Taqadam!</string>
+    <string name="e_mail_field">E-Mail Field</string>
+    <string name="e_mail_address">E-Mail Address</string>
+    <string name="password">Password</string>
+    <string name="password_strength">Password Strength:</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="already_registered">Already registered?</string>
+    <string name="sign_in">Sign in</string>
+    <string name="get_paid_des">Hooray! Collect your achieved earnings from the nearest OMT outlet accross Lebanon!</string>
+    <string name="get_paid">Get Paid!</string>
+    <string name="practice">Practice</string>
+    <string name="practice_des">Follow our tutorials and practice sets to advance your level and earn more!</string>
+    <string name="register">Register</string>
+    <string name="register_des">It\'s easy! You can do it using your Facebook account or email and password.</string>
+    <string name="work">Work</string>
+    <string name="work_des">Simply, put your practice into paid simple tasks! Just make sure to be as precise as you can.</string>
+    <string name="task_type">task type</string>
+    <string name="description">description</string>
+    <string name="pas_short">SHORT</string>
+    <string name="Signingin">Signing in</string>
+    <string name="Please_wait">Please wait..</string>
+    <string name="please_enter_both_fields">Please enter both fields</string>
+    <string name="No_internet">No internet!</string>
+    <string name="no_internet">You are not connected to the internet! Please check your connection and try again</string>
+    <string name="retry">Retry</string>
+    <string name="quit">Quit</string>
+    <string name="reset">Reset</string>
+    <string name="submit">Submit</string>
+    <string name="creatingAccount">Creating Account</string>
+    <string name="short_email_errorm">E-Mail is too short!</string>
+    <string name="email_format_errorm">E-Mail address is invalid. Should be in the format: john@example.com</string>
+    <string name="short_pass_errorm">Password is too short! Should be more than 5 characters</string>
+    <string name="pass_instruction_errorm">Password Must be 6 characters long and should contain at least one letter and one number</string>
+    <string name="write_email_errorm">Write your E-Mail address!</string>
+    <string name="allready_registed_email_errorm">This email is already registered and connected to a Facebook account.</string>
+    <string name="sign_in_with_facebook">Sign in with Facebook</string>
+    <string name="already_registed_signin_errorm">This email is already registered. Do you want to sign in?</string>
+    <string name="signin_facebook_instead_errorm">This email is associated with a registered Facebook account. Do you want to sign in with Facebook instead?</string>
+    <string name="signin_facebook">Sign in with Facebook</string>
+    <string name="cancel">Cancel</string>
+    <string name="error_signin_with_fb_errorm">Error signing in with Facebook</string>
+    <string name="accept">Accept</string>
+    <string name="decline">Decline</string>
+    <string name="pas_strong">STRONG</string>
+    <string name="pas_fair">FAIR</string>
+    <string name="pas_medium">MEDIUM</string>
+    <string name="pas_weak">WEAK</string>
+    <string name="resolving_errorm">Error while resolving problem!</string>
+    <string name="edit_profile">Edit profile</string>
+    <string name="updating_account">Updating Account</string>
+    <string name="please_wait">Please wait</string>
+    <string name="not_logged_in">You are not logged in!</string>
+    <string name="login">Login</string>
+    <string name="this_field_is_required">This field is required</string>
+    <string name="invalid_input">Invalid input</string>
+    <string name="age_less_than13">You\'re younger than 13</string>
+    <string name="select_valid_city">Please select a valid city</string>
+    <string name="user_created">User Created Successfully!</string>
+    <string name="error_updating_account">Error updating account</string>
+    <string name="tutorial">Tutorial</string>
+    <string name="qualifier">Qualifier</string>
+    <string name="tasks">Tasks</string>
+    <string name="help_faq">Help/FAQ</string>
+    <string name="cash_out">Cash out</string>
+    <string name="discussion">Discussion</string>
+    <string name="notification">Notification</string>
+    <string name="setting">Setting</string>
+    <string name="help">Help</string>
+    <string name="feedback">Feedback</string>
+    <string name="log_out">Log out</string>
+    <string name="notifications">Notifications</string>
+    <string name="discussions">Discussions</string>
+
 
 </resources>

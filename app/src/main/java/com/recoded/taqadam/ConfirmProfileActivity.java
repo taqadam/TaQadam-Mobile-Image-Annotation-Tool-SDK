@@ -80,7 +80,7 @@ public class ConfirmProfileActivity extends AppCompatActivity {
         this.mEditMode = getIntent().getBooleanExtra("EDIT_MODE", false);
 
         if (mEditMode) {
-            binding.tvReady.setText("Edit profile");
+            binding.tvReady.setText(R.string.edit_profile);
             binding.tvAlmostThere.setVisibility(View.GONE);
         }
         binding.bSubmit.setOnClickListener(new View.OnClickListener() {
@@ -150,26 +150,26 @@ public class ConfirmProfileActivity extends AppCompatActivity {
 
         mCreatingAccountProgressDialog = new ProgressDialog(this);
         mCreatingAccountProgressDialog.setCancelable(false);
-        mCreatingAccountProgressDialog.setTitle("Updating Account");
+        mCreatingAccountProgressDialog.setTitle(getString(R.string.updating_account));
         mCreatingAccountProgressDialog.setCanceledOnTouchOutside(false);
-        mCreatingAccountProgressDialog.setMessage("Please wait");
+        mCreatingAccountProgressDialog.setMessage(getString(R.string.please_wait));
     }
 
     private void checkAuthorized() {
         if (UserAuthHandler.getInstance().getCurrentUser() == null) {
             user = new User();
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Error!");
+            builder.setTitle(R.string.error);
             builder.setIcon(R.drawable.ic_error);
-            builder.setMessage("You are not logged in!");
-            builder.setPositiveButton("Login", new DialogInterface.OnClickListener() {
+            builder.setMessage(R.string.not_logged_in);
+            builder.setPositiveButton(R.string.login, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     startActivity(new Intent(ConfirmProfileActivity.this, SigninActivity.class));
                     finish();
                 }
             });
-            builder.setNegativeButton("Register", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(R.string.register, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     startActivity(new Intent(ConfirmProfileActivity.this, RegisterActivity.class));
@@ -223,10 +223,10 @@ public class ConfirmProfileActivity extends AppCompatActivity {
     }
 
     private void validateAndPush() {
-        final String EMPTY = "This field is required";
-        final String INVALID = "Invalid input";
-        final String INVALID_AGE = "You're younger than 13";
-        final String INVALID_CITY = "Please select a valid city";
+        final String EMPTY = getString(R.string.this_field_is_required);
+        final String INVALID = getString(R.string.invalid_input);
+        final String INVALID_AGE = getString(R.string.age_less_than13);
+        final String INVALID_CITY = getString(R.string.select_valid_city);
 
         boolean valid = true;
 
@@ -336,7 +336,7 @@ public class ConfirmProfileActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     mCreatingAccountProgressDialog.dismiss();
                     if (!user.isCompleteProfile()) {
-                        Toast.makeText(ConfirmProfileActivity.this, "User Created Successfully!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(ConfirmProfileActivity.this, R.string.user_created, Toast.LENGTH_LONG).show();
                     }
                     Intent i = new Intent(ConfirmProfileActivity.this, MainActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
@@ -344,7 +344,7 @@ public class ConfirmProfileActivity extends AppCompatActivity {
                     finish();
                 } else {
                     Log.d(TAG, "Error writing user data to Firebase db: " + task.getException());
-                    Toast.makeText(ConfirmProfileActivity.this, "Error updating account", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ConfirmProfileActivity.this, R.string.error_updating_account, Toast.LENGTH_LONG).show();
                 }
             }
         };
