@@ -21,8 +21,7 @@
 
         <activity
             android:name=".SplashActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_splash">
+            android:configChanges="orientation|keyboardHidden|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -50,8 +49,6 @@
         <activity android:name=".TaskActivity">
         </activity>
         <activity android:name=".ProfileActivity">
-        </activity>
-        <activity android:name=".PaymentActivity">
         </activity>
 
         <meta-data

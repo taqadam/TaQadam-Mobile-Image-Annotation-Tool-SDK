@@ -65,8 +65,7 @@
                         android:gravity="center_vertical"
                         android:text="@string/verified"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                        android:textStyle="bold"
-                        tools:text="Verified"/>
+                        android:textStyle="bold"/>
                 </LinearLayout>
 
                 <include
@@ -280,7 +279,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/ic_error_orange"
-                            android:tooltipText="Not Verified"
+                            android:tooltipText="@string/not_verified_contact_method"
                             android:layout_marginStart="8dp"
                             android:layout_marginLeft="8dp"
                             app:layout_constraintStart_toEndOf="@id/tv_user_phone_line"
@@ -315,7 +314,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/ic_error_orange"
-                            android:tooltipText="Not Verified"
+                            android:tooltipText="@string/not_verified_contact_method"
                             android:layout_marginStart="8dp"
                             android:layout_marginLeft="8dp"
                             app:layout_constraintStart_toEndOf="@id/tv_user_email_line"

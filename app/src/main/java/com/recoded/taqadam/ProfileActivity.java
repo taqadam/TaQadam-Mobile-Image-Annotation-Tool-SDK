@@ -63,19 +63,19 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void indicateVerificationStatus() {
         if (!user.isAccountApproved()) {
-            binding.tvVerifiedIndicator.setText("Awaiting Verification");
+            binding.tvVerifiedIndicator.setText(R.string.awaiting_verification);
             binding.tvVerifiedIndicator.setCompoundDrawables(null, null, null, null);
         }
         if (user.isEmailVerified()) {
             binding.ivEmailVerified.setImageResource(R.drawable.ic_check_circle);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                binding.ivEmailVerified.setTooltipText(getString(R.string.verified));
+                binding.ivEmailVerified.setTooltipText(getString(R.string.verified_contact_method));
             }
         }
         if (user.isPhoneNumberVerified()) {
             binding.ivPhoneVerified.setImageResource(R.drawable.ic_check_circle);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                binding.ivPhoneVerified.setTooltipText(getString(R.string.verified));
+                binding.ivPhoneVerified.setTooltipText(getString(R.string.verified_contact_method));
             }
         }
     }

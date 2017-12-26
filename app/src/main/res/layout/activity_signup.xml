@@ -67,7 +67,7 @@
                         android:layout_marginEnd="8dp"
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="-8dp"
-                        android:contentDescription="@string/e_mail_field"
+                        android:contentDescription="@string/email_content_desc"
                         android:src="@drawable/ic_email_black_24dp"
                         android:tint="@color/colorWhite"/>
 
@@ -83,7 +83,7 @@
                             android:id="@+id/eti_email"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/e_mail_address"
+                            android:hint="@string/input_email"
                             android:inputType="textEmailAddress"
                             android:textColor="@color/colorWhite"/>
                     </android.support.design.widget.TextInputLayout>
@@ -112,7 +112,7 @@
                         android:layout_marginEnd="8dp"
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="-8dp"
-                        android:contentDescription="@string/password_field"
+                        android:contentDescription="@string/password_content_desc"
                         android:src="@drawable/ic_key"
                         android:tint="@color/colorWhite"/>
 
@@ -129,7 +129,7 @@
                             android:id="@+id/eti_pw"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/password"
+                            android:hint="@string/input_password"
                             android:inputType="textPassword"
                             android:textColor="@color/colorWhite"/>
                     </android.support.design.widget.TextInputLayout>

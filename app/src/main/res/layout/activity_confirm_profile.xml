@@ -137,7 +137,7 @@
                             android:id="@+id/eti_email"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/e_mail_address"
+                            android:hint="@string/input_email"
                             android:inputType="textEmailAddress"
                             android:text="@{User.emailAddress}"
                             android:textColor="@color/colorWhite"/>
