@@ -24,7 +24,6 @@ import android.view.View;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -190,8 +189,11 @@ public class ConfirmProfileActivity extends AppCompatActivity {
         } else if (user.getGender() == User.Gender.FEMALE) {
             binding.spinnerGender.setSelection(2);
         }
-        ArrayAdapter adapter = (ArrayAdapter) binding.spinnerCities.getAdapter();
-        binding.spinnerCities.setSelection(adapter.getPosition(user.getUserAddress()));
+
+        if (user.getUserCity() != null) {
+            binding.spinnerCities.setSelection(user.getUserCity().getId());
+        }
+
         binding.ivDisplayImage.setTag(user.getPicturePath());
         loadImage();
         if (user.getDateOfBirth() != null) {
@@ -553,7 +555,6 @@ public class ConfirmProfileActivity extends AppCompatActivity {
         user.setLastName(binding.etLName.getEditText().getText().toString());
         user.setPhoneNumber(binding.etPhoneNumber.getEditText().getText().toString());
         user.setDateOfBirth(mCalendar.getTime());
-        user.setUserAddress(binding.spinnerCities.getSelectedItem().toString());
         user.setPicturePath((Uri) binding.ivDisplayImage.getTag());
         switch (binding.spinnerGender.getSelectedItemPosition()) {
             case 0:
@@ -566,6 +567,15 @@ public class ConfirmProfileActivity extends AppCompatActivity {
                 user.setGender(User.Gender.FEMALE);
                 break;
         }
+
+        //Setting the city
+        for (User.City city : User.City.values()) {
+            if (city.getId() == binding.spinnerCities.getSelectedItemPosition()) {
+                user.setUserCity(city);
+            }
+        }
+
+
         if (!user.isCompleteProfile()) {
             Log.d(TAG, "Creating user");
             UserDbHandler.getInstance().writeNewUser(user).addOnCompleteListener(ConfirmProfileActivity.this, mUserCreatedListener);

@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="100dp"
             android:layout_marginTop="60dp"
-            android:text="@string/balance"
+            android:text="@string/currentbalance"
             android:textColor="@color/colorWhite"
             android:textSize="20sp" />
 
@@ -69,7 +69,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="@string/conf"
+                android:text="@string/confirm"
                 android:textColor="@color/colorWhite"
                 android:textSize="18sp" />
         </RelativeLayout>

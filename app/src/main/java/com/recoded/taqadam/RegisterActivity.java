@@ -88,9 +88,9 @@ public class RegisterActivity extends AppCompatActivity {
 
         mCreatingAccountProgressDialog = new ProgressDialog(this);
         mCreatingAccountProgressDialog.setCancelable(false);
-        mCreatingAccountProgressDialog.setTitle(getString(R.string.creatingAccount));
+        mCreatingAccountProgressDialog.setTitle(R.string.creatingAccount);
         mCreatingAccountProgressDialog.setCanceledOnTouchOutside(false);
-        mCreatingAccountProgressDialog.setMessage("Please wait");
+        mCreatingAccountProgressDialog.setMessage(getString(R.string.Please_wait));
 
     }
 
@@ -166,7 +166,7 @@ public class RegisterActivity extends AppCompatActivity {
                     //Start building the alert dialog. TODO: Extract strings
                     final AlertDialog.Builder db = new AlertDialog.Builder(RegisterActivity.this);
                     db.setIcon(getResources().getDrawable(R.drawable.ic_error));
-                    db.setTitle("Error");
+                    db.setTitle(R.string.error);
                     db.setCancelable(false);
                     AuthSignUpException ex = (AuthSignUpException) e;
 
@@ -180,7 +180,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 bFbLogin.performClick();
                             }
                         });
-                        db.setNeutralButton("Forgot Password", new DialogInterface.OnClickListener() {
+                        db.setNeutralButton(R.string.forgot_password_action, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 //TODO: implement the intent to pw reset activity
@@ -188,7 +188,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 resetPassword(email);
                             }
                         });
-                        db.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        db.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
@@ -200,14 +200,14 @@ public class RegisterActivity extends AppCompatActivity {
                     } else if (ex.getErrorCode() == AuthSignUpException.PW_WRONG) {
                         //else if associated with only password means he already signed up. show him only reset pw
                         db.setMessage(R.string.already_registed_signin_errorm);
-                        db.setPositiveButton("Sign in", new DialogInterface.OnClickListener() {
+                        db.setPositiveButton(R.string.sign_in, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
                                 bSignin.performClick();
                             }
                         });
-                        db.setNeutralButton("Forgot Password", new DialogInterface.OnClickListener() {
+                        db.setNeutralButton(R.string.forgot_password_action, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 //TODO: implement the intent to pw reset activity
@@ -215,7 +215,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 resetPassword(email);
                             }
                         });
-                        db.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        db.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
@@ -284,7 +284,7 @@ public class RegisterActivity extends AppCompatActivity {
                 .setTitle(R.string.worker_agreement)
                 .setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Toast.makeText(RegisterActivity.this, "Accepted", Toast.LENGTH_LONG).show();
+                        Toast.makeText(RegisterActivity.this, R.string.accepted, Toast.LENGTH_LONG).show();
                     }
                 })
                 .setNegativeButton(R.string.decline, new DialogInterface.OnClickListener() {

@@ -4,10 +4,10 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="hello_tasks_fragment">Hello tasks fragment</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="balance">Your Current Balance:</string>
+    <string name="currentbalance">Your Current Balance:</string>
     <string name="amount_cash_text">Please enter the amount you would like to cash out bellow:</string>
     <string name="enter_amount">Enter Your Amount</string>
-    <string name="conf">Confirm</string>
+    <string name="confirm">Confirm</string>
     <string name="agree_text">By clicking on \'confirm\' I agree on the terms and conditions</string>
     <string name="need_help">Need Help ?</string>
     <string name="profile">Profile</string>
@@ -52,11 +52,6 @@
     <string name="gender_Male">Male</string>
     <string name="gender_Female">Female</string>
 
-    <string name="title_activity_splash">TAQADAM</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
-
     <string name="action_settings">Settings</string>
     <string name="ready">Ready?</string>
     <string name="almost_profile">Almost There! Just finish this form!</string>
@@ -76,18 +71,18 @@
     <string name="age">Age</string>
     <string name="phone_number">Phone Number</string>
     <string name="error">error</string>
-    <string name="password_field">Password Field</string>
+    <string name="password_content_desc">Password Field</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="don_t_have_an_account">Don\'t have an account?</string>
     <string name="taqadam">Taqadam!</string>
-    <string name="e_mail_field">E-Mail Field</string>
-    <string name="e_mail_address">E-Mail Address</string>
-    <string name="password">Password</string>
+    <string name="email_content_desc">E-Mail Field</string>
+    <string name="input_email">E-Mail Address</string>
+    <string name="input_password">Password</string>
     <string name="password_strength">Password Strength:</string>
     <string name="sign_up">Sign Up</string>
     <string name="already_registered">Already registered?</string>
     <string name="sign_in">Sign in</string>
-    <string name="get_paid_des">Hooray! Collect your achieved earnings from the nearest OMT outlet accross Lebanon!</string>
+    <string name="get_paid_des">Hooray! Collect your achieved earnings from the nearest OMT outlet across Lebanon!</string>
     <string name="get_paid">Get Paid!</string>
     <string name="practice">Practice</string>
     <string name="practice_des">Follow our tutorials and practice sets to advance your level and earn more!</string>
@@ -151,6 +146,13 @@
     <string name="log_out">Log out</string>
     <string name="notifications">Notifications</string>
     <string name="discussions">Discussions</string>
+    <string name="forgot_password_action">Forgot Password</string>
+    <string name="accepted">Accepted</string>
+    <string name="account_disabled">Your account has been disabled</string>
+    <string name="invalid_credentials">Invalid Email or Password</string>
+    <string name="awaiting_verification">Awaiting Verification</string>
+    <string name="verified_contact_method">Verified</string>
+    <string name="not_verified_contact_method">Not Verified</string>
 
 
 </resources>

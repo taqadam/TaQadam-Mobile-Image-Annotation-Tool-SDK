@@ -42,7 +42,7 @@ public class SigninActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signin);
 
         progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle(getString(R.string.Signingin));
+        progressDialog.setTitle(R.string.Signingin);
         progressDialog.setMessage(getString(R.string.Please_wait));
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
@@ -98,7 +98,12 @@ public class SigninActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                 progressDialog.dismiss();
-                indicateError(e.getMessage());
+                String msg = e.getMessage();
+                if (msg.contains("disable")) {
+                    indicateError(getString(R.string.account_disabled));
+                } else {
+                    indicateError(getString(R.string.invalid_credentials));
+                }
             }
         });
     }

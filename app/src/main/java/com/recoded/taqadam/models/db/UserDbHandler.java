@@ -74,7 +74,7 @@ public class UserDbHandler {
         keyValues.put(EMAIL_CONFIRMED, false);
         keyValues.put(PHONE_NUMBER, user.getPhoneNumber());
         keyValues.put(PHONE_CONFIRMED, false);
-        keyValues.put(USER_ADDRESS, user.getUserAddress());
+        keyValues.put(USER_ADDRESS, user.getUserCity().getName());
         keyValues.put(USER_DOB_TS, user.getDateOfBirth().getTime());
         keyValues.put(USER_GENDER, user.getGender().getGenderName());
         keyValues.put(DISPLAY_IMAGE, user.getPicturePath().toString());
@@ -92,7 +92,7 @@ public class UserDbHandler {
         keyValues.put(DISPLAY_NAME, user.getDisplayName());
         keyValues.put(EMAIL_ADDRESS, user.getEmailAddress());
         keyValues.put(PHONE_NUMBER, user.getPhoneNumber());
-        keyValues.put(USER_ADDRESS, user.getUserAddress());
+        keyValues.put(USER_ADDRESS, user.getUserCity().getName());
         keyValues.put(USER_DOB_TS, user.getDateOfBirth().getTime());
         keyValues.put(USER_GENDER, user.getGender().getGenderName());
         keyValues.put(DISPLAY_IMAGE, user.getPicturePath().toString());
@@ -176,7 +176,14 @@ public class UserDbHandler {
                 UserAuthHandler.getInstance().getCurrentUser().setPhoneNumberVerified((boolean) data.getValue());
                 break;
             case USER_ADDRESS:
-                UserAuthHandler.getInstance().getCurrentUser().setUserAddress((String) data.getValue());
+                for (User.City city : User.City.values()) {
+                    if (city.getName().equals(data.getValue())) {
+                        UserAuthHandler
+                                .getInstance()
+                                .getCurrentUser()
+                                .setUserCity(city);
+                    }
+                }
                 break;
             case USER_DOB_TS:
                 UserAuthHandler.getInstance().getCurrentUser().setDateOfBirth(new Date((long) data.getValue()));
