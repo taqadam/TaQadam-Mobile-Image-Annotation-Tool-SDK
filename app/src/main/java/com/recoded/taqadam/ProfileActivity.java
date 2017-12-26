@@ -39,7 +39,9 @@ public class ProfileActivity extends AppCompatActivity {
         binding.fabEditProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ProfileActivity.this, ConfirmProfileActivity.class));
+                Intent i = new Intent(ProfileActivity.this, ConfirmProfileActivity.class);
+                i.putExtra("EDIT_MODE", true);
+                startActivity(i);
                 finish();
             }
         });
