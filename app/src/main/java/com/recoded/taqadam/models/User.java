@@ -24,7 +24,7 @@ public class User implements Serializable {
     private static final String TAG = User.class.getSimpleName();
     private String mFName, mLName, mDName, mEMailAddr;
     private String mPhoneNumber;
-    private String mUserAddress;
+    private City mUserCity;
     private Uri mPicturePath;
     private Date mDateOfBirth;
     private Gender mGender;
@@ -95,12 +95,12 @@ public class User implements Serializable {
         this.mPhoneNumber = mPhoneNumber;
     }
 
-    public String getUserAddress() {
-        return mUserAddress;
+    public City getUserCity() {
+        return mUserCity;
     }
 
-    public void setUserAddress(String mUserAddress) {
-        this.mUserAddress = mUserAddress;
+    public void setUserCity(City mUserAddress) {
+        this.mUserCity = mUserAddress;
     }
 
     public Uri getPicturePath() {
@@ -198,6 +198,40 @@ public class User implements Serializable {
         }
     }
 
+    public enum City {
+        //These ids should be the same as the order of cities
+        // in the 'cities_lebanon' array or else it won't work
+        //We will set the selected spinner item as the userCity.getId()
+        ALEY("Aley", 1),
+        BAALBEK("Baalbek", 2),
+        BATROUN("Batroun", 3),
+        BEIRUT("Beirut", 4),
+        BYBLOS("Byblos", 5),
+        JOUNIEH("Jounieh", 6),
+        NABATIEH("Nabatieh", 7),
+        SIDON("Sidon", 8),
+        TRIPOLI("Tripoli", 9),
+        TYRE("Tyre", 10),
+        ZAHLE("Zahle", 11),
+        ZGHARTA("Zgharta", 12);
+
+        private final int positionId;
+        private final String name;
+
+        City(String name, int id) {
+            this.name = name;
+            this.positionId = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public int getId() {
+            return positionId;
+        }
+    }
+
     public static User fromMap(HashMap map) {
         User u = new User();
         u.mDName = (String) map.get(UserDbHandler.DISPLAY_NAME);
@@ -207,7 +241,6 @@ public class User implements Serializable {
         u.mPhoneNumber = (String) map.get(UserDbHandler.PHONE_NUMBER);
         u.mPicturePath = Uri.parse((String) map.get(UserDbHandler.DISPLAY_IMAGE));
         u.mDateOfBirth = new Date((long) map.get(UserDbHandler.USER_DOB_TS));
-        u.mUserAddress = (String) map.get(UserDbHandler.USER_ADDRESS);
         u.mPhoneNumberVerified = (boolean) map.get(UserDbHandler.PHONE_CONFIRMED);
         u.mEmailVerified = (boolean) map.get(UserDbHandler.EMAIL_CONFIRMED);
         u.mAccountApproved = (boolean) map.get(UserDbHandler.IS_APPROVED);
@@ -221,6 +254,12 @@ public class User implements Serializable {
             default:
                 u.mGender = Gender.NOT_SPECIFIED;
                 break;
+        }
+
+        for (City city : City.values()) {
+            if (city.getName().equals(map.get(UserDbHandler.USER_ADDRESS))) {
+                u.mUserCity = city;
+            }
         }
         return u;
     }
