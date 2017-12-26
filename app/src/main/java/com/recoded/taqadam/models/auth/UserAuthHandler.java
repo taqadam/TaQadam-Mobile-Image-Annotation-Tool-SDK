@@ -77,6 +77,7 @@ public class UserAuthHandler {
                         initTask.setResult(currentUser);
                     } else {
                         currentUser = new User(mAuth.getCurrentUser());
+                        initTask.setResult(currentUser);
                     }
                 }
             }).addOnFailureListener(new OnFailureListener() {
