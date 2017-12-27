@@ -1,15 +1,20 @@
 package com.recoded.taqadam;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.recoded.taqadam.JobActivity.JobActivity;
 import com.recoded.taqadam.models.Task;
 
 import java.util.ArrayList;
@@ -67,7 +72,7 @@ public class FragmentTasks extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fragment_tasks, container, false);
 
@@ -87,6 +92,38 @@ public class FragmentTasks extends Fragment {
         TaskAdapter taskAdapter = new TaskAdapter(getActivity(), array);
         recyclerView.setAdapter(taskAdapter);
 
+        //choosing jobs by clicking on the items
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getContext(), new RecyclerItemClickListener.OnItemClickListener() {
+                    @SuppressLint("ResourceType")
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        switch (position) {
+                            case 0:
+                                Toast.makeText(getContext(), "Bounding Box Tasks", Toast.LENGTH_SHORT).show();
+                                break;
+
+                            case 1:
+                                Toast.makeText(getContext(), "Labeling Tasks", Toast.LENGTH_SHORT).show();
+                                break;
+
+                            case 2:
+                                Intent intent=new Intent(getContext(),JobActivity.class);
+                                startActivity(intent);
+                               /* FragmentClassificationTask fragmentClassificationTask = new FragmentClassificationTask();
+                                FragmentTransaction fragmentTransactionDiscuss = getFragmentManager().beginTransaction();
+                                fragmentTransactionDiscuss.replace(R.id.frame_layout, fragmentClassificationTask);
+                                fragmentTransactionDiscuss.commit();*/
+                                break;
+
+                            case 3:
+                                Toast.makeText(getContext(), "Image validation  Tasks", Toast.LENGTH_SHORT).show();
+                                break;
+
+                        }
+                    }
+                })
+        );
         return view;
 
 

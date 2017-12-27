@@ -74,6 +74,10 @@
                 <data android:scheme="@string/facebook_login_protocol_scheme"/>
             </intent-filter>
         </activity>
+        <activity android:name=".Classification">
+        </activity>
+        <activity android:name=".JobActivity.JobActivity">
+        </activity>
     </application>
 
 </manifest>

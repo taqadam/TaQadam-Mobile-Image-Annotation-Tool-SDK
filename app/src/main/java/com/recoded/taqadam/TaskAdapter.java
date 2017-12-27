@@ -20,6 +20,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         this.dataSet = list;
     }
 
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(ctx).inflate(R.layout.task_item, parent, false);
@@ -48,5 +49,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
             taskTitle = itemView.findViewById(R.id.task_title);
             taskDesc = itemView.findViewById(R.id.task_disc);
         }
+
     }
+
+
 }

@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 
 import com.github.paolorotolo.appintro.AppIntro;
 import com.recoded.taqadam.R;
+import com.recoded.taqadam.SlideFragment;
 
 /**
  * Created by Ahmad Siafaddin on 12/12/2017.
@@ -19,11 +20,11 @@ public class IntroActivity extends AppIntro {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addSlide(SlideMaker.newInstance(R.layout.intro_logo, 0));
-        addSlide(SlideMaker.newInstance(R.layout.registeration, 1));
-        addSlide(SlideMaker.newInstance(R.layout.practice, 2));
-        addSlide(SlideMaker.newInstance(R.layout.work, 3));
-        addSlide(SlideMaker.newInstance(R.layout.payment, 4));
+        addSlide(SlideFragment.newInstance(R.layout.frag_intro_register, 0));
+        addSlide(SlideFragment.newInstance(R.layout.frag_intro_practice, 1));
+        addSlide(SlideFragment.newInstance(R.layout.frag_intro_work, 2));
+        addSlide(SlideFragment.newInstance(R.layout.frag_intro_payment, 3));
+       // addSlide(SlideFragment.newInstance(R.layout.payment, 4));
 
         showSkipButton(false);
         setFlowAnimation();
@@ -47,48 +48,48 @@ public class IntroActivity extends AppIntro {
     public void onSlideChanged(@Nullable Fragment oldFragment, @Nullable Fragment newFragment) {
         super.onSlideChanged(oldFragment, newFragment);
 
-        if (((newFragment) != null ? ((SlideMaker) newFragment).getScreenId() : 0) == 0) {
+        if (((newFragment) != null ? ((SlideFragment) newFragment).getScreenId() : 0) == 0) {
 
             setIndicatorColor(getResources().getColor(R.color.colorWhite), getResources().getColor(R.color.colorWhite));
-            setNextArrowColor(getResources().getColor(R.color.colorMaron));
+            setNextArrowColor(getResources().getColor(R.color.colorIntroRegister));
             setColorDoneText(getResources().getColor(R.color.colorWhite));
-            setBarColor(getResources().getColor(R.color.colorMaron));
-            setSeparatorColor(getResources().getColor(R.color.colorMaron));
+            setBarColor(getResources().getColor(R.color.colorIntroRegister));
+            setSeparatorColor(getResources().getColor(R.color.colorIntroRegister));
 
 
         }
 
-        else if(((SlideMaker) newFragment).getScreenId() == 1){
+        else if(((SlideFragment) newFragment).getScreenId() == 1){
 
             setIndicatorColor(getResources().getColor(R.color.colorWhite), getResources().getColor(R.color.colorWhite));
-            setNextArrowColor(getResources().getColor(R.color.colorSlide2));
+            setNextArrowColor(getResources().getColor(R.color.colorIntroPractice));
             setColorDoneText(getResources().getColor(R.color.colorWhite));
-            setBarColor(getResources().getColor(R.color.colorSlide2));
-            setSeparatorColor(getResources().getColor(R.color.colorSlide2));
+            setBarColor(getResources().getColor(R.color.colorIntroPractice));
+            setSeparatorColor(getResources().getColor(R.color.colorIntroPractice));
 
 
         }
-        else if(((SlideMaker) newFragment).getScreenId() == 2){
+        else if(((SlideFragment) newFragment).getScreenId() == 2){
 
             setIndicatorColor(getResources().getColor(R.color.colorWhite), getResources().getColor(R.color.colorWhite));
-            setNextArrowColor(getResources().getColor(R.color.colorSlide3));
+            setNextArrowColor(getResources().getColor(R.color.colorIntroWork));
             setColorDoneText(getResources().getColor(R.color.colorWhite));
-            setBarColor(getResources().getColor(R.color.colorSlide3));
-            setSeparatorColor(getResources().getColor(R.color.colorSlide3));
+            setBarColor(getResources().getColor(R.color.colorIntroWork));
+            setSeparatorColor(getResources().getColor(R.color.colorIntroWork));
 
         }
 
-        else if(((SlideMaker) newFragment).getScreenId() == 3){
+        else if(((SlideFragment) newFragment).getScreenId() == 3){
 
             setIndicatorColor(getResources().getColor(R.color.colorWhite), getResources().getColor(R.color.colorWhite));
-            setNextArrowColor(getResources().getColor(R.color.colorSlide4));
+            setNextArrowColor(getResources().getColor(R.color.colorIntroPayment));
             setColorDoneText(getResources().getColor(R.color.colorWhite));
-            setBarColor(getResources().getColor(R.color.colorSlide4));
-            setSeparatorColor(getResources().getColor(R.color.colorSlide4));
+            setBarColor(getResources().getColor(R.color.colorIntroPayment));
+            setSeparatorColor(getResources().getColor(R.color.colorIntroPayment));
 
         }
 
-        else if(((SlideMaker) newFragment).getScreenId() == 4){
+       /* else if(((SlideMaker) newFragment).getScreenId() == 4){
 
             setIndicatorColor(getResources().getColor(R.color.colorWhite), getResources().getColor(R.color.colorWhite));
             setNextArrowColor(getResources().getColor(R.color.colorWhite));
@@ -96,7 +97,7 @@ public class IntroActivity extends AppIntro {
             setBarColor(getResources().getColor(R.color.colorMaron));
             setSeparatorColor(getResources().getColor(R.color.colorMaron));
 
-        }
+        }*/
 
     }
 
