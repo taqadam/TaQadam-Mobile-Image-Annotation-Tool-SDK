@@ -1,7 +1,7 @@
 package com.recoded.taqadam.JobActivity;
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -9,24 +9,23 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.recoded.taqadam.R;
+import com.recoded.taqadam.databinding.ActivityJobBinding;
 
 public class JobActivity extends AppCompatActivity {
     SectionsPagerAdapter mSectionsPagerAdapter;
-    ViewPager mViewPager;
-
+    ActivityJobBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_job);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_job);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        mViewPager = findViewById(R.id.container);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         /* Set up the ViewPager with the sections adapter. */
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+        binding.viewPager.setAdapter(mSectionsPagerAdapter);
     }
 
     @Override

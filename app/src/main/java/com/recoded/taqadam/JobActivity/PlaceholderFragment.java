@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.recoded.taqadam.R;
+import com.recoded.taqadam.databinding.ActivityClassificationBinding;
 
 import java.util.ArrayList;
 
@@ -24,14 +25,14 @@ import java.util.ArrayList;
 public class PlaceholderFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
-
+   // ActivityClassificationBinding binding;
     ArrayList<String> QuestionsList;
     ArrayList<ArrayList<String>> AnswersList;
     int[] img;
-    TextView questions;
-    Spinner answers;
-    ImageView imageView;
 
+    TextView question;
+    ImageView imageView;
+    Spinner spinner;
     public PlaceholderFragment() {
     }
 
@@ -53,6 +54,7 @@ public class PlaceholderFragment extends Fragment implements AdapterView.OnItemS
                              Bundle savedInstanceState) {
 
         /**
+         * TODO wissam
          * THIS (getArguments().getInt(ARG_SECTION_NUMBER)) IS A RANDOM NUMBER,
          * AND IT SHOULD BE THE NUMBER OF THE TASKS IN THE FIREBASE
          * AND THE (5) IS CHANGED AS WE WANT, IT IS JUST FOR
@@ -61,9 +63,9 @@ public class PlaceholderFragment extends Fragment implements AdapterView.OnItemS
         if (getArguments().getInt(ARG_SECTION_NUMBER) < 5) {
             View rootView = inflater.inflate(R.layout.activity_classification, container, false);
 
-            questions = rootView.findViewById(R.id.question);
-            answers = rootView.findViewById(R.id.answers);
-            imageView = rootView.findViewById(R.id.images);
+            question=rootView.findViewById(R.id.question);
+            imageView=rootView.findViewById(R.id.images);
+            spinner=rootView.findViewById(R.id.answers);
 
             QuestionsList = new ArrayList<>(9);
             QuestionsList.add("this is a..........");
@@ -76,8 +78,8 @@ public class PlaceholderFragment extends Fragment implements AdapterView.OnItemS
             QuestionsList.add("YOusra");
             QuestionsList.add("Zahra");
 
-
             /**
+             * TODO wissam
              * THOSE ARRAYS SHOULD BE REPLACED BY THE DATABASE FIREBASE
              */
             img = new int[]{R.drawable.banner_taqadam,
@@ -117,11 +119,11 @@ public class PlaceholderFragment extends Fragment implements AdapterView.OnItemS
                     android.R.layout.simple_spinner_item,
                     AnswersList.get(AnswersList.size()-1));//IT SHOULD CHANGED
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            answers.setAdapter(adapter);
-            answers.setOnItemSelectedListener(PlaceholderFragment.this);
+           spinner.setAdapter(adapter);
+           spinner.setOnItemSelectedListener(PlaceholderFragment.this);
 
-            questions.setText(QuestionsList.get(getArguments().getInt(ARG_SECTION_NUMBER)));
-            imageView.setImageResource(img[getArguments().getInt(ARG_SECTION_NUMBER)]);
+            question.setText(QuestionsList.get(getArguments().getInt(ARG_SECTION_NUMBER)));
+           imageView.setImageResource(img[getArguments().getInt(ARG_SECTION_NUMBER)]);
 
             return rootView;
         } else {
