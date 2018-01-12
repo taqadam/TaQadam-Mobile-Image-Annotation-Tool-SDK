@@ -1,8 +1,10 @@
 package com.recoded.taqadam.models;
 
+import android.net.Uri;
 import android.support.annotation.NonNull;
 
-import java.net.URL;
+import com.recoded.taqadam.models.db.UserDbHandler;
+
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -11,54 +13,22 @@ import java.util.List;
 import java.util.ListIterator;
 
 /**
- * Created by HP PC on 12/17/2017.
+ * Created by hp on 1/10/2018.
  */
 
-public class Task {
-    private String taskId;
+public class Job {
     private String jobId;
     private Date dateCreated;
     private Date dateExpires;
-    private URL taskImage;
-    private List<String>options;
-    private String attemptedBy;
-    private String completedBy;
-    private String Type;
-    private String title;
+    private int numberOfAttempts;
+    private int successfulAttempts;
     private String description;
+    private float taskReward;
+    private List<String> tasks;
 
-    public Task(String type, String title, String description) {
-        Type = type;
-        this.title = title;
-        this.description = description;
-    }
-
-    public String getType() {
-        return Type;
-    }
-
-    public void setType(String type) {
-        Type = type;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getTaskId() {
-        return taskId;
+    public Job(String jobId,List<String>  tasks) {
+        this.jobId = jobId;
+        this.tasks = tasks;
     }
 
     public String getJobId() {
@@ -73,24 +43,24 @@ public class Task {
         return dateExpires;
     }
 
-    public URL getTaskImage() {
-        return taskImage;
+    public int getNumberOfAttempts() {
+        return numberOfAttempts;
     }
 
-    public List<String> getOptions() {
-        return options;
+    public int getSuccessfulAttempts() {
+        return successfulAttempts;
     }
 
-    public String getAttemptedBy() {
-        return attemptedBy;
+    public String getDescription() {
+        return description;
     }
 
-    public String getCompletedBy() {
-        return completedBy;
+    public float getTaskReward() {
+        return taskReward;
     }
 
-    public void setTaskId(String taskId) {
-        this.taskId = taskId;
+    public List<String> getTasks() {
+        return tasks;
     }
 
     public void setJobId(String jobId) {
@@ -105,24 +75,29 @@ public class Task {
         this.dateExpires = dateExpires;
     }
 
-    public void setTaskImage(URL taskImage) {
-        this.taskImage = taskImage;
+    public void setNumberOfAttempts(int numberOfAttempts) {
+        this.numberOfAttempts = numberOfAttempts;
     }
 
-    public void setOptions(List<String> options) {
-        this.options = options;
+    public void setSuccessfulAttempts(int successfulAttempts) {
+        this.successfulAttempts = successfulAttempts;
     }
 
-    public void setAttemptedBy(String attemptedBy) {
-        this.attemptedBy = attemptedBy;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public void setCompletedBy(String completedBy) {
-        this.completedBy = completedBy;
+    public void setTaskReward(float taskReward) {
+        this.taskReward = taskReward;
     }
-    public static Task fromMap(HashMap map){
+
+    public void setTasks(List<String> tasks) {
+        this.tasks = tasks;
+    }
+
+    public static Job fromMap(HashMap map){
         String id="";
-        List<String> options=new List<String>() {
+        List<String> tasks=new List<String>() {
             @Override
             public int size() {
                 return 0;
@@ -244,22 +219,16 @@ public class Task {
                 return null;
             }
         };
-        Task task=new Task("","","");
-        task.jobId = (String) map.get("");
-        task.dateCreated = (Date) map.get("");
-        task.dateExpires = (Date) map.get("");
-        task.description = (String) map.get("");
-        task.attemptedBy=(String) map.get("");
-        task.completedBy=(String) map.get("");
-        task.options=(List<String>) map.get("");
-        task.taskImage=(URL ) map.get("");
-        task.taskId=(String) map.get("");
-        task.title=(String)map.get("");
-        task.Type=(String)map.get("");
+        Job job=new Job(id,tasks);
+        job.jobId = (String) map.get("");
+        job.dateCreated = (Date) map.get(1996);
+        job.dateExpires = (Date) map.get(1997);
+        job.description = (String) map.get("");
+       job.numberOfAttempts=(int)map.get(2);
+        job.successfulAttempts=(int)map.get(3);
+        job.taskReward=(float)map.get(1.2);
+        job.tasks=(List )map.get("");
 
-
-
-        return task;
+        return job;
     }
 }
-
