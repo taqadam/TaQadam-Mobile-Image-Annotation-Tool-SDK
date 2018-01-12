@@ -64,7 +64,6 @@ public class TaskActivity extends AppCompatActivity {
                 return true;
             }
         });
-
         toggleToolbox(); //hide or show the toolbox
     }
 
