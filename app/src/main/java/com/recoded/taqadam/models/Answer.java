@@ -1,13 +1,8 @@
 package com.recoded.taqadam.models;
 
-import android.support.annotation.NonNull;
-
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.Map;
 
 /**
  * Created by hp on 1/12/2018.
@@ -21,7 +16,16 @@ public class Answer {
     private Date answerStartTime;
     private Date answerSubmitTime;
     private String rawAnswerData;
-    private String answerAccurancy;
+
+    public Answer(String taskId) {
+        this(taskId, null);
+    }
+
+    public Answer(String taskId, String answerId) {
+        this.taskId = taskId;
+        this.answerId = answerId;
+        isCompleted = false;
+    }
 
     public String getTaskId() {
         return taskId;
@@ -51,10 +55,6 @@ public class Answer {
         return rawAnswerData;
     }
 
-    public String getAnswerAccurancy() {
-        return answerAccurancy;
-    }
-
     public void setTaskId(String taskId) {
         this.taskId = taskId;
     }
@@ -69,36 +69,50 @@ public class Answer {
 
     public void setCompleted(boolean completed) {
         isCompleted = completed;
+        answerSubmitTime = new Date();
     }
 
     public void setAnswerStartTime(Date answerStartTime) {
         this.answerStartTime = answerStartTime;
     }
 
-    public void setAnswerSubmitTime(Date answerSubmitTime) {
+    /*public void setAnswerSubmitTime(Date answerSubmitTime) {
         this.answerSubmitTime = answerSubmitTime;
-    }
+    }*/
 
     public void setRawAnswerData(String rawAnswerData) {
         this.rawAnswerData = rawAnswerData;
     }
 
-    public void setAnswerAccurancy(String answerAccurancy) {
-        this.answerAccurancy = answerAccurancy;
+    public Answer fromMap(Map<String, Object> map) {
+        userId = (String) map.get("uid");
+        answerStartTime = new Date((long) map.get("start_time"));
+
+        if (map.containsKey("submit_time"))
+            answerSubmitTime = new Date((long) map.get("submit_time"));
+
+        isCompleted = (boolean) map.get("is_completed");
+
+        if (map.containsKey("answer_data")) {
+            String rawAnswerDataTemp = (String) map.get("answer_data");
+            rawAnswerData = rawAnswerDataTemp.replace("\\\"", "\"");
+        }
+
+        return this;
     }
 
-    public static Answer fromMap(HashMap map) {
-        String id = "";
-        Answer answer = new Answer();
-        answer.answerId = (String) map.get("");
-        answer.taskId = (String) map.get("");
-        answer.userId = (String) map.get("");
-        answer.answerStartTime = (Date) map.get("");
-        answer.answerSubmitTime = (Date) map.get("");
-        answer.answerAccurancy = (String) map.get("");
-        answer.isCompleted = (boolean) map.get("");
-        answer.rawAnswerData = (String) map.get("");
+    public Map<String, Object> toMap() {
+        Map<String, Object> ret = new HashMap<>();
+        ret.put("uid", userId);
+        ret.put("start_time", answerStartTime.getTime());
 
-        return answer;
+        if (answerSubmitTime != null)
+            ret.put("submit_time", answerSubmitTime.getTime());
+
+        if (rawAnswerData != null && !rawAnswerData.isEmpty())
+            ret.put("answer_data", rawAnswerData.replace("\"", "\\\"")); //Escaped for FireBase
+
+        ret.put("is_completed", isCompleted);
+        return ret;
     }
 }

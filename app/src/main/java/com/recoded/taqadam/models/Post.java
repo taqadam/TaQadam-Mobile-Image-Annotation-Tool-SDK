@@ -101,7 +101,7 @@ public class Post {
         uid = (String) map.get(PostDbHandler.USER_ID);
         title = (String) map.get(PostDbHandler.TITLE);
         author = (String) map.get(PostDbHandler.AUTHOR);
-        noOfComments = (int) map.get(PostDbHandler.COMMENTS);
+        noOfComments = ((Long) map.get(PostDbHandler.COMMENTS)).intValue();
         postTime = (long) map.get(PostDbHandler.TIMESTAMP);
         body = (String) map.get(PostDbHandler.TRUNCATED_BODY);
 

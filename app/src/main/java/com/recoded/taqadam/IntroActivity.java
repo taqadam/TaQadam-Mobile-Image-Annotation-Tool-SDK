@@ -20,10 +20,10 @@ public class IntroActivity extends AppIntro {
         setColorTransitionsEnabled(true);
         setFinishOnTouchOutside(false);
         setWizardMode(true);
-        addSlide(SlideFragment.newInstance(R.layout.frag_intro_register, 0));
-        addSlide(SlideFragment.newInstance(R.layout.frag_intro_practice, 1));
-        addSlide(SlideFragment.newInstance(R.layout.frag_intro_work, 2));
-        addSlide(SlideFragment.newInstance(R.layout.frag_intro_payment, 3));
+        addSlide(IntroSlideFragment.newInstance(R.layout.frag_intro_register, 0));
+        addSlide(IntroSlideFragment.newInstance(R.layout.frag_intro_practice, 1));
+        addSlide(IntroSlideFragment.newInstance(R.layout.frag_intro_work, 2));
+        addSlide(IntroSlideFragment.newInstance(R.layout.frag_intro_payment, 3));
         //setFlowAnimation();
         ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0).setBackgroundColor(getResources().getColor(R.color.colorWhite));
     }
@@ -42,20 +42,20 @@ public class IntroActivity extends AppIntro {
         super.onSlideChanged(oldFragment, newFragment);
 
         if(newFragment != null) {
-            if (((SlideFragment) newFragment).getScreenId() == 0) {
+            if (((IntroSlideFragment) newFragment).getScreenId() == 0) {
                 setBarColor(getResources().getColor(R.color.colorIntroRegister));
                 setSeparatorColor(getResources().getColor(R.color.colorIntroRegister));
 
 
-            } else if (((SlideFragment) newFragment).getScreenId() == 1) {
+            } else if (((IntroSlideFragment) newFragment).getScreenId() == 1) {
                 setBarColor(getResources().getColor(R.color.colorIntroPractice));
                 setSeparatorColor(getResources().getColor(R.color.colorIntroPractice));
 
-            } else if (((SlideFragment) newFragment).getScreenId() == 2) {
+            } else if (((IntroSlideFragment) newFragment).getScreenId() == 2) {
                 setBarColor(getResources().getColor(R.color.colorIntroWork));
                 setSeparatorColor(getResources().getColor(R.color.colorIntroWork));
 
-            } else if (((SlideFragment) newFragment).getScreenId() == 3) {
+            } else if (((IntroSlideFragment) newFragment).getScreenId() == 3) {
                 setBarColor(getResources().getColor(R.color.colorIntroPayment));
                 setSeparatorColor(getResources().getColor(R.color.colorIntroPayment));
             }

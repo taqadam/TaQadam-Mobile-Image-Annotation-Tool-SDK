@@ -152,6 +152,6 @@
     <string name="awaiting_verification">قيد المراجعة</string>
     <string name="verified_contact_method">مؤكد</string>
     <string name="not_verified_contact_method">غير مؤكد</string>
-
-
+    <string name="jobs">مهام</string>
+    /
 </resources>

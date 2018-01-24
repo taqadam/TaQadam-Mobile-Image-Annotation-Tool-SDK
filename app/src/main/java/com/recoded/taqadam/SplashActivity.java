@@ -166,13 +166,14 @@ public class SplashActivity extends AppCompatActivity {
             Intent i = new Intent(this, SigninActivity.class);
             startActivity(i);
         } else if (!UserAuthHandler.getInstance().getCurrentUser().isCompleteProfile()) {
-            Intent i = new Intent(this, ConfirmProfileActivity.class);
+            Intent i = new Intent(SplashActivity.this, ConfirmProfileActivity.class);
             startActivity(i);
+            finish();
         } else {
-            Intent i = new Intent(this, MainActivity.class);
+            Intent i = new Intent(SplashActivity.this, MainActivity.class);
             startActivity(i);
+            finish();
         }
-        finish();
     }
 
     private boolean firstRun() {

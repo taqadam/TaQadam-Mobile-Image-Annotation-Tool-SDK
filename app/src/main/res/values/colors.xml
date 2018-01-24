@@ -21,4 +21,10 @@
     <color name="colorIntroPayment">@color/colorPrimary</color>
     <color name="colorTransparent">#00000000</color>
     <color name="colorDarkGrey">#aaaaaa</color>
+
+    <color name="colorBoundingBox">#ff2196F3</color>
+    <color name="colorBoundingBoxSelected">#21f352</color>
+    <color name="button_attributes_bg">#80424242</color>
+    <color name="button_attributes_bg_pressed">#ff424242</color>
+    <color name="colorTransparentOverlay">#aa000000</color>
 </resources>

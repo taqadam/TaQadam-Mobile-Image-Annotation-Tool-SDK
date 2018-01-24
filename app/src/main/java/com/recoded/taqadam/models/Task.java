@@ -1,60 +1,49 @@
 package com.recoded.taqadam.models;
 
-import android.support.annotation.NonNull;
+import android.net.Uri;
 
-import java.net.URL;
-import java.util.Collection;
+import com.recoded.taqadam.models.db.TaskDbHandler;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
+import java.util.Map;
 
 /**
  * Created by HP PC on 12/17/2017.
  */
 
 public class Task {
+    public static final String CATEGORIZATION = "categorization";
+    public static final String BOUNDING_BOX = "bbox";
+
     private String taskId;
     private String jobId;
     private Date dateCreated;
     private Date dateExpires;
-    private URL taskImage;
-    private List<String>options;
-    private String attemptedBy;
-    private String completedBy;
-    private String Type;
-    private String title;
+    private Uri taskImage;
+    private String type;
     private String description;
+    private List<String> options;
+    private Map<String, String> attemptedBy;
+    private Map<String, String> completedBy;
+    public Answer answer; //Only a reference;
 
-    public Task(String type, String title, String description) {
-        Type = type;
-        this.title = title;
-        this.description = description;
+
+    public Task(String id) {
+        taskId = id;
+        options = new ArrayList<>();
+        attemptedBy = new HashMap<>();
+        completedBy = new HashMap<>();
     }
 
     public String getType() {
-        return Type;
-    }
-
-    public void setType(String type) {
-        Type = type;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
+        return type;
     }
 
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getTaskId() {
@@ -73,7 +62,7 @@ public class Task {
         return dateExpires;
     }
 
-    public URL getTaskImage() {
+    public Uri getTaskImage() {
         return taskImage;
     }
 
@@ -81,185 +70,45 @@ public class Task {
         return options;
     }
 
-    public String getAttemptedBy() {
+    public Map<String, String> getAttemptedBy() {
         return attemptedBy;
     }
 
-    public String getCompletedBy() {
+    public Map<String, String> getCompletedBy() {
         return completedBy;
     }
 
-    public void setTaskId(String taskId) {
-        this.taskId = taskId;
+    public void addAttempt(String uid, String answerId) {
+        if (!attemptedBy.containsKey(uid)) {
+            attemptedBy.put(uid, answerId);
+        }
     }
 
-    public void setJobId(String jobId) {
-        this.jobId = jobId;
+    public void addComplete(String uid) {
+        if (!completedBy.containsKey(uid) && attemptedBy.containsKey(uid)) {
+            String answerId = attemptedBy.get(uid);
+            attemptedBy.remove(uid);
+            completedBy.put(uid, answerId);
+        }
     }
 
-    public void setDateCreated(Date dateCreated) {
-        this.dateCreated = dateCreated;
-    }
+    public Task fromMap(Map<String, Object> map) {
+        type = (String) map.get(TaskDbHandler.TYPE);
+        jobId = (String) map.get(TaskDbHandler.JOB_ID);
+        dateCreated = new Date((long) map.get(TaskDbHandler.DATE_CREATED) * 1000);
+        dateExpires = new Date((long) map.get(TaskDbHandler.DATE_EXPIRES) * 1000);
+        description = (String) map.get(TaskDbHandler.DESC);
+        taskImage = Uri.parse((String) map.get(TaskDbHandler.TASK_IMAGE));
 
-    public void setDateExpires(Date dateExpires) {
-        this.dateExpires = dateExpires;
-    }
+        if (map.get(TaskDbHandler.ATTEMPTS) != null)
+            attemptedBy.putAll((Map<String, String>) map.get(TaskDbHandler.ATTEMPTS));
 
-    public void setTaskImage(URL taskImage) {
-        this.taskImage = taskImage;
-    }
+        if (map.get(TaskDbHandler.COMPLETED_ATTEMPTS) != null)
+            completedBy.putAll((Map<String, String>) map.get(TaskDbHandler.COMPLETED_ATTEMPTS));
 
-    public void setOptions(List<String> options) {
-        this.options = options;
-    }
-
-    public void setAttemptedBy(String attemptedBy) {
-        this.attemptedBy = attemptedBy;
-    }
-
-    public void setCompletedBy(String completedBy) {
-        this.completedBy = completedBy;
-    }
-    public static Task fromMap(HashMap map){
-        String id="";
-        List<String> options=new List<String>() {
-            @Override
-            public int size() {
-                return 0;
-            }
-
-            @Override
-            public boolean isEmpty() {
-                return false;
-            }
-
-            @Override
-            public boolean contains(Object o) {
-                return false;
-            }
-
-            @NonNull
-            @Override
-            public Iterator<String> iterator() {
-                return null;
-            }
-
-            @NonNull
-            @Override
-            public Object[] toArray() {
-                return new Object[0];
-            }
-
-            @NonNull
-            @Override
-            public <T> T[] toArray(@NonNull T[] ts) {
-                return null;
-            }
-
-            @Override
-            public boolean add(String s) {
-                return false;
-            }
-
-            @Override
-            public boolean remove(Object o) {
-                return false;
-            }
-
-            @Override
-            public boolean containsAll(@NonNull Collection<?> collection) {
-                return false;
-            }
-
-            @Override
-            public boolean addAll(@NonNull Collection<? extends String> collection) {
-                return false;
-            }
-
-            @Override
-            public boolean addAll(int i, @NonNull Collection<? extends String> collection) {
-                return false;
-            }
-
-            @Override
-            public boolean removeAll(@NonNull Collection<?> collection) {
-                return false;
-            }
-
-            @Override
-            public boolean retainAll(@NonNull Collection<?> collection) {
-                return false;
-            }
-
-            @Override
-            public void clear() {
-
-            }
-
-            @Override
-            public String get(int i) {
-                return null;
-            }
-
-            @Override
-            public String set(int i, String s) {
-                return null;
-            }
-
-            @Override
-            public void add(int i, String s) {
-
-            }
-
-            @Override
-            public String remove(int i) {
-                return null;
-            }
-
-            @Override
-            public int indexOf(Object o) {
-                return 0;
-            }
-
-            @Override
-            public int lastIndexOf(Object o) {
-                return 0;
-            }
-
-            @NonNull
-            @Override
-            public ListIterator<String> listIterator() {
-                return null;
-            }
-
-            @NonNull
-            @Override
-            public ListIterator<String> listIterator(int i) {
-                return null;
-            }
-
-            @NonNull
-            @Override
-            public List<String> subList(int i, int i1) {
-                return null;
-            }
-        };
-        Task task=new Task("","","");
-        task.jobId = (String) map.get("");
-        task.dateCreated = (Date) map.get("");
-        task.dateExpires = (Date) map.get("");
-        task.description = (String) map.get("");
-        task.attemptedBy=(String) map.get("");
-        task.completedBy=(String) map.get("");
-        task.options=(List<String>) map.get("");
-        task.taskImage=(URL ) map.get("");
-        task.taskId=(String) map.get("");
-        task.title=(String)map.get("");
-        task.Type=(String)map.get("");
-
-
-
-        return task;
+        if (map.get(TaskDbHandler.OPTIONS) != null)
+            options.addAll((List<String>) map.get(TaskDbHandler.OPTIONS));
+        return this;
     }
 }
 

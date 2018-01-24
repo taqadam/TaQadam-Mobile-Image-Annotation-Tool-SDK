@@ -46,8 +46,6 @@
         </activity>
         <activity android:name=".MainActivity">
         </activity>
-        <activity android:name=".TaskActivity">
-        </activity>
         <activity android:name=".ProfileActivity">
         </activity>
 
@@ -71,9 +69,7 @@
                 <data android:scheme="@string/facebook_login_protocol_scheme"/>
             </intent-filter>
         </activity>
-        <activity android:name=".Classification">
-        </activity>
-        <activity android:name=".JobActivity.JobActivity">
+        <activity android:name=".JobActivity">
         </activity>
     </application>
 

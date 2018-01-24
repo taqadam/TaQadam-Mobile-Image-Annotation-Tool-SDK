@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -21,12 +20,14 @@ import android.widget.TextView;
 
 import com.recoded.taqadam.models.User;
 import com.recoded.taqadam.models.auth.UserAuthHandler;
+import com.recoded.taqadam.models.db.JobDbHandler;
 import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private User user;
     private View drawerHeader;
+    private LockableViewPager pager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,41 +64,49 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void setupBottomNavigation() {
+        pager = findViewById(R.id.main_pager);
+        pager.setLocked(true);
+        pager.setAdapter(new MainPagerAdapter(getSupportFragmentManager()));
+
         BottomNavigationView.OnNavigationItemSelectedListener listener = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.navigation_tasks:
+                    case R.id.navigation_jobs:
                         setTitle(item.getTitle());
-                        FragmentTasks fragmentTasks = new FragmentTasks();
+                        /*FragmentJobs fragmentJobs = new FragmentJobs();
                         FragmentTransaction fragmentTransactionTasks = getSupportFragmentManager().beginTransaction();
-                        fragmentTransactionTasks.replace(R.id.frame_layout, fragmentTasks);
-                        fragmentTransactionTasks.commit();
+                        fragmentTransactionTasks.replace(R.id.frame_layout, fragmentJobs);
+                        fragmentTransactionTasks.commit();*/
+                        pager.setCurrentItem(0);
 
                         return true;
                     case R.id.navigation_qa:
                         setTitle(item.getTitle());
-                        FragmentQA fragmentQA = new FragmentQA();
+                        /*FragmentQA fragmentQA = new FragmentQA();
                         FragmentTransaction fragmentTransactionQa = getSupportFragmentManager().beginTransaction();
                         fragmentTransactionQa.replace(R.id.frame_layout, fragmentQA);
-                        fragmentTransactionQa.commit();
+                        fragmentTransactionQa.commit();*/
+                        pager.setCurrentItem(1);
 
                         return true;
                     case R.id.navigation_cash_out:
                         setTitle(item.getTitle());
-                        FragmentCashOut fragmentCashOut = new FragmentCashOut();
+                       /* FragmentCashOut fragmentCashOut = new FragmentCashOut();
                         FragmentTransaction fragmentTransactionCashout = getSupportFragmentManager().beginTransaction();
                         fragmentTransactionCashout.replace(R.id.frame_layout, fragmentCashOut);
-                        fragmentTransactionCashout.commit();
+                        fragmentTransactionCashout.commit();*/
+                        pager.setCurrentItem(2);
 
                         return true;
                     case R.id.navigation_discuss:
                         setTitle(item.getTitle());
-                        FragmentDiscuss fragmentDiscuss = new FragmentDiscuss();
+                        /*FragmentDiscuss fragmentDiscuss = new FragmentDiscuss();
                         FragmentTransaction fragmentTransactionDiscuss = getSupportFragmentManager().beginTransaction();
                         fragmentTransactionDiscuss.replace(R.id.frame_layout, fragmentDiscuss);
-                        fragmentTransactionDiscuss.commit();
+                        fragmentTransactionDiscuss.commit();*/
+                        pager.setCurrentItem(3);
 
                         return true;
                 }
@@ -108,11 +117,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         BottomNavigationView navigation = findViewById(R.id.bottom_navigation);
         navigation.setOnNavigationItemSelectedListener(listener);
 
-        FragmentTasks fragmentTasks = new FragmentTasks();
+        /*FragmentJobs fragmentJobs = new FragmentJobs();
         FragmentTransaction fragmentTransactionTasks = getSupportFragmentManager().beginTransaction();
-        fragmentTransactionTasks.replace(R.id.frame_layout, fragmentTasks);
+        fragmentTransactionTasks.replace(R.id.frame_layout, fragmentJobs);
         fragmentTransactionTasks.commit();
-        setTitle("Tasks");
+        setTitle("Tasks");*/
+        navigation.setSelectedItemId(0);
     }
 
     @Override
@@ -220,6 +230,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (JobDbHandler.getInstance().getOnJobsChangedLister() != null) {
+            JobDbHandler.getInstance().setOnJobsChangedListener(null);
         }
     }
 }

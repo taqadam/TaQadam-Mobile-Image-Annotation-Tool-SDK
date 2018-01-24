@@ -112,6 +112,39 @@ public class PostDbHandler {
         latestPostsTask = fetcher.getTask();
     }
 
+    private void setupLatestThreadsListener() {
+        this.mThreadsListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Post post = new Post(dataSnapshot.getKey())
+                        .fromMap((HashMap<String, Object>) dataSnapshot.getValue());
+                postsList.put(post.getId(), post);
+                //We need to monitor the list as well or call a callback in here
+                //Add all existing children then Single Value Event Listener will be called and we will set the results
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                postsList.remove(dataSnapshot.getKey());
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+    }
+
     public List<Post> getRecentPosts() {
         List<Post> res = new ArrayList<>();
         for (String key : postsList.keySet()) {
@@ -277,39 +310,6 @@ public class PostDbHandler {
                     .setValue(comment.toMap());
         }
         return comment;
-    }
-
-    private void setupLatestThreadsListener() {
-        this.mThreadsListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Post post = new Post(dataSnapshot.getKey())
-                        .fromMap((HashMap<String, Object>) dataSnapshot.getValue());
-                postsList.put(post.getId(), post);
-                //We need to monitor the list as well or call a callback in here
-                //Add all existing children then Single Value Event Listener will be called and we will set the results
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                postsList.remove(dataSnapshot.getKey());
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        };
     }
 
     public static String getCurrentTimeCycle() {

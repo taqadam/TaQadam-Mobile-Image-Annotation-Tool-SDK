@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data/>
+
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/root_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.recoded.taqadam.JobActivity">
+
+        <it.sephiroth.android.library.imagezoom.ImageViewTouch
+            android:id="@+id/iv_task_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            tools:src="@drawable/cubes"/>
+
+        <com.recoded.taqadam.BoundingBoxView
+            android:id="@+id/bboxView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <ImageButton
+            android:id="@+id/button_attributes"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="70dp"
+            android:background="@drawable/rounded_button"
+            android:src="@drawable/ic_list"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/tv_instruction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:background="#aa000000"
+            android:padding="8dp"
+            android:textSize="24sp"
+            tools:text="Draw a box around cars"/>
+
+        <LinearLayout
+            android:id="@+id/toolbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="12dp"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/button_rect"
+                style="@style/button_toolbox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_tool_button_left"
+                android:contentDescription="@string/rectangle_tool"
+                android:src="@drawable/ic_rect"/>
+
+            <ImageButton
+                android:id="@+id/button_circle"
+                style="@style/button_toolbox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_tool_button_middle"
+                android:contentDescription="@string/circle_tool"
+                android:src="@drawable/ic_circle"
+                android:visibility="gone"/>
+
+            <ImageButton
+                android:id="@+id/button_ellipse"
+                style="@style/button_toolbox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_tool_button_middle"
+                android:contentDescription="@string/ellipse_tool"
+                android:src="@drawable/ic_ellipse"/>
+
+            <ImageButton
+                android:id="@+id/button_polygon"
+                style="@style/button_toolbox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_tool_button_middle"
+                android:contentDescription="@string/polygon_tool"
+                android:src="@drawable/ic_polygon"/>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"/>
+
+            <ImageButton
+                android:id="@+id/button_lock_image"
+                style="@style/button_toolbox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_tool_button_right"
+                android:src="@drawable/ic_coord"/>
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/image_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/tv_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/error_while_loading_image"
+            android:textSize="24sp"
+            android:visibility="gone"/>
+
+        <RelativeLayout
+            android:id="@+id/completed_task_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorTransparentOverlay"
+            android:clickable="true"
+            android:focusable="true"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:drawableTop="@drawable/ic_check_circle_big"
+                android:drawablePadding="16dp"
+                android:gravity="center"
+                android:text="@string/answer_has_already_been_submitted"
+                android:textSize="16sp"/>
+        </RelativeLayout>
+    </FrameLayout>
+</layout>

@@ -153,6 +153,23 @@
     <string name="awaiting_verification">Awaiting Verification</string>
     <string name="verified_contact_method">Verified</string>
     <string name="not_verified_contact_method">Not Verified</string>
-
-
+    <string name="jobs">Jobs</string>
+    <string name="loading_tasks">Loading Tasks..</string>
+    <string name="error_while_loading_image">Error while loading image!</string>
+    <string name="job_activity_title">Task %d/%d</string>
+    <string name="attribute">Attribute</string>
+    <string name="value">Value</string>
+    <string name="delete">Delete</string>
+    <string name="label">Label</string>
+    <string name="region_attributes">Region Attributes</string>
+    <string name="select_label">Select Label</string>
+    <string name="choose_label">Choose Label</string>
+    <string name="please_choose_a_label">Please choose a label!</string>
+    <string name="no_label">No label</string>
+    <string name="region_delete_msg">Are you sure you want to delete %s bounding box?</string>
+    <string name="region_delete_title">Delete Bounding Box</string>
+    <string name="answer_has_already_been_submitted">Answer has already been submitted</string>
+    <string name="no_more_tasks">No more tasks!</string>
+    <string name="you_completed_tasks">You\'ve already completed all the tasks in this job.</string>
+    <string name="ok">OK</string>
 </resources>

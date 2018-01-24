@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data/>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="16dp"
+                    android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/frag_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="@string/region_attributes"
+                android:textStyle="bold"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="@color/colorAccent"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/label_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/frag_header"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:text="@string/label"
+                android:textSize="20sp"/>
+
+            <Spinner
+                android:id="@+id/spinner_options"
+                style="@style/Widget.AppCompat.Spinner"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_weight="2"
+                android:spinnerMode="dropdown"
+                android:textSize="20sp"/>
+        </LinearLayout>
+
+        <ScrollView
+            android:id="@+id/sv_table"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_below="@id/label_container">
+
+            <TableLayout
+                android:id="@+id/table_attributes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:shrinkColumns="1,3"
+                android:stretchColumns="2">
+            </TableLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/add_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/sv_table"
+            android:layout_margin="8dp"
+            android:layout_centerHorizontal="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_error"
+                style="@style/AppTheme.ErrorTextAppearance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_margin="16dp"
+                android:gravity="center"
+                android:text="@string/please_choose_a_label"
+                android:visibility="invisible"/>
+
+            <ImageButton
+                android:id="@+id/button_add"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal|bottom"
+                android:background="@drawable/circular_button"
+                android:src="@drawable/ic_add"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/buttons_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button_cancel"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/cancel"/>
+
+            <Button
+                android:id="@+id/button_ok"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/submit"/>
+        </LinearLayout>
+    </RelativeLayout>
+</layout>
