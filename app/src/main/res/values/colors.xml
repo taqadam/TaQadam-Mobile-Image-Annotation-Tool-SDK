@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#73204C</color>
-    <color name="colorPrimaryDark">#73204C</color>
-    <color name="colorAccent">#000</color>
+    <color name="colorPrimaryDark">#4d0f30</color>
+    <color name="colorAccent">#377899</color>
+    <color name="colorPurple">@color/colorPrimary</color>
+    <color name="colorGrey">#EFEFEF</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorMaroon">#800000</color>
+    <color name="colorPwShort">#A20025</color>
+    <color name="colorPwWeak">#A20025</color>
+    <color name="colorPwMedium">#FA6800</color>
+    <color name="colorPwFair">#E3C800</color>
+    <color name="colorPwStrong">#008A00</color>
+    <color name="colorErrorText">#e6712e</color>
+    <color name="colorMaterialError">#F4511E</color>
+
+    <color name="colorIntroRegister">#5c8900</color>
+    <color name="colorIntroPractice">#9c27b0</color>
+    <color name="colorIntroWork">#336598</color>
+    <color name="colorIntroPayment">@color/colorPrimary</color>
+    <color name="colorTransparent">#00000000</color>
+    <color name="colorDarkGrey">#aaaaaa</color>
+
+    <color name="colorBoundingBox">#ff2196F3</color>
+    <color name="colorBoundingBoxSelected">#21f352</color>
+    <color name="button_attributes_bg">#80424242</color>
+    <color name="button_attributes_bg_pressed">#ff424242</color>
+    <color name="colorTransparentOverlay">#aa000000</color>
 </resources>

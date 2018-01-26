@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "892643069384",
+    "firebase_url": "https://taqadam-io.firebaseio.com",
+    "project_id": "taqadam-io",
+    "storage_bucket": "taqadam-io.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:892643069384:android:da0b963e79728cc1",
+        "android_client_info": {
+          "package_name": "com.recoded.taqadam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "892643069384-ppd8b0d7627mjeaona16gb1606iumr4r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUYKzihvrAUkD5e1uouw58JOxnwC2Vcs4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

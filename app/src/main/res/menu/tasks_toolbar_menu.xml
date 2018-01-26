@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_lock_slider"
+        android:icon="@drawable/ic_unlock"
+        android:title="@string/freeze_slider"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/action_submit_answer"
+        android:icon="@drawable/ic_submit_answer"
+        android:title="@string/submit_answer"
+        app:showAsAction="always"/>
+</menu>
