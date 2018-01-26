@@ -29,6 +29,7 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.FirebaseNetworkException;
 import com.recoded.taqadam.models.User;
 import com.recoded.taqadam.models.auth.UserAuthHandler;
 import com.recoded.taqadam.models.auth.UserAuthHandler.AuthSignUpException;
@@ -244,6 +245,9 @@ public class RegisterActivity extends AppCompatActivity {
 
                         db.create().show();
                     }
+
+                } else if (e instanceof FirebaseNetworkException) {
+                    Toast.makeText(RegisterActivity.this, R.string.network_error, Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(RegisterActivity.this, R.string.resolving_errorm, Toast.LENGTH_LONG).show();
                 }

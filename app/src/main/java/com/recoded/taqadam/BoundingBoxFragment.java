@@ -55,7 +55,6 @@ public class BoundingBoxFragment extends TaskFragment {
     private List<Region> mRegions = new ArrayList<>();
 
     protected boolean imageFrozen = false;
-    private boolean hasPendingAnswer = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -92,9 +91,8 @@ public class BoundingBoxFragment extends TaskFragment {
 
         toggleToolbox(); //hide or show the toolbox
 
-        if (hasPendingAnswer) {
+        if (mTask.answer != null) {
             notifyFragmentForAnswer();
-            hasPendingAnswer = false;
         }
 
         return rootView;
@@ -103,6 +101,8 @@ public class BoundingBoxFragment extends TaskFragment {
     private void initTaskImg() {
         taskImageView = binding.ivTaskImage;
         taskImageView.setDisplayType(ImageViewTouchBase.DisplayType.FIT_IF_BIGGER);
+        binding.bboxView.setEnabled(false);
+        binding.bboxView.setVisibility(View.GONE);
 
         Picasso.with(getContext()).load(mTask.getTaskImage()).into(taskImageView, new Callback() {
             @Override
@@ -110,6 +110,8 @@ public class BoundingBoxFragment extends TaskFragment {
                 binding.imageProgressBar.setVisibility(View.GONE);
                 binding.bboxView.setBoundingRect(taskImageView.getBitmapRect());
                 if (mRegions.size() != 0) binding.bboxView.addRegions(mRegions);
+                binding.bboxView.setEnabled(true);
+                binding.bboxView.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -161,7 +163,6 @@ public class BoundingBoxFragment extends TaskFragment {
     @Override
     protected void notifyFragmentForAnswer() {
         if (binding == null) {
-            hasPendingAnswer = true;
             return;
         }
         if (mTask.answer.isCompleted()) binding.completedTaskOverlay.setVisibility(View.VISIBLE);

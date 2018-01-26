@@ -18,7 +18,7 @@
         android:id="@+id/iv_display_image"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:contentDescription="Worker Display Image"
+        android:contentDescription="@string/worker_display_image"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:src="@drawable/no_image"
         app:civ_border_color="@color/colorPwStrong"
@@ -37,6 +37,6 @@
         android:id="@+id/tv_wallet_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Wallet: $10.66"/>
+        android:text="@string/wallet_amunt"/>
 
 </LinearLayout>

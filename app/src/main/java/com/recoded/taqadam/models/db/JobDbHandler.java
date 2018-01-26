@@ -155,6 +155,15 @@ public class JobDbHandler {
         });
     }
 
+    public void release() {
+        listener = null;
+        this.jobList.clear();
+        this.mUid = null;
+        mJobsDbRef.removeEventListener(mJobsListener);
+        mJobsListener = null;
+        handler = null;
+    }
+
     public interface OnJobsChangedListener {
         void onJobsChanged(List<Job> jobs);
     }

@@ -158,4 +158,11 @@ public class TaskDbHandler {
             }
         }
     }
+
+    public void release() {
+        //for logging out
+        this.mUid = null;
+        this.tasksCache.clear();
+        handler = null;
+    }
 }

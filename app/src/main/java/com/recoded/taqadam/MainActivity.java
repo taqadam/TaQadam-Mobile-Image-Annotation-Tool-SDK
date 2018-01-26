@@ -21,6 +21,8 @@ import android.widget.TextView;
 import com.recoded.taqadam.models.User;
 import com.recoded.taqadam.models.auth.UserAuthHandler;
 import com.recoded.taqadam.models.db.JobDbHandler;
+import com.recoded.taqadam.models.db.PostDbHandler;
+import com.recoded.taqadam.models.db.TaskDbHandler;
 import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -235,10 +237,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onDestroy() {
+        JobDbHandler.getInstance().release();
+        TaskDbHandler.getInstance().release();
+        PostDbHandler.getInstance().release();
         super.onDestroy();
-        if (JobDbHandler.getInstance().getOnJobsChangedLister() != null) {
-            JobDbHandler.getInstance().setOnJobsChangedListener(null);
-        }
     }
 }
 

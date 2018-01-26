@@ -153,5 +153,30 @@
     <string name="verified_contact_method">مؤكد</string>
     <string name="not_verified_contact_method">غير مؤكد</string>
     <string name="jobs">مهام</string>
+    <string name="loading_tasks">جاري تنزيل المهام...</string>
+    <string name="error_while_loading_image">حدث خطأ اثناء تحميل الصورة!</string>
+    <string name="job_activity_title">مهمة %d/%d</string>
+    <string name="attribute">الصفة</string>
+    <string name="value">القيمة</string>
+    <string name="delete">حذف</string>
+    <string name="label">الصنف</string>
+    <string name="region_attributes">صفات التحديد</string>
+    <string name="select_label">اختر صنف</string>
+    <string name="choose_label">اختر صنف</string>
+    <string name="please_choose_a_label">الرجاء اختيار الصنف</string>
+    <string name="no_label">لا يوجد صنف</string>
+    <string name="region_delete_msg">هل انت متأكد من حذف التحديد %s؟</string>
+    <string name="region_delete_title">حذف التحديد</string>
+    <string name="answer_has_already_been_submitted">لقد تم مسبقا ارسال الجواب</string>
+    <string name="no_more_tasks">لا يوجد مهام اخرى!</string>
+    <string name="you_completed_tasks">لقد اكملت كل المهام في هذا العمل</string>
+    <string name="ok">حسنا</string>
+    <string name="network_error">تأكد من انك مرتبط بالانترنت</string>
+    <string name="job_item_tasks">%s مهمات</string>
+    <string name="job_item_reward">$%s</string>
+    <string name="worker_display_image">صورة العامل</string>
+    <string name="wallet_amunt">المحفظة: $10.66</string>
+    <string name="freeze_slider">تجميد المتصفح</string>
+    <string name="submit_answer">ارسال الجواب</string>
     /
 </resources>

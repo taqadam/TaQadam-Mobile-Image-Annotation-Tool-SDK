@@ -146,8 +146,10 @@ public class UserDbHandler {
         mDbReference.addChildEventListener(this.userListener);
     }
 
-    public void detachListeners() {
+    public void release() {
         mDbReference.removeEventListener(this.userListener);
+        userListener = null;
+        mDbReference = null;
         handler = null;
     }
 

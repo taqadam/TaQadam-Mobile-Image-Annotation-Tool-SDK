@@ -101,6 +101,8 @@ public class SigninActivity extends AppCompatActivity {
                 String msg = e.getMessage();
                 if (msg.contains("disable")) {
                     indicateError(getString(R.string.account_disabled));
+                } else if (msg.contains("network")) {
+                    indicateError(getString(R.string.network_error));
                 } else {
                     indicateError(getString(R.string.invalid_credentials));
                 }

@@ -341,4 +341,13 @@ public class PostDbHandler {
 
         return sdf.format(cal.getTime());
     }
+
+    public void release() {
+        this.postsList.clear();
+        this.mUid = null;
+        this.mThreadsDbRef.child(getCurrentTimeCycle()).removeEventListener(mThreadsListener);
+        mThreadsListener = null;
+        mThreadsDbRef = null;
+        handler = null;
+    }
 }

@@ -90,8 +90,15 @@ public class JobActivity extends AppCompatActivity {
         if (answer != null && !answer.isCompleted()) {
             answer.setCompleted(true);
             TaskDbHandler.getInstance().completeTask(answer.getTaskId());
-            binding.viewPager.setCurrentItem(binding.viewPager.getCurrentItem() + 1);
             frag.notifyFragmentForAnswer();
+        }
+
+        if (answer != null && answer.isCompleted()) {
+            if (binding.viewPager.getCurrentItem() == mTasksPagerAdapter.getCount() - 1) {
+                showCompletedJobDialog();
+            } else {
+                binding.viewPager.setCurrentItem(binding.viewPager.getCurrentItem() + 1);
+            }
         }
     }
 
@@ -146,6 +153,7 @@ public class JobActivity extends AppCompatActivity {
 
     private void showCompletedJobDialog() {
         AlertDialog.Builder d = new AlertDialog.Builder(this);
+        d.setCancelable(false);
         d.setTitle(R.string.no_more_tasks);
         d.setMessage(R.string.you_completed_tasks);
         d.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {

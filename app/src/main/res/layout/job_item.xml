@@ -25,14 +25,25 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/job_desc"
+                android:id="@+id/job_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:layout_margin="2dp"
                 android:text="@{Job.jobName}"
                 android:textSize="22sp"
                 android:textStyle="bold"
                 tools:text="Label No. of cats"/>
+
+            <TextView
+                android:id="@+id/job_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="4dp"
+                android:text="@{Job.description}"
+                android:textSize="16sp"
+                tools:text="Label No. of catsLabel No. of catsLabel No. of catsLabel No. of cats"/>
 
             <View
                 android:layout_width="match_parent"
@@ -52,7 +63,7 @@
                     android:layout_alignParentStart="true"
                     android:background="@color/colorPrimary"
                     android:padding="8dp"
-                    android:text="@{Job.type}"
+                    android:text="@{Job.type.toUpperCase()}"
                     android:textColor="@color/colorWhite"
                     tools:text="@string/task_type"/>
 
@@ -63,7 +74,7 @@
                     android:layout_centerHorizontal="true"
                     android:background="@color/colorPrimary"
                     android:padding="8dp"
-                    android:text="@{String.valueOf(Job.tasks.size())}"
+                    android:text="@{String.format(@string/job_item_tasks, String.valueOf(Job.tasks.size()))}"
                     android:textColor="@color/colorWhite"
                     tools:text="15/50"/>
 
@@ -75,7 +86,7 @@
                     android:layout_alignParentRight="true"
                     android:background="@color/colorPrimary"
                     android:padding="8dp"
-                    android:text="@{String.valueOf(Job.taskReward)}"
+                    android:text="@{String.format(@string/job_item_reward, String.valueOf(Job.taskReward))}"
                     android:textColor="@color/colorWhite"
                     tools:text="$0.5"/>
             </RelativeLayout>

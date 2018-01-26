@@ -250,7 +250,7 @@ public class UserAuthHandler {
     }
 
     public void signOut() {
-        UserDbHandler.getInstance().detachListeners();
+        UserDbHandler.getInstance().release();
         currentUser = null;
         mUid = null;
         if (AccessToken.getCurrentAccessToken() != null) {

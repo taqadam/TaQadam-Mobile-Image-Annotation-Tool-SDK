@@ -81,7 +81,6 @@ public class CategorizationFragment extends TaskFragment {
 
         if (hasPendingAnswer) {
             notifyFragmentForAnswer();
-            hasPendingAnswer = false;
         }
 
         return rootView;
@@ -107,6 +106,7 @@ public class CategorizationFragment extends TaskFragment {
         optionClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!v.isEnabled()) return;
                 String option = ((TextView) v).getText().toString();
                 if (selectedOptions.indexOfKey(v.getId()) >= 0) {
                     v.setBackgroundResource(R.drawable.options_background_normal);
@@ -169,7 +169,13 @@ public class CategorizationFragment extends TaskFragment {
             hasPendingAnswer = true;
             return;
         }
-        if (mTask.answer.isCompleted()) binding.completedTaskOverlay.setVisibility(View.VISIBLE);
+        if (mTask.answer.isCompleted()) {
+            binding.completedTaskOverlay.setVisibility(View.VISIBLE);
+            for (int i = 0; i < binding.optionsGrid.getChildCount(); i++) {
+                binding.optionsGrid.getChildAt(i).setEnabled(false);
+            }
+        }
+
         String rawData = mTask.answer.getRawAnswerData();
         if (rawData == null || rawData.isEmpty()) return;
 

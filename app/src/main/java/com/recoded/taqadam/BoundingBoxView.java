@@ -376,9 +376,9 @@ public class BoundingBoxView extends View {
         mDownTouch.set(x, y);
         if (isDrawing) { //if the user is drawing
             if (mCurrentDrawingShape.getShape() == Region.Shape.POLYGON) {
-                snapToBounds(mDownTouch);
+                PointF snapped = getSnappedToBoundsPoint(mDownTouch, true);
 
-                int i = mCurrentDrawingShape.getPointUnder(mDownTouch, mPointRadius);
+                int i = mCurrentDrawingShape.getPointUnder(snapped, mPointRadius);
                 //For closing the polygon
                 if (i == 0) {
                     if (mCurrentDrawingShape.getPoints().size() >= 3) {
@@ -387,10 +387,10 @@ public class BoundingBoxView extends View {
                 } else {
                     //check for validity
                     PointF last = mCurrentDrawingShape.getPoint(mCurrentDrawingShape.getPoints().size() - 1);
-                    float dx = mDownTouch.x - last.x;
-                    float dy = mDownTouch.y - last.y;
+                    float dx = snapped.x - last.x;
+                    float dy = snapped.y - last.y;
                     if ((float) Math.hypot(dx, dy) >= mPointRadius * 2) {
-                        mCurrentDrawingShape.addPoint(new PointF(mDownTouch.x, mDownTouch.y));
+                        mCurrentDrawingShape.addPoint(snapped);
                     }
                 }
 
@@ -405,22 +405,23 @@ public class BoundingBoxView extends View {
             //mCurrentDrawingShape.setImageRect(mBoundingRectangle);
 
             if (mCurrentDrawingShape.getShape() == Region.Shape.POLYGON) {
-                snapToBounds(mDownTouch);
-                mCurrentDrawingShape.addPoint(new PointF(mDownTouch.x, mDownTouch.y));
+                PointF snapped = getSnappedToBoundsPoint(mDownTouch, true);
+                mCurrentDrawingShape.addPoint(snapped);
                 invalidate();
             }
             return true;
         } else if (mSelectedRegion != -1) { //if the touch is on selected area
             //we need to check if the touch is on the cross, on a point or on enclosed area
+            PointF snapped = getSnappedToBoundsPoint(mDownTouch, false);
             if (mCrossRect.contains(mDownTouch.x, mDownTouch.y)) {
                 if (removingListener != null) removingListener.onRegionDelete(mSelectedRegion);
                 else deleteRegion(mSelectedRegion);
                 return true;
             } else if ((mSelectedPoint = drawnRegions.get(mSelectedRegion)
-                    .getPointUnder(snapToBounds(mDownTouch), mPointRadius)) != -1) {
+                    .getPointUnder(snapped, mPointRadius)) != -1) {
                 isDragging = true;
                 return true;
-            } else if (!drawnRegions.get(mSelectedRegion).contains(mDownTouch)) { //no need to snap because already snapped
+            } else if (!drawnRegions.get(mSelectedRegion).contains(snapped)) { //no need to snap because already snapped
                 deselectRegion();
                 return onActionDown(x, y);
             } else {
@@ -448,20 +449,22 @@ public class BoundingBoxView extends View {
             float dy = y - mDownTouch.y;
             mDownTouch.set(x, y);
 
-            if (mBoundingRectangle != null) {
-                RectF shapeRect = drawnRegions.get(mSelectedRegion).getShapeRect();
-                if (mBoundingRectangle.left >= shapeRect.left + dx + mBoundingRectangle.left
-                        || mBoundingRectangle.right <= shapeRect.right + dx + mBoundingRectangle.left) {
-                    dx = 0;
-                }
-                if (mBoundingRectangle.top >= shapeRect.top + dy + mBoundingRectangle.top
-                        || mBoundingRectangle.bottom <= shapeRect.bottom + dy + mBoundingRectangle.top) {
-                    dy = 0;
-                }
-            }
-
             if (mSelectedPoint != -1) {
+                //this is for point offsetting
+                if (mBoundingRectangle != null) {
+                    PointF selected = drawnRegions.get(mSelectedRegion).getPoint(mSelectedPoint);
+                    if (mBoundingRectangle.left >= selected.x + dx + mBoundingRectangle.left
+                            || mBoundingRectangle.right <= selected.x + dx + mBoundingRectangle.left) {
+                        dx = 0;
+                    }
+                    if (mBoundingRectangle.top >= selected.y + dy + mBoundingRectangle.top
+                            || mBoundingRectangle.bottom <= selected.y + dy + mBoundingRectangle.top) {
+                        dy = 0;
+                    }
+                }
                 drawnRegions.get(mSelectedRegion).offsetPoint(mSelectedPoint, dx, dy);
+
+                //account for polygon
                 if (drawnRegions.get(mSelectedRegion).getShape() == Region.Shape.POLYGON
                         && mSelectedPoint == 0) {
                     drawnRegions.get(mSelectedRegion).offsetPoint(
@@ -469,9 +472,22 @@ public class BoundingBoxView extends View {
                             dx,
                             dy);
                 }
+
                 invalidate();
                 return true;
             } else {
+                //this is for shape offsetting
+                if (mBoundingRectangle != null) {
+                    RectF shapeRect = drawnRegions.get(mSelectedRegion).getShapeRect();
+                    if (mBoundingRectangle.left >= shapeRect.left + dx + mBoundingRectangle.left
+                            || mBoundingRectangle.right <= shapeRect.right + dx + mBoundingRectangle.left) {
+                        dx = 0;
+                    }
+                    if (mBoundingRectangle.top >= shapeRect.top + dy + mBoundingRectangle.top
+                            || mBoundingRectangle.bottom <= shapeRect.bottom + dy + mBoundingRectangle.top) {
+                        dy = 0;
+                    }
+                }
                 drawnRegions.get(mSelectedRegion).offsetShape(dx, dy);
                 invalidate();
                 return true;
@@ -479,8 +495,7 @@ public class BoundingBoxView extends View {
         } else if (isDrawing) {
             if (mCurrentDrawingShape.getShape() == Region.Shape.POLYGON) return false;
             PointF p = new PointF(x, y);
-            snapToBounds(p);
-            mCurrentDrawingShape.addPoint(p);
+            mCurrentDrawingShape.addPoint(getSnappedToBoundsPoint(p, true));
             if (mCurrentDrawingShape.getPoints().size() == 2) invalidate();
             return true;
         } else {
@@ -514,20 +529,22 @@ public class BoundingBoxView extends View {
         }
     }
 
-    private PointF snapToBounds(PointF p) {
+    private PointF getSnappedToBoundsPoint(PointF po, boolean move) {
+        PointF p = new PointF(po.x, po.y);
         if (mBoundingRectangle != null) {
-            if (p.x < mBoundingRectangle.left) {
-                p.x = mBoundingRectangle.left;
-            } else if (p.x > mBoundingRectangle.right) {
-                p.x = mBoundingRectangle.right;
-            }
+            if (move) {
+                if (p.x < mBoundingRectangle.left) {
+                    p.x = mBoundingRectangle.left;
+                } else if (p.x > mBoundingRectangle.right) {
+                    p.x = mBoundingRectangle.right;
+                }
 
-            if (p.y < mBoundingRectangle.top) {
-                p.y = mBoundingRectangle.top;
-            } else if (p.y > mBoundingRectangle.bottom) {
-                p.y = mBoundingRectangle.bottom;
+                if (p.y < mBoundingRectangle.top) {
+                    p.y = mBoundingRectangle.top;
+                } else if (p.y > mBoundingRectangle.bottom) {
+                    p.y = mBoundingRectangle.bottom;
+                }
             }
-
             //to make the coordinates per image coords
             p.x = p.x - mBoundingRectangle.left;
             p.y = p.y - mBoundingRectangle.top;

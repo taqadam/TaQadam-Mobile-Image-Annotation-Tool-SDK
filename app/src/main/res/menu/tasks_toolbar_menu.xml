@@ -9,11 +9,11 @@
     <item
         android:id="@+id/action_lock_slider"
         android:icon="@drawable/ic_unlock"
-        android:title="Freeze Slider"
+        android:title="@string/freeze_slider"
         app:showAsAction="always"/>
     <item
         android:id="@+id/action_submit_answer"
         android:icon="@drawable/ic_submit_answer"
-        android:title="Submit Answer"
+        android:title="@string/submit_answer"
         app:showAsAction="always"/>
 </menu>
