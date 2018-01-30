@@ -1,12 +1,61 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
+
+    </style>
+
+
+    <style name="LightCustom" parent="Theme.AppCompat.Light.NoActionBar">
+
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="MainActivityBG">@color/colorPrimary</item>
+        <item name="SigninActivityBG">@color/colorWhite</item>
+        <item name="TaqadamLogo">@drawable/taqadam_logo</item>
+        <item name="SigninActivitytextColor">@color/colorPrimary</item>
+        <item name="colorErrorText">@color/colorErrorTextRed</item>
+        <item name="colorProfileIcons">@color/button_attributes_bg_pressed</item>
+        <item name="settingBg">@color/colorWhite</item>
+        <item name="editProfileIcon">@color/colorWhite</item>
+        <item name="planeBackground">@color/colorPrimary</item>
+
+    </style>
+
+    <style name="DarkCustom" parent="Theme.AppCompat.NoActionBar">
+
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="MainActivityBG">@color/button_attributes_bg</item>
+        <item name="SigninActivityBG">@color/colorPrimary</item>
+        <item name="TaqadamLogo">@drawable/taqadam_logo_white</item>
+        <item name="SigninActivitytextColor">@color/colorWhite</item>
+        <item name="colorErrorText">@color/colorErrorTextOrange</item>
+        <item name="colorProfileIcons">@color/colorWhite</item>
+        <item name="settingBg">@color/button_attributes_bg_pressed</item>
+        <item name="editProfileIcon">@color/button_attributes_bg_pressed</item>
+        <item name="planeBackground">@color/colorDarkGray</item>
+    </style>
+
+    <attr name="MainActivityBG" format="reference"/>
+    <attr name="SigninActivityBG" format="reference"/>
+    <attr name="TaqadamLogo" format="reference"/>
+    <attr name="SigninActivitytextColor" format="reference"/>
+    <attr name="colorErrorText" format="reference"/>
+    <attr name="colorProfileIcons" format="reference"/>
+    <attr name="settingBg" format="reference"/>
+    <attr name="editProfileIcon" format="reference"/>
+    <attr name="planeBackground" format="reference"/>
+
+
+    <style name="settingActivityTheme">
+        <item name="android:background">?attr/settingBg</item>
     </style>
 
     <style name="button_toolbox" parent="Base.Widget.AppCompat.Button.Borderless">
@@ -19,7 +68,7 @@
     </style>
 
     <style name="AppTheme.Button" parent="Base.Widget.AppCompat.Button">
-        <item name="android:backgroundTint">@color/colorMaroon</item>
+        <item name="android:backgroundTint" tools:ignore="NewApi">@color/colorMaroon</item>
     </style>
 
     <style name="signup_form_fields" parent="Base.Widget.AppCompat.EditText">
@@ -32,15 +81,15 @@
     </style>
 
     <style name="signup_form_hint_appearance" parent="TextAppearance.Design.Hint">
-        <item name="android:textColor">@color/colorWhite</item>
+        <!--<item name="android:textColor">?attr/SigninActivitytextColor</item>-->
     </style>
 
     <style name="AppTheme.ErrorTextAppearance" parent="TextAppearance.AppCompat">
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Caption</item>
-        <item name="android:textColor">@color/colorErrorText</item>
+        <item name="android:textColor">?attr/colorErrorText</item>
     </style>
 
-    <style name="AppTheme.IntroDialog" parent="Theme.AppCompat.Dialog">
+    <style name="AppTheme.IntroDialog" parent="Theme.AppCompat.Light.Dialog">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:backgroundDimAmount">0.6</item>
@@ -53,7 +102,6 @@
     <style name="AppTheme.ProfileLineText" parent="Base.TextAppearance.AppCompat.Body1">
         <item name="android:gravity">center_vertical</item>
         <item name="android:drawablePadding">8dp</item>
-        <item name="android:drawableTint">@color/colorWhite</item>
         <item name="android:layout_marginTop">8dp</item>
     </style>
 

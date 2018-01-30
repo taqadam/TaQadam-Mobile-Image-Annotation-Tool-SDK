@@ -67,13 +67,13 @@ public class ProfileActivity extends AppCompatActivity {
             binding.tvVerifiedIndicator.setCompoundDrawables(null, null, null, null);
         }
         if (user.isEmailVerified()) {
-            binding.ivEmailVerified.setImageResource(R.drawable.ic_check_circle);
+            binding.ivEmailVerified.setImageResource(R.drawable.ic_check_green);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 binding.ivEmailVerified.setTooltipText(getString(R.string.verified_contact_method));
             }
         }
         if (user.isPhoneNumberVerified()) {
-            binding.ivPhoneVerified.setImageResource(R.drawable.ic_check_circle);
+            binding.ivPhoneVerified.setImageResource(R.drawable.ic_check_green);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 binding.ivPhoneVerified.setTooltipText(getString(R.string.verified_contact_method));
             }

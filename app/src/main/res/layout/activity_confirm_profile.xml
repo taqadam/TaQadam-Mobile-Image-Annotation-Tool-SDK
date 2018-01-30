@@ -14,7 +14,7 @@
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPurple">
+        android:background="?attr/SigninActivityBG">
 
         <ScrollView
             android:id="@+id/main_layout_container"
@@ -40,7 +40,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:text="@string/ready"
-                        android:textColor="@color/colorWhite"
+                        android:textColor="?attr/SigninActivitytextColor"
                         android:textSize="42sp"
                         android:textStyle="bold"/>
 
@@ -85,7 +85,6 @@
                                 android:layout_gravity="bottom|end"
                                 android:layout_margin="3dp"
                                 android:src="@drawable/ic_camera"
-                                android:tint="@color/colorWhite"
                                 app:borderWidth="2dp"
                                 app:fabSize="mini"/>
                         </FrameLayout>
@@ -100,7 +99,7 @@
                             android:minWidth="150dp"
                             android:text="@{User.displayName}"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
-                            android:textColor="@color/colorWhite"
+                            android:textColor="?attr/SigninActivitytextColor"
                             tools:text="Wisso Mechano"/>
                     </LinearLayout>
 
@@ -112,7 +111,7 @@
                         android:layout_marginBottom="8dp"
                         android:gravity="center"
                         android:text="@string/almost_profile"
-                        android:textColor="@color/colorWhite"
+                        android:textColor="?attr/SigninActivitytextColor"
                         android:textSize="19sp"/>
                 </LinearLayout>
 
@@ -128,7 +127,6 @@
                         android:layout_marginEnd="8dp"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
-                        app:hintTextAppearance="@style/signup_form_hint_appearance"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
@@ -139,8 +137,7 @@
                             android:layout_height="wrap_content"
                             android:hint="@string/input_email"
                             android:inputType="textEmailAddress"
-                            android:text="@{User.emailAddress}"
-                            android:textColor="@color/colorWhite"/>
+                            android:text="@{User.emailAddress}"/>
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout
@@ -150,7 +147,6 @@
                         android:layout_marginEnd="8dp"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
-                        app:hintTextAppearance="@style/signup_form_hint_appearance"
                         app:layout_constraintEnd_toStartOf="@id/et_l_name"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/et_email">
@@ -161,8 +157,7 @@
                             android:layout_height="wrap_content"
                             android:hint="@string/first_name"
                             android:inputType="textNoSuggestions"
-                            android:text="@{User.firstName}"
-                            android:textColor="@color/colorWhite"/>
+                            android:text="@{User.firstName}"/>
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout
@@ -171,7 +166,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
                         android:layout_marginStart="8dp"
-                        app:hintTextAppearance="@style/signup_form_hint_appearance"
                         app:layout_constraintBottom_toBottomOf="@id/et_f_name"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/et_f_name"
@@ -183,8 +177,7 @@
                             android:layout_height="wrap_content"
                             android:hint="@string/last_name"
                             android:inputType="textNoSuggestions"
-                            android:text="@{User.lastName}"
-                            android:textColor="@color/colorWhite"/>
+                            android:text="@{User.lastName}"/>
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout
@@ -194,7 +187,6 @@
                         android:layout_marginEnd="8dp"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
-                        app:hintTextAppearance="@style/signup_form_hint_appearance"
                         app:layout_constraintEnd_toStartOf="@id/spinner_gender"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/et_f_name">
@@ -205,8 +197,7 @@
                             android:layout_height="wrap_content"
                             android:hint="@string/phone_number"
                             android:inputType="phone"
-                            android:text="@{User.phoneNumber}"
-                            android:textColor="@color/colorWhite"/>
+                            android:text="@{User.phoneNumber}"/>
                     </android.support.design.widget.TextInputLayout>
 
                     <Spinner
@@ -235,7 +226,6 @@
                         android:focusable="false"
                         app:errorEnabled="true"
                         app:errorTextAppearance="@style/AppTheme.ErrorTextAppearance"
-                        app:hintTextAppearance="@style/signup_form_hint_appearance"
                         app:layout_constraintEnd_toStartOf="@id/spinner_cities_container"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/et_phone_number">
@@ -246,8 +236,7 @@
                             android:layout_height="wrap_content"
                             android:focusable="false"
                             android:hint="@string/date_of_birth"
-                            android:inputType="none"
-                            android:textColor="@color/colorWhite"/>
+                            android:inputType="none"/>
                     </android.support.design.widget.TextInputLayout>
 
                     <LinearLayout
@@ -303,7 +292,7 @@
             android:id="@+id/intents_chooser_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorWhite"
+            android:background="?attr/planeBackground"
             android:orientation="horizontal"
             app:layout_behavior="@string/bottom_sheet_behavior"
             app:layout_dodgeInsetEdges="top">

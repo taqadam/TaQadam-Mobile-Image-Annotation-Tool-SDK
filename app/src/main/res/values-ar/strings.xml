@@ -33,6 +33,16 @@
     <string name="ellipse_tool">شكل بيضوي</string>
     <string name="polygon_tool">شكل مضلّع</string>
     <string name="sign_up">إنشاء حساب </string>
+    <string name="pref_header_notifications">الإشعارات</string>
+    <string name="pref_title_language">اللغة</string>
+    <string name="pref_title_theme">الثيمات</string>
+    <string name="pref_title_new_message_notifications">إشعارات الرسائل الجديدة</string>
+    <string name="pref_title_ringtone">نغمة التنبيه</string>
+    <string name="pref_ringtone_silent">صامت</string>
+    <string name="pref_title_vibrate">اهتزاز</string>
+    <string name="title_activity_settings">الإعدادت</string>
+    <string name="settings">الإعدادت</string>
+
 
     <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
 
@@ -153,7 +163,7 @@
     <string name="verified_contact_method">مؤكد</string>
     <string name="not_verified_contact_method">غير مؤكد</string>
     <string name="jobs">مهام</string>
-    <string name="loading_tasks">جاري تنزيل المهام...</string>
+    <string name="loading_tasks">جاري تنزيل المهام…</string>
     <string name="error_while_loading_image">حدث خطأ اثناء تحميل الصورة!</string>
     <string name="job_activity_title">مهمة %d/%d</string>
     <string name="attribute">الصفة</string>

@@ -6,7 +6,7 @@
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPurple"
+    android:background="?attr/SigninActivityBG"
     tools:context="com.recoded.taqadam.RegisterActivity">
 
     <RelativeLayout
@@ -68,8 +68,7 @@
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="-8dp"
                         android:contentDescription="@string/email_content_desc"
-                        android:src="@drawable/ic_email_black_24dp"
-                        android:tint="@color/colorWhite"/>
+                        android:src="@drawable/ic_email_grey"/>
 
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/et_email"
@@ -113,8 +112,7 @@
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="-8dp"
                         android:contentDescription="@string/password_content_desc"
-                        android:src="@drawable/ic_key"
-                        android:tint="@color/colorWhite"/>
+                        android:src="@drawable/ic_password_grey"/>
 
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/et_pw"

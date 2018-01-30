@@ -25,7 +25,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="10dp"
-            android:drawableRight="@drawable/payment_dollar"
             android:text="99"
             android:textColor="@color/colorWhite"
             android:textSize="28sp" />

@@ -2,18 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/navigation_jobs"
-        android:icon="@drawable/ic_assignment_black_24dp"
+        android:icon="@drawable/ic_agreement_grey_48dp"
         android:title="@string/jobs"/>
     <item
         android:id="@+id/navigation_qa"
-        android:icon="@drawable/ic_help_black_24dp"
+        android:icon="@drawable/ic_help_grey"
         android:title="@string/help_faq" />
     <item
         android:id="@+id/navigation_cash_out"
-        android:icon="@drawable/ic_attach_money_black_24dp"
+        android:icon="@drawable/ic_dollar_black"
         android:title="@string/cash_out" />
     <item
         android:id="@+id/navigation_discuss"
-        android:icon="@drawable/ic_sms_black_24dp"
+        android:icon="@drawable/ic_chat_grey"
         android:title="@string/discussion" />
 </menu>

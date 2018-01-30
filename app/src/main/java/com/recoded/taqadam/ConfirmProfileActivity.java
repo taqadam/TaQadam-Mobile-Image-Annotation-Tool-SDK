@@ -159,7 +159,7 @@ public class ConfirmProfileActivity extends AppCompatActivity {
             user = new User();
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.error);
-            builder.setIcon(R.drawable.ic_error);
+            builder.setIcon(R.drawable.ic_error_black);
             builder.setMessage(R.string.not_logged_in);
             builder.setPositiveButton(R.string.login, new DialogInterface.OnClickListener() {
                 @Override

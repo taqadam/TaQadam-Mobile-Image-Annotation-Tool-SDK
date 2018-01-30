@@ -166,7 +166,7 @@ public class RegisterActivity extends AppCompatActivity {
                 if (e instanceof AuthSignUpException) {
                     //Start building the alert dialog. TODO: Extract strings
                     final AlertDialog.Builder db = new AlertDialog.Builder(RegisterActivity.this);
-                    db.setIcon(getResources().getDrawable(R.drawable.ic_error));
+                    db.setIcon(getResources().getDrawable(R.drawable.ic_error_black));
                     db.setTitle(R.string.error);
                     db.setCancelable(false);
                     AuthSignUpException ex = (AuthSignUpException) e;
@@ -298,7 +298,7 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 })
                 .setCancelable(false)
-                .setIcon(R.drawable.ic_assignment_black_24dp);
+                .setIcon(R.drawable.ic_agreement_grey_48dp);
         // Create the AlertDialog object and return it
         builder.create().show();
     }
@@ -377,11 +377,11 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
                 if (s.length() < 5) {
-                    etEmailField.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.ic_cross_circle), null);
+                    etEmailField.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.ic_cross_maroon), null);
                 } else if (s.toString().matches(EMAIL_REGEX)) {
-                    etEmailField.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.ic_check_circle), null);
+                    etEmailField.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.ic_check_green), null);
                 } else {
-                    etEmailField.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.ic_cross_circle), null);
+                    etEmailField.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.ic_cross_maroon), null);
                 }
             }
         });
