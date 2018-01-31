@@ -217,4 +217,5 @@
     <string name="title">Title</string>
     <string name="general_settings">General Settings</string>
     <string name="body">Body</string>
+    <string name="write_post">Write Post</string>
 </resources>
