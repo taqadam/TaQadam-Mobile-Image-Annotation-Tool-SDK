@@ -26,7 +26,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="28dp"
                 android:text="@string/taqadam"
-                android:textColor="@color/colorWhite"
+                android:textColor="?attr/SigninActivitytextColor"
                 android:textSize="42sp"/>
 
             <ImageView
@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="14dp"
-                android:src="@drawable/taqadam_logo_white"/>
+                android:src="?attr/taqadam_logo"/>
         </LinearLayout>
 
         <LinearLayout
@@ -68,7 +68,7 @@
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="-8dp"
                         android:contentDescription="@string/email_content_desc"
-                        android:src="@drawable/ic_email_grey"/>
+                        android:src="?attr/ic_email"/>
 
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/et_email"
@@ -83,8 +83,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/input_email"
-                            android:inputType="textEmailAddress"
-                            android:textColor="@color/colorWhite"/>
+                            android:inputType="textEmailAddress"/>
                     </android.support.design.widget.TextInputLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -112,7 +111,7 @@
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="-8dp"
                         android:contentDescription="@string/password_content_desc"
-                        android:src="@drawable/ic_password_grey"/>
+                        android:src="?attr/ic_password"/>
 
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/et_pw"
@@ -128,13 +127,12 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/input_password"
-                            android:inputType="textPassword"
-                            android:textColor="@color/colorWhite"/>
+                            android:inputType="textPassword"/>
                     </android.support.design.widget.TextInputLayout>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:visibility="invisible"
+                    android:visibility="visible"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
@@ -143,8 +141,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="4dp"
-                        android:text="@string/password_strength"
-                        android:textColor="@color/colorWhite"/>
+                        android:text="@string/password_strength"/>
 
                     <TextView
                         android:id="@+id/tv_pw_strength"

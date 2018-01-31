@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:layout_margin="12dp"
+              tools:context="com.recoded.taqadam.PostActivity">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/title"
+        android:layout_marginTop="20dp"
+        android:id="@+id/Edit_Name"
+        android:padding="10dp"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:inputType="textMultiLine"
+        android:hint="@string/body"
+        android:gravity="top|start"
+        android:maxEms="10"
+        android:layout_marginTop="10dp"
+        android:id="@+id/Edit_Description"
+        android:padding="10dp"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/submit"
+        android:padding="10dp"
+        android:id="@+id/Button_clicked"
+        android:layout_margin="10dp"/>
+</LinearLayout>

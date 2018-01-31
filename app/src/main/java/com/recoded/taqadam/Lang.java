@@ -11,6 +11,8 @@ import java.util.Locale;
 
 public class Lang {
 
+    public static String language;
+
     public static void changeLang(Activity activity, String lang) {
 
         Configuration config = activity.getBaseContext().getResources().getConfiguration();

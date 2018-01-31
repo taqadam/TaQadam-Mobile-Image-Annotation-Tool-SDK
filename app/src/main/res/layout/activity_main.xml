@@ -37,8 +37,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:background="@color/colorDarkGrey"
-                app:elevation="8dp"
+                android:background="?attr/BottomNavigationBG"
+                app:elevation="16dp"
                 app:menu="@menu/bottom_nav_menu"/>
         </RelativeLayout>
     </android.support.design.widget.CoordinatorLayout>

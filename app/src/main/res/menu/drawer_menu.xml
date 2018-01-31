@@ -6,34 +6,34 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_profile"
-            android:icon="@drawable/ic_person_grey_48dp"
+            android:icon="?attr/ic_person"
             android:title="@string/profile" />
         <item
             android:id="@+id/nav_notification"
-            android:icon="@drawable/ic_notifications_grey"
+            android:icon="?attr/ic_notifications"
             android:title="@string/notification" />
         <item
             android:id="@+id/nav_setting"
-            android:icon="@drawable/ic_settings_grey"
+            android:icon="?attr/ic_settings"
             android:title="@string/setting" />
         <item
             android:id="@+id/nav_help"
-            android:icon="@drawable/ic_help_grey"
+            android:icon="?attr/ic_help"
             android:title="@string/help" />
 
         <item
             android:id="@+id/nav_feedback"
-            android:icon="@drawable/ic_feedback_grey"
+            android:icon="?attr/ic_feedback"
             android:title="@string/feedback" />
 
         <item
             android:id="@+id/nav_about"
-            android:icon="@drawable/ic_info_grey"
+            android:icon="?attr/ic_info"
             android:title="@string/about" />
 
         <item
             android:id="@+id/nav_logout"
-            android:icon="@drawable/ic_logout_grey"
+            android:icon="?attr/ic_logout"
             android:title="@string/log_out" />
 
     </group>

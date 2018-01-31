@@ -11,13 +11,14 @@
 
 
     <style name="LightCustom" parent="Theme.AppCompat.Light.NoActionBar">
-
+        <!--<item name="preferenceTheme">@style/PreferenceThemeOverlay</item>-->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorPrimary</item>
+        <item name="colorAccentDark">@color/colorPrimaryDark</item>
         <item name="MainActivityBG">@color/colorPrimary</item>
+        <item name="BottomNavigationBG">@color/colorOffWhite</item>
         <item name="SigninActivityBG">@color/colorWhite</item>
-        <item name="TaqadamLogo">@drawable/taqadam_logo</item>
         <item name="SigninActivitytextColor">@color/colorPrimary</item>
         <item name="colorErrorText">@color/colorErrorTextRed</item>
         <item name="colorProfileIcons">@color/button_attributes_bg_pressed</item>
@@ -25,38 +26,88 @@
         <item name="editProfileIcon">@color/colorWhite</item>
         <item name="planeBackground">@color/colorPrimary</item>
 
+        <item name="ic_agreement">@drawable/ic_agreement_grey</item>
+        <item name="ic_chat">@drawable/ic_chat_grey</item>
+        <item name="ic_display_name">@drawable/ic_display_name_grey</item>
+        <item name="ic_dollar">@drawable/ic_dollar_grey</item>
+        <item name="ic_email">@drawable/ic_email_grey</item>
+        <item name="ic_feedback">@drawable/ic_feedback_grey</item>
+        <item name="ic_fullname">@drawable/ic_fullname_grey</item>
+        <item name="ic_gender">@drawable/ic_gender_grey</item>
+        <item name="ic_help">@drawable/ic_help_grey</item>
+        <item name="ic_info">@drawable/ic_info_grey</item>
+        <item name="ic_language">@drawable/ic_language_grey</item>
+        <item name="ic_location">@drawable/ic_location_grey</item>
+        <item name="ic_logout">@drawable/ic_logout_grey</item>
+        <item name="ic_loupe">@drawable/ic_loupe_grey</item>
+        <item name="ic_notifications">@drawable/ic_notifications_grey</item>
+        <item name="ic_password">@drawable/ic_password_grey</item>
+        <item name="ic_phone">@drawable/ic_phone_grey</item>
+        <item name="ic_profile">@drawable/ic_profile_grey</item>
+        <item name="ic_person">@drawable/ic_person_grey</item>
+        <item name="ic_settings">@drawable/ic_settings_grey</item>
+        <item name="ic_theme">@drawable/ic_theme_grey</item>
+        <item name="taqadam_logo_f">@drawable/taqadam_logo_f</item>
+        <item name="taqadam_logo">@drawable/taqadam_logo</item>
+        <item name="ic_person_48">@drawable/ic_person_grey_48dp</item>
+        <item name="ic_payment_48">@drawable/ic_payment_grey_48dp</item>
+        <item name="ic_agreement_48">@drawable/ic_agreement_grey_48dp</item>
     </style>
 
     <style name="DarkCustom" parent="Theme.AppCompat.NoActionBar">
-
+        <!--<item name="preferenceTheme">@style/PreferenceThemeOverlay</item>-->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccentDark">@color/colorAccentDark</item>
         <item name="MainActivityBG">@color/button_attributes_bg</item>
+        <item name="BottomNavigationBG">@color/colorDarkGrey</item>
         <item name="SigninActivityBG">@color/colorPrimary</item>
-        <item name="TaqadamLogo">@drawable/taqadam_logo_white</item>
         <item name="SigninActivitytextColor">@color/colorWhite</item>
         <item name="colorErrorText">@color/colorErrorTextOrange</item>
         <item name="colorProfileIcons">@color/colorWhite</item>
         <item name="settingBg">@color/button_attributes_bg_pressed</item>
         <item name="editProfileIcon">@color/button_attributes_bg_pressed</item>
         <item name="planeBackground">@color/colorDarkGray</item>
+
+        <item name="ic_agreement">@drawable/ic_agreement_white</item>
+        <item name="ic_chat">@drawable/ic_chat_white</item>
+        <item name="ic_display_name">@drawable/ic_display_name_white</item>
+        <item name="ic_dollar">@drawable/ic_dollar_white</item>
+        <item name="ic_email">@drawable/ic_email_white</item>
+        <item name="ic_feedback">@drawable/ic_feedback_white</item>
+        <item name="ic_fullname">@drawable/ic_fullname_white</item>
+        <item name="ic_gender">@drawable/ic_gender_white</item>
+        <item name="ic_help">@drawable/ic_help_white</item>
+        <item name="ic_info">@drawable/ic_info_white</item>
+        <item name="ic_language">@drawable/ic_language_white</item>
+        <item name="ic_location">@drawable/ic_location_white</item>
+        <item name="ic_logout">@drawable/ic_logout_white</item>
+        <item name="ic_loupe">@drawable/ic_loupe_white</item>
+        <item name="ic_notifications">@drawable/ic_notifications_white</item>
+        <item name="ic_password">@drawable/ic_password_white</item>
+        <item name="ic_phone">@drawable/ic_phone_white</item>
+        <item name="ic_profile">@drawable/ic_profile_white</item>
+        <item name="ic_person">@drawable/ic_person_white</item>
+        <item name="ic_settings">@drawable/ic_settings_white</item>
+        <item name="ic_theme">@drawable/ic_theme_white</item>
+        <item name="taqadam_logo_f">@drawable/taqadam_logo_f_white</item>
+        <item name="taqadam_logo">@drawable/taqadam_logo_white</item>
+        <item name="ic_person_48">@drawable/ic_person_white_48dp</item>
+        <item name="ic_payment_48">@drawable/ic_payment_white_48dp</item>
+        <item name="ic_agreement_48">@drawable/ic_agreement_white_48dp</item>
     </style>
 
+    <attr name="colorAccentDark" format="color"/>
     <attr name="MainActivityBG" format="reference"/>
     <attr name="SigninActivityBG" format="reference"/>
-    <attr name="TaqadamLogo" format="reference"/>
+    <attr name="BottomNavigationBG" format="reference"/>
     <attr name="SigninActivitytextColor" format="reference"/>
     <attr name="colorErrorText" format="reference"/>
     <attr name="colorProfileIcons" format="reference"/>
     <attr name="settingBg" format="reference"/>
     <attr name="editProfileIcon" format="reference"/>
     <attr name="planeBackground" format="reference"/>
-
-
-    <style name="settingActivityTheme">
-        <item name="android:background">?attr/settingBg</item>
-    </style>
 
     <style name="button_toolbox" parent="Base.Widget.AppCompat.Button.Borderless">
         <item name="android:layout_gravity">center</item>

@@ -2,47 +2,61 @@ package com.recoded.taqadam;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
+import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
-import java.util.Locale;
-
-public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
-
-    String lang;
-    String theme;
+public class SettingsActivity extends BaseActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        theme = sharedPreferences.getString("theme", "1");
-        lang = sharedPreferences.getString("language", "");
-        Theme.onActivityCreateSetTheme(this, Integer.parseInt(theme));
-        addPreferencesFromResource(R.xml.preferences);
-        Lang.changeLang(this, lang);
-        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+        setContentView(R.layout.activity_settings);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle(getResources().getString(R.string.action_settings));
+        getFragmentManager().beginTransaction()
+                .replace(R.id.content, new SettingsFragment())
+                .commit();
+
+        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
         if (key.equals("language")) {
-            String defLanguage = Locale.getDefault().getDisplayLanguage();
-            Lang.changeLang(this, sharedPreferences.getString(key, defLanguage));
+            Lang.language = sharedPreferences.getString(key, "");
             recreate();
         }
         if (key.equals("theme")) {
-            String theme = sharedPreferences.getString(key, "1");
-            Theme.changeToTheme(this, Integer.parseInt(theme));
-
+            int themeId = Integer.parseInt(sharedPreferences.getString(key, "1"));
+            Theme.setTheme(themeId);
+            recreate();
         }
-
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
-        getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+        PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public static class SettingsFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.preferences);
+        }
     }
 }

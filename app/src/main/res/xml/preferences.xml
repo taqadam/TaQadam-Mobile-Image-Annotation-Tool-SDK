@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/general_settings">
 
     <PreferenceScreen
-        android:icon="@drawable/ic_notifications_grey"
+        android:icon="?attr/ic_notifications"
         android:title="@string/pref_header_notifications">
         <SwitchPreference
             android:defaultValue="true"
@@ -27,7 +29,7 @@
         android:defaultValue="en"
         android:entries="@array/pref_language_titles"
         android:entryValues="@array/pref_language_values"
-        android:icon="@drawable/ic_language_grey"
+        android:icon="?attr/ic_language"
         android:key="language"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
@@ -37,7 +39,7 @@
         android:defaultValue="1"
         android:entries="@array/pref_theme_titles"
         android:entryValues="@array/pref_theme_values"
-        android:icon="@drawable/ic_theme_grey"
+        android:icon="?attr/ic_theme"
         android:key="theme"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"

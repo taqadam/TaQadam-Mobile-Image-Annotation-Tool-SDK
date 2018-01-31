@@ -43,6 +43,7 @@
             android:background="#aa000000"
             android:padding="8dp"
             android:textSize="24sp"
+            android:textColor="@color/colorWhite"
             tools:text="Draw a box around cars"/>
 
         <LinearLayout

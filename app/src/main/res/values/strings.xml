@@ -214,4 +214,7 @@
     <string name="wallet_amunt">Wallet: $10.66</string>
     <string name="freeze_slider">Freeze Slider</string>
     <string name="submit_answer">Submit Answer</string>
+    <string name="title">Title</string>
+    <string name="general_settings">General Settings</string>
+    <string name="body">Body</string>
 </resources>

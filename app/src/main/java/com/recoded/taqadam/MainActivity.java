@@ -10,7 +10,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,7 +24,7 @@ import com.recoded.taqadam.models.db.PostDbHandler;
 import com.recoded.taqadam.models.db.TaskDbHandler;
 import com.squareup.picasso.Picasso;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private User user;
     private View drawerHeader;
@@ -77,37 +76,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 switch (item.getItemId()) {
                     case R.id.navigation_jobs:
                         setTitle(item.getTitle());
-                        /*FragmentJobs fragmentJobs = new FragmentJobs();
-                        FragmentTransaction fragmentTransactionTasks = getSupportFragmentManager().beginTransaction();
-                        fragmentTransactionTasks.replace(R.id.frame_layout, fragmentJobs);
-                        fragmentTransactionTasks.commit();*/
                         pager.setCurrentItem(0);
 
                         return true;
                     case R.id.navigation_qa:
                         setTitle(item.getTitle());
-                        /*FragmentQA fragmentQA = new FragmentQA();
-                        FragmentTransaction fragmentTransactionQa = getSupportFragmentManager().beginTransaction();
-                        fragmentTransactionQa.replace(R.id.frame_layout, fragmentQA);
-                        fragmentTransactionQa.commit();*/
                         pager.setCurrentItem(1);
 
                         return true;
                     case R.id.navigation_cash_out:
                         setTitle(item.getTitle());
-                       /* FragmentCashOut fragmentCashOut = new FragmentCashOut();
-                        FragmentTransaction fragmentTransactionCashout = getSupportFragmentManager().beginTransaction();
-                        fragmentTransactionCashout.replace(R.id.frame_layout, fragmentCashOut);
-                        fragmentTransactionCashout.commit();*/
                         pager.setCurrentItem(2);
 
                         return true;
                     case R.id.navigation_discuss:
                         setTitle(item.getTitle());
-                        /*FragmentDiscuss fragmentDiscuss = new FragmentDiscuss();
-                        FragmentTransaction fragmentTransactionDiscuss = getSupportFragmentManager().beginTransaction();
-                        fragmentTransactionDiscuss.replace(R.id.frame_layout, fragmentDiscuss);
-                        fragmentTransactionDiscuss.commit();*/
                         pager.setCurrentItem(3);
 
                         return true;
@@ -118,12 +101,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         BottomNavigationView navigation = findViewById(R.id.bottom_navigation);
         navigation.setOnNavigationItemSelectedListener(listener);
-
-        /*FragmentJobs fragmentJobs = new FragmentJobs();
-        FragmentTransaction fragmentTransactionTasks = getSupportFragmentManager().beginTransaction();
-        fragmentTransactionTasks.replace(R.id.frame_layout, fragmentJobs);
-        fragmentTransactionTasks.commit();
-        setTitle("Tasks");*/
         navigation.setSelectedItemId(0);
     }
 
@@ -143,7 +120,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_notification) {
             // Handle the camera action
         } else if (id == R.id.nav_setting) {
-
+            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_help) {
 
         } else if (id == R.id.nav_feedback) {
@@ -212,6 +190,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(intent);
             return true;
         } else if (id == R.id.action_discussion) {
             return true;

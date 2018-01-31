@@ -72,8 +72,11 @@
         <activity android:name=".JobActivity">
         </activity>
         <activity
-            android:name=".SettingsActivity"
-            android:theme="@style/settingActivityTheme"/>
+            android:name=".SettingsActivity"/>
+        <activity android:name=".BaseActivity">
+        </activity>
+        <activity android:name=".PostActivity">
+        </activity>
     </application>
 
 </manifest>

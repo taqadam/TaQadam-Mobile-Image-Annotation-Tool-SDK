@@ -9,6 +9,6 @@
     android:background="@color/colorPrimary"
     app:popupTheme="@style/AppTheme.PopupOverlay"
     app:layout_collapseMode="pin"
-    tools:showIn="@layout/activity_profile">
+    tools:showIn="@layout/activity_main">
 </android.support.v7.widget.Toolbar>
         

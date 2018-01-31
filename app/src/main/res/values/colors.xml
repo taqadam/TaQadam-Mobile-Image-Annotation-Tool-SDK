@@ -3,9 +3,11 @@
     <color name="colorPrimary">#73204C</color>
     <color name="colorPrimaryDark">#4d0f30</color>
     <color name="colorAccent">#377899</color>
+    <color name="colorAccentDark">#26566e</color>
     <color name="colorPurple">@color/colorPrimary</color>
     <color name="colorGrey">#EFEFEF</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorOffWhite">#f5f1f1</color>
     <color name="colorMaroon">#800000</color>
     <color name="colorPwShort">#A20025</color>
     <color name="colorPwWeak">#A20025</color>

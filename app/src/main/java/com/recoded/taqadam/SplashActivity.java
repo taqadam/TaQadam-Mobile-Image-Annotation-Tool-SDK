@@ -93,6 +93,7 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -179,6 +180,9 @@ public class SplashActivity extends AppCompatActivity {
     private boolean firstRun() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isFirstRun = preferences.getBoolean("firstRun", true);
+        int themeId = Integer.parseInt(preferences.getString("theme", "1"));
+        Lang.language = preferences.getString("language", "");
+        Theme.setTheme(themeId);
 
         if (isFirstRun) {
             SharedPreferences.Editor editor = preferences.edit();

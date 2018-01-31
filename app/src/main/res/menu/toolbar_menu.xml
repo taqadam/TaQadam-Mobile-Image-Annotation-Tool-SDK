@@ -9,11 +9,11 @@
     <item
         android:id="@+id/action_notification"
         android:title="@string/notifications"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_notifications_grey"/>
+        app:showAsAction="always"
+        android:icon="@drawable/ic_notifications_white"/>
     <item
         android:id="@+id/action_discussion"
         android:title="@string/discussions"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_chat_grey"/>
+        android:icon="@drawable/ic_chat_white"/>
 </menu>

@@ -26,6 +26,7 @@
             android:background="#aa000000"
             android:padding="8dp"
             android:textSize="24sp"
+            android:textColor="@color/colorWhite"
             tools:text="Select A category for this image"/>
 
         <android.support.v7.widget.CardView
@@ -35,7 +36,7 @@
             android:layout_marginBottom="12dp"
             app:cardElevation="8dp"
             app:cardCornerRadius="4dp"
-            app:cardBackgroundColor="#aa000000">
+            app:cardBackgroundColor="#ff000000">
 
             <GridLayout
                 android:id="@+id/options_grid"
