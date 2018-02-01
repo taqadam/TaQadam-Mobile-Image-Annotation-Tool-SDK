@@ -19,6 +19,7 @@
         <item name="MainActivityBG">@color/colorPrimary</item>
         <item name="BottomNavigationBG">@color/colorOffWhite</item>
         <item name="SigninActivityBG">@color/colorWhite</item>
+        <item name="SigninActivityBGInv">@color/colorPrimary</item>
         <item name="SigninActivitytextColor">@color/colorPrimary</item>
         <item name="colorErrorText">@color/colorErrorTextRed</item>
         <item name="colorProfileIcons">@color/button_attributes_bg_pressed</item>
@@ -63,6 +64,7 @@
         <item name="MainActivityBG">@color/button_attributes_bg</item>
         <item name="BottomNavigationBG">@color/colorDarkGrey</item>
         <item name="SigninActivityBG">@color/colorPrimary</item>
+        <item name="SigninActivityBGInv">@color/colorWhite</item>
         <item name="SigninActivitytextColor">@color/colorWhite</item>
         <item name="colorErrorText">@color/colorErrorTextOrange</item>
         <item name="colorProfileIcons">@color/colorWhite</item>
@@ -101,6 +103,7 @@
     <attr name="colorAccentDark" format="color"/>
     <attr name="MainActivityBG" format="reference"/>
     <attr name="SigninActivityBG" format="reference"/>
+    <attr name="SigninActivityBGInv" format="reference"/>
     <attr name="BottomNavigationBG" format="reference"/>
     <attr name="SigninActivitytextColor" format="reference"/>
     <attr name="colorErrorText" format="reference"/>
