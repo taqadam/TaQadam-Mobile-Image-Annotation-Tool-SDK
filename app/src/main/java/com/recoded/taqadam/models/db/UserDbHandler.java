@@ -99,6 +99,22 @@ public class UserDbHandler {
         return mDbReference.updateChildren(keyValues);
     }
 
+    public Task<String> fetchUserPicture(String uid) {
+        final TaskCompletionSource<String> src = new TaskCompletionSource<>();
+        mDbReference.getParent().child(uid).child(DISPLAY_IMAGE).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                src.setResult((String) dataSnapshot.getValue());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                src.setException(databaseError.toException());
+            }
+        });
+        return src.getTask();
+    }
+
     public Task<DataSnapshot> fetchUserNode() {
         final TaskCompletionSource<DataSnapshot> source = new TaskCompletionSource<>();
         mDbReference.addListenerForSingleValueEvent(new ValueEventListener() {

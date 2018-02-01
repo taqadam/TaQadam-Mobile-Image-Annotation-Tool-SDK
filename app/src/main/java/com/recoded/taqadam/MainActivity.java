@@ -118,16 +118,17 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         if (id == R.id.nav_profile) {
             startActivity(new Intent(this, ProfileActivity.class));
         } else if (id == R.id.nav_notification) {
-            // Handle the camera action
+
+
         } else if (id == R.id.nav_setting) {
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_help) {
-
+            startActivity(new Intent(this, HelpActivity.class));
         } else if (id == R.id.nav_feedback) {
-
+            startActivity(new Intent(this, FeedbackActivity.class));
         } else if (id == R.id.nav_about) {
-
+            startActivity(new Intent(this, AboutActivity.class));
         } else if (id == R.id.nav_logout) {
             UserAuthHandler.getInstance().signOut();
             startActivity(new Intent(this, SigninActivity.class));

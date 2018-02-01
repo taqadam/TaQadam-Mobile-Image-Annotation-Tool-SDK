@@ -161,4 +161,46 @@
         <item name="android:layout_marginLeft">162dp</item>
         <item name="android:layout_marginStart">162dp</item>
     </style>
+
+    <style name="radio_button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:buttonTint" tools:ignore="NewApi">@color/colorWhite</item>
+    </style>
+
+    <style name="edit_text_feedback">
+        <item name="android:layout_width">250dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:gravity">top|start</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:background">@drawable/edit_text_bg</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="button_feedback">
+        <item name="android:layout_width">250dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:drawableLeft">@drawable/ic_right</item>
+        <item name="android:drawableStart">@drawable/ic_right</item>
+        <item name="android:background">@color/colorGrey</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:layout_margin">10dp</item>
+    </style>
+
+    <style name="about_us_design_text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:padding">10dp</item>
+    </style>
 </resources>

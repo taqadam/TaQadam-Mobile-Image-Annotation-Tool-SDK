@@ -44,6 +44,8 @@ public class PostDbHandler {
     private HashMap<String, Post> postsList;
     private Task<List<Post>> latestPostsTask;
 
+    private OnPostsChangedListener postsListener;
+
     private String mUid;
     private DatabaseReference mThreadsDbRef, mDataDbRef;
     private ChildEventListener mCommentsListener, mThreadsListener;
@@ -119,6 +121,10 @@ public class PostDbHandler {
                 Post post = new Post(dataSnapshot.getKey())
                         .fromMap((HashMap<String, Object>) dataSnapshot.getValue());
                 postsList.put(post.getId(), post);
+
+                if (postsListener != null) {
+                    postsListener.onPostsChanged(getRecentPosts());
+                }
                 //We need to monitor the list as well or call a callback in here
                 //Add all existing children then Single Value Event Listener will be called and we will set the results
             }
@@ -131,6 +137,9 @@ public class PostDbHandler {
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 postsList.remove(dataSnapshot.getKey());
+                if (postsListener != null) {
+                    postsListener.onPostsChanged(getRecentPosts());
+                }
             }
 
             @Override
@@ -292,6 +301,10 @@ public class PostDbHandler {
     public Post writePost(Post post) {
         if (post.getId() == null) {
             post.setId(mThreadsDbRef.child(getCurrentTimeCycle()).push().getKey());
+            post.setAuthor(UserAuthHandler.getInstance().getCurrentUser().getDisplayName());
+            post.setUid(mUid);
+            post.setNoOfComments(0);
+            post.setPostTime(new Date().getTime());
             mThreadsDbRef.child(getCurrentTimeCycle()).child(post.getId()).setValue(post.toMap());
             mDataDbRef.child(post.getId())
                     .child(BODY)
@@ -349,5 +362,13 @@ public class PostDbHandler {
         mThreadsListener = null;
         mThreadsDbRef = null;
         handler = null;
+    }
+
+    public void setPostsListener(OnPostsChangedListener postsListener) {
+        this.postsListener = postsListener;
+    }
+
+    public interface OnPostsChangedListener {
+        void onPostsChanged(List<Post> posts);
     }
 }

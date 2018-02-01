@@ -25,6 +25,7 @@
     <color name="colorTransparent">#00000000</color>
     <color name="colorDarkGrey">#aaaaaa</color>
     <color name="colorDarkGray">#424242</color>
+    <color name="colorBlack">#000000</color>
 
     <color name="colorBoundingBox">#ff2196F3</color>
     <color name="colorBoundingBoxSelected">#21f352</color>

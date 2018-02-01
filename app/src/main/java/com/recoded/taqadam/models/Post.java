@@ -114,6 +114,7 @@ public class Post {
         result.put(PostDbHandler.USER_ID, uid);
         result.put(PostDbHandler.AUTHOR, author);
         result.put(PostDbHandler.TITLE, title);
+        result.put(PostDbHandler.COMMENTS, noOfComments);
 
         String truncatedBody = body.length() > 150 ? body.substring(0, 150) : body;
 

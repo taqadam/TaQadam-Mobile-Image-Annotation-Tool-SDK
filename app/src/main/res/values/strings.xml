@@ -218,4 +218,14 @@
     <string name="general_settings">General Settings</string>
     <string name="body">Body</string>
     <string name="write_post">Write Post</string>
+
+    <string name="sad_hint">We are really sorry.\nTell us what went wrong?</string>
+    <string name="happy_hint">That\'s great!\nTell us what we got right?</string>
+    <string name="neutral_hint">Umm…\nTell us how can we make it better?</string>
+    <string name="feedback_good">It was Very Good</string>
+    <string name="feedback_neutral">It was OK</string>
+    <string name="feedback_bad">It was Boring</string>
+    <string name="evaluation_msg">How do you evaluate Taqadam android app?</string>
+    <string name="send_feedback">Send Feedback</string>
+    <string name="copyright">© 2017–%s Taqadam.\nAll rights reserved.</string>
 </resources>

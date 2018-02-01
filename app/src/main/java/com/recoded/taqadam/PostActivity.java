@@ -8,7 +8,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.recoded.taqadam.models.Post;
-import com.recoded.taqadam.models.auth.UserAuthHandler;
 import com.recoded.taqadam.models.db.PostDbHandler;
 
 public class PostActivity extends BaseActivity {
@@ -38,7 +37,6 @@ public class PostActivity extends BaseActivity {
                 Post post = new Post();
                 post.setTitle(editName.getText().toString());
                 post.setBody(editDescription.getText().toString());
-                post.setUid(UserAuthHandler.getInstance().getUid());
                 PostDbHandler.getInstance().writePost(post);
                 finish();
             }
@@ -49,7 +47,7 @@ public class PostActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             onBackPressed();
-            return true;
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }
