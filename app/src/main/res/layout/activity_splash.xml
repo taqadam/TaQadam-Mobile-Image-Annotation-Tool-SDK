@@ -3,7 +3,7 @@
              android:id="@+id/content_layout"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             android:background="@color/colorWhite"
+             android:background="?attr/SigninActivityBG"
              tools:context="com.recoded.taqadam.SplashActivity">
 
     <ImageView
@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:src="@drawable/taqadam_logo_f_white"
+        android:src="?attr/taqadam_logo_f"
         android:alpha="0"/>
 
     <ProgressBar

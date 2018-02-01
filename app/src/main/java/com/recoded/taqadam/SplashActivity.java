@@ -5,15 +5,15 @@ import android.animation.ValueAnimator;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
+import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.ColorInt;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -30,12 +30,12 @@ public class SplashActivity extends AppCompatActivity {
     private Runnable mBackgroundColorAnimation = new Runnable() {
         @Override
         public void run() {
-            int colorFrom = Color.TRANSPARENT;
-            Drawable background = mContentView.getBackground();
-            if (background instanceof ColorDrawable)
-                colorFrom = ((ColorDrawable) background).getColor();
-
-            int colorTo = getResources().getColor(R.color.colorPrimary);
+            TypedValue typedValue = new TypedValue();
+            Resources.Theme theme = getTheme();
+            theme.resolveAttribute(R.attr.SigninActivityBGInv, typedValue, true);
+            @ColorInt int colorFrom = typedValue.data;
+            theme.resolveAttribute(R.attr.SigninActivityBG, typedValue, true);
+            @ColorInt int colorTo = typedValue.data;
 
             ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
             colorAnimation.setDuration(1500); // milliseconds

@@ -188,5 +188,18 @@
     <string name="wallet_amunt">المحفظة: $10.66</string>
     <string name="freeze_slider">تجميد المتصفح</string>
     <string name="submit_answer">ارسال الجواب</string>
+    <string name="title">العنوان</string>
+    <string name="general_settings">اعدادات عامة</string>
+    <string name="body">المتن</string>
+    <string name="write_post">اكتب منشور</string>
+    <string name="sad_hint">نعتذر جدا، رجاءا اخبرنا ما الذي ازعجك؟</string>
+    <string name="happy_hint">هذا عظيم! ما هو اكثر ما اعجبك؟</string>
+    <string name="feedback_good">جيد جدا</string>
+    <string name="feedback_neutral">لا بأس</string>
+    <string name="feedback_bad">ممل</string>
+    <string name="evaluation_msg">ماهو تقييمك لتطبيق تقدم للأندرويد؟</string>
+    <string name="send_feedback">ارسل رأيك</string>
+    <string name="neutral_hint">عذرا… اخبرنا كيف يمكننا جعله افضل؟</string>
+    <string name="copyright">جميع الحقوق محفوظة\nتقدم 2017-%s</string>
     /
 </resources>

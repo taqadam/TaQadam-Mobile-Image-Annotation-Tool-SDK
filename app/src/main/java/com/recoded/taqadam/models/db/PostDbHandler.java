@@ -77,15 +77,6 @@ public class PostDbHandler {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //All threads will be added onChildAdded then this will be called so we just set the result
-                /*HashMap<String, HashMap<String, Object>> posts
-                        = (HashMap<String, HashMap<String, Object>>) dataSnapshot.getValue();
-
-                if (posts != null) {
-                    for (String key : posts.keySet()) {
-                        Post post = new Post(key).fromMap(posts.get(key));
-                        postsList.put(key, post);
-                    }
-                }*/
 
                 //If the results are less than 5, read last months as well
                 if (dataSnapshot.getChildrenCount() <= 5) {
@@ -170,7 +161,10 @@ public class PostDbHandler {
     @NonNull
     public Task<HashMap<String, Post>> getPosts(String timeCycle) {
         final TaskCompletionSource<HashMap<String, Post>> fetcher = new TaskCompletionSource<>();
-
+        if (mThreadsDbRef == null) {
+            fetcher.setException(new NullPointerException());
+            return fetcher.getTask();
+        }
         if (timeCycle.equals(getCurrentTimeCycle())) {
             fetcher.setResult(null);
             return fetcher.getTask();
