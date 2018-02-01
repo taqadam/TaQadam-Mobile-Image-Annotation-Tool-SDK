@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class Task {
     public static final String CATEGORIZATION = "categorization";
-    public static final String BOUNDING_BOX = "bbox";
+    public static final String BOUNDING_BOX = "bounding_box", BBOX = "bbox";
 
     private String taskId;
     private String jobId;

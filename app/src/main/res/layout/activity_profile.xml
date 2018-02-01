@@ -59,9 +59,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal|bottom"
-                        android:drawableEnd="@drawable/ic_verified_user_black_24dp"
+                        android:drawableEnd="@drawable/ic_verified_user_green"
                         android:drawablePadding="8dp"
-                        android:drawableRight="@drawable/ic_verified_user_black_24dp"
+                        android:drawableRight="@drawable/ic_verified_user_green"
                         android:gravity="center_vertical"
                         android:text="@string/verified"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
@@ -77,13 +77,12 @@
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="8dp"
+            android:background="?attr/BottomNavigationBG"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/colorDarkGrey"
                 android:orientation="vertical"
                 android:paddingTop="16dp">
 
@@ -99,7 +98,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_weight="1"
                         android:drawableTint="@color/colorPrimary"
-                        android:drawableTop="@drawable/ic_person_black_24dp"
+                        android:drawableTop="?attr/ic_person_48"
                         android:gravity="center_horizontal"
                         android:text="@string/about"
                         android:textColor="@color/colorPrimary"
@@ -110,8 +109,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_weight="1"
-                        android:drawableTint="@color/colorWhite"
-                        android:drawableTop="@drawable/ic_assignment_black_24dp"
+                        android:drawableTop="?attr/ic_agreement_48"
                         android:gravity="center_horizontal"
                         android:text="@string/worker_agreement"
                         android:textSize="14sp"/>
@@ -121,8 +119,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_weight="1"
-                        android:drawableTint="@color/colorWhite"
-                        android:drawableTop="@drawable/ic_payment_black_24dp"
+                        android:drawableTop="?attr/ic_payment_48"
                         android:gravity="center_horizontal"
                         android:text="@string/balance_profile"
                         android:textSize="14sp"/>
@@ -143,9 +140,8 @@
                             android:id="@+id/tv_basic_info"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:drawableEnd="@drawable/ic_basic_profile"
-                            android:drawableRight="@drawable/ic_basic_profile"
-                            android:drawableTint="@color/colorWhite"
+                            android:drawableEnd="?attr/ic_profile"
+                            android:drawableRight="?attr/ic_profile"
                             android:gravity="center_vertical"
                             android:text="@string/basic_information"
                             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
@@ -158,8 +154,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="24dp"
-                            android:drawableLeft="@drawable/ic_person_outline_black_24dp"
-                            android:drawableStart="@drawable/ic_person_outline_black_24dp"
+                            android:drawableLeft="?attr/ic_fullname"
+                            android:drawableStart="?attr/ic_fullname"
                             android:text="@string/full_name"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_basic_info"/>
@@ -180,8 +176,8 @@
                             style="@style/AppTheme.ProfileLineText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/ic_perm_contact_calendar_black_24dp"
-                            android:drawableStart="@drawable/ic_perm_contact_calendar_black_24dp"
+                            android:drawableLeft="?attr/ic_display_name"
+                            android:drawableStart="?attr/ic_display_name"
                             android:text="@string/display_name"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_full_name_line"/>
@@ -202,8 +198,8 @@
                             style="@style/AppTheme.ProfileLineText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/ic_location_on_black_24dp"
-                            android:drawableStart="@drawable/ic_location_on_black_24dp"
+                            android:drawableLeft="?attr/ic_location"
+                            android:drawableStart="?attr/ic_location"
                             android:text="@string/location"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_user_name_line"/>
@@ -224,8 +220,8 @@
                             style="@style/AppTheme.ProfileLineText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/ic_gender"
-                            android:drawableStart="@drawable/ic_gender"
+                            android:drawableLeft="?attr/ic_gender"
+                            android:drawableStart="?attr/ic_gender"
                             android:text="@string/gender"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_user_location_line"/>
@@ -246,8 +242,8 @@
                             style="@style/AppTheme.ProfileLineText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/ic_loupe_black_24dp"
-                            android:drawableStart="@drawable/ic_loupe_black_24dp"
+                            android:drawableLeft="?attr/ic_loupe"
+                            android:drawableStart="?attr/ic_loupe"
                             android:text="@string/age"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_user_gender_line"/>
@@ -268,8 +264,8 @@
                             style="@style/AppTheme.ProfileLineText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/ic_call_black_24dp"
-                            android:drawableStart="@drawable/ic_call_black_24dp"
+                            android:drawableLeft="?attr/ic_phone"
+                            android:drawableStart="?attr/ic_phone"
                             android:text="@string/phone_number"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_user_age_line"/>
@@ -303,8 +299,8 @@
                             style="@style/AppTheme.ProfileLineText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/ic_email_black_24dp"
-                            android:drawableStart="@drawable/ic_email_black_24dp"
+                            android:drawableLeft="?attr/ic_email"
+                            android:drawableStart="?attr/ic_email"
                             android:text="@string/email"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_user_phone_line"/>
@@ -342,7 +338,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/activity_horizontal_margin"
-            android:src="@drawable/ic_edit_black_24dp"
+            android:src="@drawable/ic_edit"
             app:layout_anchor="@id/appbar_main"
             app:layout_anchorGravity="bottom|right|end"/>
 

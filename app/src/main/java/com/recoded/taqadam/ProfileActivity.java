@@ -6,7 +6,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,7 +19,7 @@ import com.recoded.taqadam.models.User;
 import com.recoded.taqadam.models.auth.UserAuthHandler;
 import com.squareup.picasso.Picasso;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends BaseActivity {
     private ActivityProfileBinding binding;
     private User user;
 
@@ -67,13 +66,13 @@ public class ProfileActivity extends AppCompatActivity {
             binding.tvVerifiedIndicator.setCompoundDrawables(null, null, null, null);
         }
         if (user.isEmailVerified()) {
-            binding.ivEmailVerified.setImageResource(R.drawable.ic_check_circle);
+            binding.ivEmailVerified.setImageResource(R.drawable.ic_check_green);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 binding.ivEmailVerified.setTooltipText(getString(R.string.verified_contact_method));
             }
         }
         if (user.isPhoneNumberVerified()) {
-            binding.ivPhoneVerified.setImageResource(R.drawable.ic_check_circle);
+            binding.ivPhoneVerified.setImageResource(R.drawable.ic_check_green);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 binding.ivPhoneVerified.setTooltipText(getString(R.string.verified_contact_method));
             }

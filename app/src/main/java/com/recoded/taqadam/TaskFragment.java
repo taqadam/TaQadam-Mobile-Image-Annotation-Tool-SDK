@@ -26,7 +26,7 @@ public class TaskFragment extends Fragment {
 
     public static TaskFragment newTask(String taskId) {
         Task t = TaskDbHandler.getInstance().getTask(taskId);
-        if (t.getType().equals(Task.BOUNDING_BOX)) {
+        if (t.getType().equals(Task.BOUNDING_BOX) || t.getType().equals(Task.BBOX)) { //We have two different values as of now
             TaskFragment frag = new BoundingBoxFragment();
             frag.setTask(t);
             return frag;

@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -38,7 +37,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends BaseActivity {
     private static final String TAG = RegisterActivity.class.getSimpleName();
     private static final String EMAIL_REGEX = "^[a-zA-Z]+[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]{2,}(?<!\\.)$";
     private static final String PASSWORD_REGEX_MED = "^(?=.*[A-Za-z])(?=.*[0-9]).{6,}$";
@@ -166,7 +165,7 @@ public class RegisterActivity extends AppCompatActivity {
                 if (e instanceof AuthSignUpException) {
                     //Start building the alert dialog. TODO: Extract strings
                     final AlertDialog.Builder db = new AlertDialog.Builder(RegisterActivity.this);
-                    db.setIcon(getResources().getDrawable(R.drawable.ic_error));
+                    db.setIcon(getResources().getDrawable(R.drawable.ic_error_black));
                     db.setTitle(R.string.error);
                     db.setCancelable(false);
                     AuthSignUpException ex = (AuthSignUpException) e;
@@ -298,7 +297,7 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 })
                 .setCancelable(false)
-                .setIcon(R.drawable.ic_assignment_black_24dp);
+                .setIcon(R.drawable.ic_agreement_purple_48dp);
         // Create the AlertDialog object and return it
         builder.create().show();
     }
@@ -377,11 +376,11 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
                 if (s.length() < 5) {
-                    etEmailField.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.ic_cross_circle), null);
+                    etEmailField.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.ic_cross_maroon), null);
                 } else if (s.toString().matches(EMAIL_REGEX)) {
-                    etEmailField.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.ic_check_circle), null);
+                    etEmailField.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.ic_check_green), null);
                 } else {
-                    etEmailField.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.ic_cross_circle), null);
+                    etEmailField.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.ic_cross_maroon), null);
                 }
             }
         });

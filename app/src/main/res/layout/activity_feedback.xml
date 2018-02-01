@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data/>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/toolbar_appbar"/>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/SigninActivityBG"
+            tools:context="com.recoded.taqadam.FeedbackActivity">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center"
+                    android:layout_marginBottom="30dp"
+                    android:text="@string/evaluation_msg"
+                    android:textSize="24sp"/>
+
+                <Button
+                    android:id="@+id/happy_feedback"
+                    style="@style/button_feedback"
+                    android:drawableEnd="@drawable/ic_happy"
+                    android:drawableRight="@drawable/ic_happy"
+                    android:text="@string/feedback_good"/>
+
+                <EditText
+                    android:id="@+id/happy_feedback_comment"
+                    style="@style/edit_text_feedback"
+                    android:hint="@string/happy_hint"/>
+
+                <Button
+                    android:id="@+id/neutral_feedback"
+                    style="@style/button_feedback"
+                    android:drawableEnd="@drawable/ic_neutral"
+                    android:drawableRight="@drawable/ic_neutral"
+                    android:text="@string/feedback_neutral"/>
+
+                <EditText
+                    android:id="@+id/neutral_feedback_comment"
+                    style="@style/edit_text_feedback"
+                    android:hint="@string/neutral_hint"/>
+
+                <Button
+                    android:id="@+id/sad_feedback"
+                    style="@style/button_feedback"
+                    android:drawableEnd="@drawable/ic_sad"
+                    android:drawableRight="@drawable/ic_sad"
+                    android:text="@string/feedback_bad"/>
+
+                <EditText
+                    android:id="@+id/sad_feedback_comment"
+                    style="@style/edit_text_feedback"
+                    android:hint="@string/sad_hint"/>
+
+                <Button
+                    android:id="@+id/send_feedback"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="60dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/feedback_button_bg"
+                    android:padding="10dp"
+                    android:text="@string/send_feedback"
+                    android:textColor="@color/colorWhite"/>
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</layout>

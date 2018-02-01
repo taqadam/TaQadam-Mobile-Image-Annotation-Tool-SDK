@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorWhite"
+                tools:context="com.recoded.taqadam.AppAboutActivity">
+
+    <include
+        android:id="@+id/appbar_layout"
+        layout="@layout/toolbar_appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/appbar_layout"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Taqadam Android App"
+                android:textColor="@color/colorBlack"
+                android:textSize="24sp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Version 1.0-beta"
+                android:textColor="@color/button_attributes_bg_pressed"
+                android:textSize="18sp"/>
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="16dp"
+                android:src="@drawable/taqadam_logo"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/colorBlack"
+                android:textSize="18sp"
+                android:text="Developed by Re:Coded Team"/>
+
+            <TextView
+                android:id="@+id/tv_copyright"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="34dp"
+                android:textColor="@color/colorBlack"
+                android:textSize="16sp"
+                tools:text="@string/copyright"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

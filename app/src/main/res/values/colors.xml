@@ -3,16 +3,19 @@
     <color name="colorPrimary">#73204C</color>
     <color name="colorPrimaryDark">#4d0f30</color>
     <color name="colorAccent">#377899</color>
+    <color name="colorAccentDark">#26566e</color>
     <color name="colorPurple">@color/colorPrimary</color>
     <color name="colorGrey">#EFEFEF</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorOffWhite">#f5f1f1</color>
     <color name="colorMaroon">#800000</color>
     <color name="colorPwShort">#A20025</color>
     <color name="colorPwWeak">#A20025</color>
     <color name="colorPwMedium">#FA6800</color>
     <color name="colorPwFair">#E3C800</color>
     <color name="colorPwStrong">#008A00</color>
-    <color name="colorErrorText">#e6712e</color>
+    <color name="colorErrorTextOrange">#e6712e</color>
+    <color name="colorErrorTextRed">#ff0000</color>
     <color name="colorMaterialError">#F4511E</color>
 
     <color name="colorIntroRegister">#5c8900</color>
@@ -21,6 +24,8 @@
     <color name="colorIntroPayment">@color/colorPrimary</color>
     <color name="colorTransparent">#00000000</color>
     <color name="colorDarkGrey">#aaaaaa</color>
+    <color name="colorDarkGray">#424242</color>
+    <color name="colorBlack">#000000</color>
 
     <color name="colorBoundingBox">#ff2196F3</color>
     <color name="colorBoundingBoxSelected">#21f352</color>

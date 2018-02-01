@@ -6,12 +6,10 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.recoded.taqadam.databinding.ActivityJobBinding;
@@ -24,7 +22,7 @@ import com.recoded.taqadam.models.db.TaskDbHandler;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JobActivity extends AppCompatActivity {
+public class JobActivity extends BaseActivity {
     private static final String TAG = JobActivity.class.getSimpleName();
     private TasksPagerAdapter mTasksPagerAdapter;
     private ActivityJobBinding binding;
@@ -182,7 +180,8 @@ public class JobActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Toast.makeText(this, "SETTING", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(JobActivity.this, SettingsActivity.class);
+            startActivity(intent);
             return true;
         } else if (id == R.id.action_lock_slider) {
             if (binding.viewPager.isLocked()) {

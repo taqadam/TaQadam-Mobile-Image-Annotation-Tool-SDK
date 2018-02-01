@@ -17,7 +17,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -46,7 +45,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class ConfirmProfileActivity extends AppCompatActivity {
+public class ConfirmProfileActivity extends BaseActivity {
     private static final String TAG = ConfirmProfileActivity.class.getSimpleName();
     private static final int ACTIVITY_REQUEST_CODE_FILES = 1990;
     private static final int ACTIVITY_REQUEST_CODE_CAMERA = 1991;
@@ -159,7 +158,7 @@ public class ConfirmProfileActivity extends AppCompatActivity {
             user = new User();
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.error);
-            builder.setIcon(R.drawable.ic_error);
+            builder.setIcon(R.drawable.ic_error_black);
             builder.setMessage(R.string.not_logged_in);
             builder.setPositiveButton(R.string.login, new DialogInterface.OnClickListener() {
                 @Override

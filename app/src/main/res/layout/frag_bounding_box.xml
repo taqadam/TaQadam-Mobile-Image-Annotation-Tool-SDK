@@ -43,6 +43,7 @@
             android:background="#aa000000"
             android:padding="8dp"
             android:textSize="24sp"
+            android:textColor="@color/colorWhite"
             tools:text="Draw a box around cars"/>
 
         <LinearLayout
@@ -137,7 +138,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:drawableTop="@drawable/ic_check_circle_big"
+                android:drawableTop="@drawable/ic_check_big"
                 android:drawablePadding="16dp"
                 android:gravity="center"
                 android:text="@string/answer_has_already_been_submitted"

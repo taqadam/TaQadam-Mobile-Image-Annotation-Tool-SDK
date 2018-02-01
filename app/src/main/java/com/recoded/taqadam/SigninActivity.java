@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -24,7 +23,7 @@ import com.google.firebase.auth.AuthResult;
 import com.recoded.taqadam.models.User;
 import com.recoded.taqadam.models.auth.UserAuthHandler;
 
-public class SigninActivity extends AppCompatActivity {
+public class SigninActivity extends BaseActivity {
     private static final String TAG = SigninActivity.class.getSimpleName();
 
     private TextInputLayout etEmailLayout, etPwLayout;

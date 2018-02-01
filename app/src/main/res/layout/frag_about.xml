@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimary">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="16dp"
+                android:src="@drawable/taqadam_logo_f_white"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="30dp"/>
+
+            <Button
+                android:id="@+id/b_taqadam"
+                style="@style/button_feedback"
+                android:text="Taqadam"/>
+
+            <Button
+                android:id="@+id/b_privacy"
+                style="@style/button_feedback"
+                android:text="Privacy Policy"/>
+
+            <Button
+                android:id="@+id/b_tos"
+                style="@style/button_feedback"
+                android:text="Terms of Service"/>
+
+            <Button
+                android:id="@+id/b_us"
+                style="@style/button_feedback"
+                android:text="About us"/>
+
+            <TextView
+                android:id="@+id/tv_copyright"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_marginTop="60dp"
+                android:gravity="center"
+                android:text="@string/copyright"
+                android:textColor="@color/colorWhite"
+                android:textSize="12sp"/>
+
+        </LinearLayout>
+    </ScrollView>
+</layout>

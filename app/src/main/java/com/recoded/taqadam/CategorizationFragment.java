@@ -130,6 +130,7 @@ public class CategorizationFragment extends TaskFragment {
         tv.setText(text);
         tv.setTag(text);
         tv.setTextSize(16);
+        tv.setTextColor(getResources().getColor(R.color.colorWhite));
         tv.setPadding(dpToPx(4), dpToPx(4), dpToPx(4), dpToPx(4));
         tv.setBackgroundResource(R.drawable.options_background_normal);
         tv.setClickable(true);
