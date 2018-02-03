@@ -3,11 +3,11 @@
 
     <data/>
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="16dp"
-                    android:orientation="vertical">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:layout_marginTop="16dp"
+                  android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/frag_header"
@@ -34,7 +34,6 @@
             android:id="@+id/label_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/frag_header"
             android:layout_marginBottom="16dp"
             android:layout_marginTop="16dp"
             android:orientation="horizontal">
@@ -65,8 +64,8 @@
         <ScrollView
             android:id="@+id/sv_table"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_below="@id/label_container">
+            android:layout_height="0dp"
+            android:layout_weight="10">
 
             <TableLayout
                 android:id="@+id/table_attributes"
@@ -82,9 +81,9 @@
             android:id="@+id/add_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/sv_table"
-            android:layout_margin="8dp"
-            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:layout_gravity="center"
             android:orientation="vertical">
 
             <TextView
@@ -111,7 +110,7 @@
             android:id="@+id/buttons_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
             android:orientation="horizontal">
 
             <Button
@@ -130,5 +129,5 @@
                 android:layout_weight="1"
                 android:text="@string/submit"/>
         </LinearLayout>
-    </RelativeLayout>
+    </LinearLayout>
 </layout>
