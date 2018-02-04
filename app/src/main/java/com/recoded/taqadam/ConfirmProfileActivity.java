@@ -6,10 +6,16 @@ import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -28,7 +34,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.firebase.storage.UploadTask;
 import com.recoded.taqadam.databinding.ActivityConfirmProfileBinding;
 import com.recoded.taqadam.models.User;
@@ -367,6 +375,7 @@ public class ConfirmProfileActivity extends BaseActivity {
 
                         @Override
                         public void onError() {
+                            binding.pbDisplayImage.setVisibility(View.GONE);
                             Log.d(TAG, "Picasso couldn't load the image: " + uri);
                         }
                     });
@@ -505,7 +514,7 @@ public class ConfirmProfileActivity extends BaseActivity {
                         Log.d(TAG, "from camera: " + uri);
                         binding.ivDisplayImage.setImageDrawable(getResources().getDrawable(R.drawable.no_image));
                         binding.pbDisplayImage.setVisibility(View.VISIBLE);
-                        uploadImageFileToStorage(uri);
+                        processAndUploadImageToStorage(uri);
                     } else {
                         Log.d(TAG, "Image file is null");
                     }
@@ -517,33 +526,56 @@ public class ConfirmProfileActivity extends BaseActivity {
                     Log.d(TAG, "from gallery: " + uri);
                     binding.ivDisplayImage.setImageDrawable(getResources().getDrawable(R.drawable.no_image));
                     binding.pbDisplayImage.setVisibility(View.VISIBLE);
-                    uploadImageFileToStorage(uri);
+                    processAndUploadImageToStorage(uri);
                     break;
             }
         }
     }
 
-    private void uploadImageFileToStorage(Uri uri) {
-        //TODO-wisam: In the future make sure to resize the images for faster uploads
-        Log.d(TAG, "Uploading display image " + uri);
-        try {
-            UserStorageHandler.getInstance().uploadDisplayImage(uri)
-                    .addOnCompleteListener(ConfirmProfileActivity.this, new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                            if (task.isSuccessful()) {
-                                binding.ivDisplayImage.setTag(task.getResult().getDownloadUrl());
-                                loadImage();
-                            } else {
-                                Log.d(TAG, "Display image upload failed. Reason:" + task.getException());
-                                Toast.makeText(ConfirmProfileActivity.this, "Image upload failed", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    private void processAndUploadImageToStorage(final Uri uri) {
+        ImageProcessor ip = new ImageProcessor();
+        ip.execute(getPath(uri));
+        ip.processTask.addOnSuccessListener(this, new OnSuccessListener<Bitmap>() {
+            @Override
+            public void onSuccess(Bitmap bmp) {
+                uploadImage(bmp);
+            }
+        });
+    }
 
+    private String getPath(Uri uri) {
+        if (uri.getScheme().equalsIgnoreCase("file")) {
+            return uri.getPath();
+        }
+        String[] proj = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getContentResolver().query(uri, proj, null, null, null);
+        if (cursor != null) {
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            String path = cursor.getString(column_index);
+            cursor.close();
+            return path;
+        }
+        return uri.toString();
+    }
+
+    private void uploadImage(Bitmap bmp) {
+        Log.d(TAG, "Uploading bitmap display image");
+        UserStorageHandler.getInstance().uploadImage(bmp)
+                .addOnCompleteListener(ConfirmProfileActivity.this, new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            binding.ivDisplayImage.setTag(task.getResult().getDownloadUrl());
+                            //Todo: implement old and new in the future to allow user to revert
+                            UserDbHandler.getInstance().updateUserImg(task.getResult().getDownloadUrl());
+                            loadImage();
+                        } else {
+                            Log.d(TAG, "Display image upload failed. Reason:" + task.getException());
+                            Toast.makeText(ConfirmProfileActivity.this, "Image upload failed", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
     private void createUserDbEntry() {
@@ -585,6 +617,62 @@ public class ConfirmProfileActivity extends BaseActivity {
             mCreatingAccountProgressDialog.show();
         }
 
+
+    }
+
+    private static class ImageProcessor extends AsyncTask<String, Void, Void> {
+        final TaskCompletionSource<Bitmap> src = new TaskCompletionSource<>();
+        final Task<Bitmap> processTask = src.getTask();
+
+        @Override
+        protected Void doInBackground(String... path) {
+            Bitmap bmp = BitmapFactory.decodeFile(path[0]);
+            if (bmp == null) {
+                src.setException(new IOException());
+                return null;
+            }
+            float rotation = getRequiredRotation(path[0]);
+            float scale = 1000f / Math.max(bmp.getWidth(), bmp.getHeight());
+            Matrix matrix = new Matrix();
+
+            if (rotation != 0)
+                matrix.postRotate(rotation);
+
+            if (scale < 1)
+                matrix.postScale(scale, scale);
+
+            if (!matrix.isIdentity())
+                bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(),
+                        matrix, true);
+
+            src.setResult(bmp);
+            return null;
+        }
+
+        private float getRequiredRotation(String path) {
+            float rotation = 0;
+            try {
+                ExifInterface ei = new ExifInterface(path);
+                int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+
+                switch (orientation) {
+                    case ExifInterface.ORIENTATION_ROTATE_90:
+                        rotation = 90;
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_180:
+                        rotation = 180;
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_270:
+                        rotation = 270;
+                        break;
+                }
+            } catch (IOException e) {
+                Log.w("ImageProcessor", "Error opening image file: " + path);
+                e.printStackTrace();
+            }
+
+            return rotation;
+        }
 
     }
 }
