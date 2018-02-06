@@ -95,6 +95,10 @@ public class BoundingBoxView extends View {
         mBoundingRectangle = rect;
     }
 
+    public RectF getBoundingRect() {
+        return mBoundingRectangle;
+    }
+
     public void setTool(Region.Shape tool) {
         this.mSelectedTool = tool;
     }

@@ -15,8 +15,7 @@
             android:id="@+id/iv_task_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            tools:src="@drawable/cubes"/>
+            android:layout_gravity="center"/>
 
         <com.recoded.taqadam.BoundingBoxView
             android:id="@+id/bboxView"
@@ -35,16 +34,21 @@
             android:src="@drawable/ic_list"
             android:visibility="gone"/>
 
-        <TextView
-            android:id="@+id/tv_instruction"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:background="#aa000000"
-            android:padding="8dp"
-            android:textSize="24sp"
-            android:textColor="@color/colorWhite"
-            tools:text="Draw a box around cars"/>
+            android:layout_height="60dp">
+
+            <TextView
+                android:id="@+id/tv_instruction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:background="#aa000000"
+                android:padding="8dp"
+                android:textColor="@color/colorWhite"
+                android:textSize="16sp"
+                tools:text="Draw a box aroundaskdmklasmfklasmfklmasklfmasklfmsklfmk;lsdmfk;lMDSFK;Ldsmfk;lMSDK;LFMdsk;lmfk;lMSDFK;LMsdk;lfmK;LSDMFKLdsmf;klds cars"/>
+        </ScrollView>
 
         <LinearLayout
             android:id="@+id/toolbox"
@@ -138,8 +142,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:drawableTop="@drawable/ic_check_big"
                 android:drawablePadding="16dp"
+                android:drawableTop="@drawable/ic_check_big"
                 android:gravity="center"
                 android:text="@string/answer_has_already_been_submitted"
                 android:textSize="16sp"/>
