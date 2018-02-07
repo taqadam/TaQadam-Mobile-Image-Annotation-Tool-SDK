@@ -42,6 +42,27 @@
     <string name="pref_title_vibrate">اهتزاز</string>
     <string name="title_activity_settings">الإعدادت</string>
     <string name="settings">الإعدادت</string>
+    <string-array name="pref_language_titles">
+        <item>انكليزي</item>
+        <item>عربي</item>
+
+    </string-array>
+    <string-array name="pref_language_values">
+        <item>en</item>
+        <item>ar</item>
+
+    </string-array>
+
+    <string-array name="pref_theme_titles">
+        <item>فاتح</item>
+        <item>غامق</item>
+
+    </string-array>
+    <string-array name="pref_theme_values">
+        <item>1</item>
+        <item>2</item>
+
+    </string-array>
 
 
     <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
