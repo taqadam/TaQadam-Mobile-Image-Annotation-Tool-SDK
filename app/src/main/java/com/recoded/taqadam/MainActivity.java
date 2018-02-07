@@ -89,11 +89,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         pager.setCurrentItem(2);
 
                         return true;
-                    case R.id.navigation_discuss:
-                        setTitle(item.getTitle());
-                        pager.setCurrentItem(3);
-
-                        return true;
                 }
                 return false;
             }
@@ -195,6 +190,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             startActivity(intent);
             return true;
         } else if (id == R.id.action_discussion) {
+            startActivity(new Intent(this, PostsFeedActivity.class));
             return true;
         } else if (id == R.id.action_notification) {
             return true;

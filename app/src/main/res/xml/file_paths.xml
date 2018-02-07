@@ -9,6 +9,6 @@
 
 <paths>
     <external-path
-        name="product_images"
+        name="_images"
         path="Android/data/com.recoded.taqadam/files/Pictures/"/>
 </paths>

@@ -71,7 +71,7 @@ public class UserAuthHandler {
             UserDbHandler.getInstance().fetchUserNode().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                 @Override
                 public void onSuccess(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.exists()) {
+                    if (dataSnapshot.exists() && dataSnapshot.getChildrenCount() > 1) {
                         currentUser = User.fromMap((HashMap) dataSnapshot.getValue());
                         currentUser.setCompleteProfile(true);
                         initTask.setResult(currentUser);

@@ -16,7 +16,6 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
         jobs = new FragmentJobs();
         qa = new FragmentQA();
         wallet = new FragmentCashOut();
-        discussion = new FragmentDiscuss();
     }
 
 
@@ -29,8 +28,6 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
                 return qa;
             case 2:
                 return wallet;
-            case 3:
-                return discussion;
             default:
                 return jobs;
         }
@@ -38,6 +35,6 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 4;
+        return 3;
     }
 }

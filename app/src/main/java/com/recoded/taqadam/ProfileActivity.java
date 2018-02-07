@@ -97,6 +97,7 @@ public class ProfileActivity extends BaseActivity {
         if (id == R.id.action_settings) {
             return true;
         } else if (id == R.id.action_discussion) {
+            startActivity(new Intent(this, PostsFeedActivity.class));
             return true;
         } else if (id == R.id.action_notification) {
             return true;

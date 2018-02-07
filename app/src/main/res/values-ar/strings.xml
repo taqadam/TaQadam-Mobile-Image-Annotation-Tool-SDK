@@ -201,5 +201,24 @@
     <string name="send_feedback">ارسل رأيك</string>
     <string name="neutral_hint">عذرا… اخبرنا كيف يمكننا جعله افضل؟</string>
     <string name="copyright">جميع الحقوق محفوظة\nتقدم 2017-%s</string>
+    <string name="comments_holder">%d تعليق</string>
+    <string name="read_more">اقرأ المزيد</string>
+    <string name="write_a_comment">اكتب تعليقا</string>
+    <string name="moment_ago">قبل لحظات</string>
+    <string name="minute_ago">قبل دقيقة</string>
+    <string name="minuts_ago">قبل %d دقائق</string>
+    <string name="hour_ago">قبل ساعة</string>
+    <string name="hours_ago">قبل %d ساعات</string>
+    <string name="yesterday_at">البارحة عند %s</string>
+    <string name="action_edit">تعديل</string>
+    <string name="adction_delete">حذف</string>
+    <string name="action_report">ابلاغ مخالفة</string>
+    <string name="edit_post">تعديل المنشور</string>
+    <string name="edit_comment">تعديل التعليق</string>
+    <string name="too_short_post">العنوان او المتن قصير جدا!</string>
+    <string name="delete_comment">حذف التعليق</string>
+    <string name="delete_comment_confirmation">هل انت متأكد من حذف التعليق؟</string>
+    <string name="delete_post">حذف المنشور</string>
+    <string name="delete_post_confirmation">هل انت متأكد من حذف المنشور؟</string>
     /
 </resources>

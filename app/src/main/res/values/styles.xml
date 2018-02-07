@@ -11,6 +11,8 @@
 
 
     <style name="LightCustom" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:textAlignment">gravity</item>
+        <item name="android:textDirection">locale</item>
         <!--<item name="preferenceTheme">@style/PreferenceThemeOverlay</item>-->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -26,6 +28,7 @@
         <item name="settingBg">@color/colorWhite</item>
         <item name="editProfileIcon">@color/colorWhite</item>
         <item name="planeBackground">@color/colorPrimary</item>
+        <item name="colorWhiteOrBlack">@color/colorBlack</item>
 
         <item name="ic_agreement">@drawable/ic_agreement_grey</item>
         <item name="ic_chat">@drawable/ic_chat_grey</item>
@@ -56,6 +59,8 @@
     </style>
 
     <style name="DarkCustom" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:textAlignment">gravity</item>
+        <item name="android:textDirection">locale</item>
         <!--<item name="preferenceTheme">@style/PreferenceThemeOverlay</item>-->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -71,6 +76,7 @@
         <item name="settingBg">@color/button_attributes_bg_pressed</item>
         <item name="editProfileIcon">@color/button_attributes_bg_pressed</item>
         <item name="planeBackground">@color/colorDarkGray</item>
+        <item name="colorWhiteOrBlack">@color/colorWhite</item>
 
         <item name="ic_agreement">@drawable/ic_agreement_white</item>
         <item name="ic_chat">@drawable/ic_chat_white</item>
@@ -101,6 +107,7 @@
     </style>
 
     <attr name="colorAccentDark" format="color"/>
+    <attr name="colorWhiteOrBlack" format="color"/>
     <attr name="MainActivityBG" format="reference"/>
     <attr name="SigninActivityBG" format="reference"/>
     <attr name="SigninActivityBGInv" format="reference"/>
