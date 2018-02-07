@@ -61,9 +61,9 @@ public class ProfileActivity extends BaseActivity {
     }
 
     private void indicateVerificationStatus() {
-        if (!user.isAccountApproved()) {
-            binding.tvVerifiedIndicator.setText(R.string.awaiting_verification);
-            binding.tvVerifiedIndicator.setCompoundDrawables(null, null, null, null);
+        if (user.isAccountApproved()) {
+            binding.tvVerifiedIndicator.setText(R.string.verified);
+            binding.tvVerifiedIndicator.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_verified_user_green, 0);
         }
         if (user.isEmailVerified()) {
             binding.ivEmailVerified.setImageResource(R.drawable.ic_check_green);
@@ -97,6 +97,7 @@ public class ProfileActivity extends BaseActivity {
         if (id == R.id.action_settings) {
             return true;
         } else if (id == R.id.action_discussion) {
+            startActivity(new Intent(this, PostsFeedActivity.class));
             return true;
         } else if (id == R.id.action_notification) {
             return true;

@@ -12,8 +12,4 @@
         android:id="@+id/navigation_cash_out"
         android:icon="?attr/ic_dollar"
         android:title="@string/cash_out" />
-    <item
-        android:id="@+id/navigation_discuss"
-        android:icon="?attr/ic_chat"
-        android:title="@string/discussion" />
 </menu>

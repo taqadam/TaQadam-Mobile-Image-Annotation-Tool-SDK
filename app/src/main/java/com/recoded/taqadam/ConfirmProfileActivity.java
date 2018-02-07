@@ -1,17 +1,28 @@
 package com.recoded.taqadam;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
+import android.content.ContentUris;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
@@ -28,7 +39,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.firebase.storage.UploadTask;
 import com.recoded.taqadam.databinding.ActivityConfirmProfileBinding;
 import com.recoded.taqadam.models.User;
@@ -39,7 +52,10 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -65,7 +81,6 @@ public class ConfirmProfileActivity extends BaseActivity {
     private Intent cameraIntent, galleryIntent, filesIntent;
     private Uri cameraOutputFile; //Because there is no access to it;
 
-    private boolean mEditMode; // This activity Will Be Used for editing profile as well
     private ProgressDialog mCreatingAccountProgressDialog;
 
     @Override
@@ -75,7 +90,7 @@ public class ConfirmProfileActivity extends BaseActivity {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_confirm_profile);
 
-        this.mEditMode = getIntent().getBooleanExtra("EDIT_MODE", false);
+        boolean mEditMode = getIntent().getBooleanExtra("EDIT_MODE", false);
 
         if (mEditMode) {
             binding.tvReady.setText(R.string.edit_profile);
@@ -95,7 +110,6 @@ public class ConfirmProfileActivity extends BaseActivity {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                   int dayOfMonth) {
-                // TODO Auto-generated method stub
                 mCalendar.set(Calendar.YEAR, year);
                 mCalendar.set(Calendar.MONTH, monthOfYear);
                 mCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -337,6 +351,7 @@ public class ConfirmProfileActivity extends BaseActivity {
                 if (task.isSuccessful()) {
                     mCreatingAccountProgressDialog.dismiss();
                     if (!user.isCompleteProfile()) {
+                        UserAuthHandler.getInstance().getCurrentUser().setCompleteProfile(true);
                         Toast.makeText(ConfirmProfileActivity.this, R.string.user_created, Toast.LENGTH_LONG).show();
                     }
                     Intent i = new Intent(ConfirmProfileActivity.this, MainActivity.class);
@@ -367,6 +382,7 @@ public class ConfirmProfileActivity extends BaseActivity {
 
                         @Override
                         public void onError() {
+                            binding.pbDisplayImage.setVisibility(View.GONE);
                             Log.d(TAG, "Picasso couldn't load the image: " + uri);
                         }
                     });
@@ -378,7 +394,7 @@ public class ConfirmProfileActivity extends BaseActivity {
         galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         filesIntent = new Intent(Intent.ACTION_GET_CONTENT).setType("image/*");
         PackageManager pm = getPackageManager();
-        ComponentName cameraComponent = cameraIntent.resolveActivity(pm);
+        final ComponentName cameraComponent = cameraIntent.resolveActivity(pm);
         ComponentName galleryComponent = galleryIntent.resolveActivity(pm);
         ComponentName filesComponent = filesIntent.resolveActivity(pm);
 
@@ -453,6 +469,7 @@ public class ConfirmProfileActivity extends BaseActivity {
                     cameraOutputFile = FileProvider.getUriForFile(ConfirmProfileActivity.this,
                             getPackageName().concat(".fileprovider"),
                             photoFile);
+                    grantUriPermission(cameraComponent.getPackageName(), cameraOutputFile, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, cameraOutputFile);
                 }
 
@@ -505,7 +522,7 @@ public class ConfirmProfileActivity extends BaseActivity {
                         Log.d(TAG, "from camera: " + uri);
                         binding.ivDisplayImage.setImageDrawable(getResources().getDrawable(R.drawable.no_image));
                         binding.pbDisplayImage.setVisibility(View.VISIBLE);
-                        uploadImageFileToStorage(uri);
+                        processAndUploadImageToStorage(uri);
                     } else {
                         Log.d(TAG, "Image file is null");
                     }
@@ -517,33 +534,88 @@ public class ConfirmProfileActivity extends BaseActivity {
                     Log.d(TAG, "from gallery: " + uri);
                     binding.ivDisplayImage.setImageDrawable(getResources().getDrawable(R.drawable.no_image));
                     binding.pbDisplayImage.setVisibility(View.VISIBLE);
-                    uploadImageFileToStorage(uri);
+                    processAndUploadImageToStorage(uri);
                     break;
             }
         }
     }
 
-    private void uploadImageFileToStorage(Uri uri) {
-        //TODO-wisam: In the future make sure to resize the images for faster uploads
-        Log.d(TAG, "Uploading display image " + uri);
-        try {
-            UserStorageHandler.getInstance().uploadDisplayImage(uri)
-                    .addOnCompleteListener(ConfirmProfileActivity.this, new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                            if (task.isSuccessful()) {
-                                binding.ivDisplayImage.setTag(task.getResult().getDownloadUrl());
-                                loadImage();
-                            } else {
-                                Log.d(TAG, "Display image upload failed. Reason:" + task.getException());
-                                Toast.makeText(ConfirmProfileActivity.this, "Image upload failed", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-        } catch (Exception e) {
-            e.printStackTrace();
+    private void processAndUploadImageToStorage(final Uri uri) {
+        ImageProcessor ip = new ImageProcessor();
+        String p = getPath(uri);
+        Log.d(TAG, "image path " + p);
+        ip.execute(p);
+        ip.processTask.addOnSuccessListener(this, new OnSuccessListener<Bitmap>() {
+            @Override
+            public void onSuccess(Bitmap bmp) {
+                uploadImage(bmp);
+            }
+        });
+    }
+
+    private String getPath(Uri uri) {
+
+        //Files Provider
+        if (uri.getScheme().equalsIgnoreCase("file")) {
+            return uri.getPath();
         }
 
+        //App Provider
+        if (uri.getAuthority().contains(getPackageName())) {
+            String fn = "/".concat(uri.getLastPathSegment());
+            String dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES).getPath();
+            return dir + fn;
+        }
+
+        //Try File Path
+        try {
+            String p = FilePath.getPath(this, uri);
+            if (p != null) return p;
+        } catch (Exception ignored) {
+
+        }
+
+        //Handle other providers
+        File tempFile = createImageFile();
+        FileOutputStream os;
+        InputStream is;
+        try {
+            os = new FileOutputStream(tempFile);
+            is = getContentResolver().openInputStream(uri);
+            byte[] buf = new byte[1024];
+            int len;
+            if (is != null) {
+                while ((len = is.read(buf)) > 0) {
+                    os.write(buf, 0, len);
+                }
+                is.close();
+                os.close();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return tempFile.getPath();
+    }
+
+    private void uploadImage(Bitmap bmp) {
+        Log.d(TAG, "Uploading bitmap display image");
+        UserStorageHandler.getInstance().uploadImage(bmp)
+                .addOnCompleteListener(ConfirmProfileActivity.this, new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            binding.ivDisplayImage.setTag(task.getResult().getDownloadUrl());
+                            //Todo: implement old and new in the future to allow user to revert
+                            UserDbHandler.getInstance().updateUserImg(task.getResult().getDownloadUrl());
+                            loadImage();
+                        } else {
+                            Log.d(TAG, "Display image upload failed. Reason:" + task.getException());
+                            Toast.makeText(ConfirmProfileActivity.this, "Image upload failed", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
     private void createUserDbEntry() {
@@ -586,6 +658,208 @@ public class ConfirmProfileActivity extends BaseActivity {
         }
 
 
+    }
+
+    private static class ImageProcessor extends AsyncTask<String, Void, Void> {
+        final TaskCompletionSource<Bitmap> src = new TaskCompletionSource<>();
+        final Task<Bitmap> processTask = src.getTask();
+
+        @Override
+        protected Void doInBackground(String... path) {
+            Bitmap bmp = BitmapFactory.decodeFile(path[0]);
+            if (bmp == null) {
+                src.setException(new IOException());
+                return null;
+            }
+            float rotation = getRequiredRotation(path[0]);
+            float scale = 1000f / Math.max(bmp.getWidth(), bmp.getHeight());
+            Matrix matrix = new Matrix();
+
+            if (rotation != 0)
+                matrix.postRotate(rotation);
+
+            if (scale < 1)
+                matrix.postScale(scale, scale);
+
+            if (!matrix.isIdentity())
+                bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(),
+                        matrix, true);
+
+            src.setResult(bmp);
+            return null;
+        }
+
+        private float getRequiredRotation(String path) {
+            float rotation = 0;
+            try {
+                ExifInterface ei = new ExifInterface(path);
+                int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+
+                switch (orientation) {
+                    case ExifInterface.ORIENTATION_ROTATE_90:
+                        rotation = 90;
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_180:
+                        rotation = 180;
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_270:
+                        rotation = 270;
+                        break;
+                }
+            } catch (IOException e) {
+                Log.w("ImageProcessor", "Error opening image file: " + path);
+                e.printStackTrace();
+            }
+
+            return rotation;
+        }
+
+    }
+
+    public static class FilePath {
+
+        /**
+         * Method for return file path of Gallery image/ Document / Video / Audio
+         *
+         * @param context
+         * @param uri
+         * @return path of the selected image file from gallery
+         */
+        @SuppressLint("NewApi")
+        public static String getPath(final Context context, final Uri uri) {
+
+            // check here to KITKAT or new version
+            final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+
+            // DocumentProvider
+            if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
+
+                // ExternalStorageProvider
+                if (isExternalStorageDocument(uri)) {
+                    final String docId = DocumentsContract.getDocumentId(uri);
+                    final String[] split = docId.split(":");
+                    final String type = split[0];
+
+                    if ("primary".equalsIgnoreCase(type)) {
+                        return Environment.getExternalStorageDirectory() + "/"
+                                + split[1];
+                    }
+                }
+                // DownloadsProvider
+                else if (isDownloadsDocument(uri)) {
+
+                    final String id = DocumentsContract.getDocumentId(uri);
+                    final Uri contentUri = ContentUris.withAppendedId(
+                            Uri.parse("content://downloads/public_downloads"),
+                            Long.valueOf(id));
+
+                    return getDataColumn(context, contentUri, null, null);
+                }
+                // MediaProvider
+                else if (isMediaDocument(uri)) {
+                    final String docId = DocumentsContract.getDocumentId(uri);
+                    final String[] split = docId.split(":");
+                    final String type = split[0];
+
+                    Uri contentUri = null;
+                    if ("image".equals(type)) {
+                        contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                    } else if ("video".equals(type)) {
+                        contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                    } else if ("audio".equals(type)) {
+                        contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                    }
+
+                    final String selection = "_id=?";
+                    final String[] selectionArgs = new String[]{split[1]};
+
+                    return getDataColumn(context, contentUri, selection,
+                            selectionArgs);
+                }
+            }
+            // MediaStore (and general)
+            else if ("content".equalsIgnoreCase(uri.getScheme())) {
+
+                // Return the remote address
+                if (isGooglePhotosUri(uri))
+                    return uri.getLastPathSegment();
+
+                return getDataColumn(context, uri, null, null);
+            }
+            // File
+            else if ("file".equalsIgnoreCase(uri.getScheme())) {
+                return uri.getPath();
+            }
+
+            return null;
+        }
+
+        /**
+         * Get the value of the data column for this Uri. This is useful for
+         * MediaStore Uris, and other file-based ContentProviders.
+         *
+         * @param context       The context.
+         * @param uri           The Uri to query.
+         * @param selection     (Optional) Filter used in the query.
+         * @param selectionArgs (Optional) Selection arguments used in the query.
+         * @return The value of the _data column, which is typically a file path.
+         */
+        public static String getDataColumn(Context context, Uri uri,
+                                           String selection, String[] selectionArgs) {
+
+            Cursor cursor = null;
+            final String column = "_data";
+            final String[] projection = {column};
+
+            try {
+                cursor = context.getContentResolver().query(uri, projection,
+                        selection, selectionArgs, null);
+                if (cursor != null && cursor.moveToFirst()) {
+                    final int index = cursor.getColumnIndexOrThrow(column);
+                    return cursor.getString(index);
+                }
+            } finally {
+                if (cursor != null)
+                    cursor.close();
+            }
+            return null;
+        }
+
+        /**
+         * @param uri The Uri to check.
+         * @return Whether the Uri authority is ExternalStorageProvider.
+         */
+        public static boolean isExternalStorageDocument(Uri uri) {
+            return "com.android.externalstorage.documents".equals(uri
+                    .getAuthority());
+        }
+
+        /**
+         * @param uri The Uri to check.
+         * @return Whether the Uri authority is DownloadsProvider.
+         */
+        public static boolean isDownloadsDocument(Uri uri) {
+            return "com.android.providers.downloads.documents".equals(uri
+                    .getAuthority());
+        }
+
+        /**
+         * @param uri The Uri to check.
+         * @return Whether the Uri authority is MediaProvider.
+         */
+        public static boolean isMediaDocument(Uri uri) {
+            return "com.android.providers.media.documents".equals(uri
+                    .getAuthority());
+        }
+
+        /**
+         * @param uri The Uri to check.
+         * @return Whether the Uri authority is Google Photos.
+         */
+        public static boolean isGooglePhotosUri(Uri uri) {
+            return "com.google.android.apps.photos.content".equals(uri
+                    .getAuthority());
+        }
     }
 }
 

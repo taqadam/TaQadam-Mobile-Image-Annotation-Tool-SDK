@@ -56,7 +56,7 @@ public class CategorizationFragment extends TaskFragment {
         setupOptionClickListener();
 
         taskImageView = binding.ivTaskImage;
-        taskImageView.setDisplayType(ImageViewTouchBase.DisplayType.FIT_IF_BIGGER);
+        taskImageView.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
         Picasso.with(getContext()).load(mTask.getTaskImage()).into(taskImageView, new Callback() {
             @Override
             public void onSuccess() {

@@ -15,36 +15,40 @@
             android:id="@+id/iv_task_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            tools:src="@drawable/cubes"/>
+            android:layout_gravity="center"/>
 
-        <TextView
-            android:id="@+id/tv_instruction"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:background="#aa000000"
-            android:padding="8dp"
-            android:textSize="24sp"
-            android:textColor="@color/colorWhite"
-            tools:text="Select A category for this image"/>
+            android:layout_height="60dp">
+
+            <TextView
+                android:id="@+id/tv_instruction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:background="#aa000000"
+                android:padding="8dp"
+                android:textColor="@color/colorWhite"
+                android:textSize="16sp"
+                tools:text="Select A category for this image"/>
+        </ScrollView>
 
         <android.support.v7.widget.CardView
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
             android:layout_marginBottom="12dp"
-            app:cardElevation="8dp"
+            app:cardBackgroundColor="#ff000000"
             app:cardCornerRadius="4dp"
-            app:cardBackgroundColor="#ff000000">
+            app:cardElevation="8dp">
 
             <GridLayout
                 android:id="@+id/options_grid"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:useDefaultMargins="true"
-                android:background="@color/colorTransparent">
+                android:background="@color/colorTransparent"
+                android:useDefaultMargins="true">
 
             </GridLayout>
 
@@ -61,10 +65,10 @@
             android:id="@+id/tv_error"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/error_while_loading_image"
             android:layout_gravity="center"
-            android:visibility="gone"
-            android:textSize="24sp"/>
+            android:text="@string/error_while_loading_image"
+            android:textSize="24sp"
+            android:visibility="gone"/>
 
         <RelativeLayout
             android:id="@+id/completed_task_overlay"
@@ -79,8 +83,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:drawableTop="@drawable/ic_check_big"
                 android:drawablePadding="16dp"
+                android:drawableTop="@drawable/ic_check_big"
                 android:gravity="center"
                 android:text="@string/answer_has_already_been_submitted"
                 android:textSize="16sp"/>

@@ -2,6 +2,8 @@ package com.recoded.taqadam.models;
 
 import com.recoded.taqadam.models.db.JobDbHandler;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -82,8 +84,14 @@ public class Job {
         jobName = (String) map.get(JobDbHandler.JOB_NAME);
         description = (String) map.get(JobDbHandler.DESC);
         company = (String) map.get(JobDbHandler.COMPANY);
-        taskReward = ((long) map.get(JobDbHandler.TASK_REWARD)) / 100f;
-
+        if (map.get(JobDbHandler.TASK_REWARD) instanceof Double) {
+            double tReward = (double) map.get(JobDbHandler.TASK_REWARD);
+            BigDecimal bd = new BigDecimal(tReward);
+            bd = bd.setScale(2, RoundingMode.DOWN);
+            taskReward = bd.floatValue();
+        } else {
+            taskReward = ((long) map.get(JobDbHandler.TASK_REWARD)) * 1f;
+        }
         if (map.get(JobDbHandler.TASKS) != null)
             tasks.addAll((List<String>) map.get(JobDbHandler.TASKS));
         return this;

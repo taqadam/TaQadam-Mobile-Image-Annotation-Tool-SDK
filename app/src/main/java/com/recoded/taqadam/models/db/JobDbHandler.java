@@ -143,7 +143,8 @@ public class JobDbHandler {
         attemptedRef.runTransaction(new Transaction.Handler() {
             @Override
             public Transaction.Result doTransaction(MutableData mutableData) {
-                int attempts = (int) mutableData.getValue();
+                if (mutableData.getValue() == null) return Transaction.success(mutableData);
+                int attempts = ((Long) mutableData.getValue()).intValue();
                 mutableData.setValue(++attempts);
                 return Transaction.success(mutableData);
             }

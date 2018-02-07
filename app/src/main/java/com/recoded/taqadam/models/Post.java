@@ -1,9 +1,14 @@
 package com.recoded.taqadam.models;
 
+import android.net.Uri;
+import android.support.annotation.NonNull;
+
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
+import com.recoded.taqadam.models.auth.UserAuthHandler;
 import com.recoded.taqadam.models.db.PostDbHandler;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,10 +18,11 @@ import java.util.Map;
  */
 
 @IgnoreExtraProperties
-public class Post {
+public class Post implements Comparable<Post> {
 
     private String uid;
     private String author;
+    private Uri authorImg;
     private List<Comment> comments;
     private int noOfComments;
     private String title;
@@ -45,11 +51,22 @@ public class Post {
         return author;
     }
 
+    public Uri getAuthorImage() {
+        return authorImg;
+    }
+
+    public void setAuthorImg(Uri imgUri) {
+        authorImg = imgUri;
+    }
+
     public void setAuthor(String author) {
         this.author = author;
     }
 
     public List<Comment> getComments() {
+        if (comments == null) {
+            comments = new ArrayList<>();
+        }
         return comments;
     }
 
@@ -101,7 +118,12 @@ public class Post {
         uid = (String) map.get(PostDbHandler.USER_ID);
         title = (String) map.get(PostDbHandler.TITLE);
         author = (String) map.get(PostDbHandler.AUTHOR);
+        if (map.containsKey(PostDbHandler.AUTHOR_IMG))
+            authorImg = Uri.parse((String) map.get(PostDbHandler.AUTHOR_IMG));
+        else
+            authorImg = UserAuthHandler.getInstance().getCurrentUser().getPicturePath();
         noOfComments = ((Long) map.get(PostDbHandler.COMMENTS)).intValue();
+
         postTime = (long) map.get(PostDbHandler.TIMESTAMP);
         body = (String) map.get(PostDbHandler.TRUNCATED_BODY);
 
@@ -113,13 +135,25 @@ public class Post {
         HashMap<String, Object> result = new HashMap<>();
         result.put(PostDbHandler.USER_ID, uid);
         result.put(PostDbHandler.AUTHOR, author);
+        result.put(PostDbHandler.AUTHOR_IMG, authorImg.toString());
         result.put(PostDbHandler.TITLE, title);
         result.put(PostDbHandler.COMMENTS, noOfComments);
 
-        String truncatedBody = body.length() > 150 ? body.substring(0, 150) : body;
+        String truncatedBody = getTruncatedBody();
 
         result.put(PostDbHandler.TRUNCATED_BODY, truncatedBody);
         result.put(PostDbHandler.TIMESTAMP, postTime);
         return result;
+    }
+
+    @Override
+    public int compareTo(@NonNull Post o) {
+        long compareTime = o.getPostTime();
+
+        return (int) (compareTime - this.getPostTime());
+    }
+
+    public String getTruncatedBody() {
+        return body.length() > 150 ? body.substring(0, 150).concat("…") : body;
     }
 }

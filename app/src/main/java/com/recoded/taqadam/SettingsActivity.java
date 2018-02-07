@@ -27,7 +27,7 @@ public class SettingsActivity extends BaseActivity implements SharedPreferences.
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equals("language")) {
-            Lang.language = sharedPreferences.getString(key, "");
+            Lang.setLanguage(sharedPreferences.getString(key, ""));
             recreate();
         }
         if (key.equals("theme")) {

@@ -100,7 +100,7 @@ public class BoundingBoxFragment extends TaskFragment {
 
     private void initTaskImg() {
         taskImageView = binding.ivTaskImage;
-        taskImageView.setDisplayType(ImageViewTouchBase.DisplayType.FIT_IF_BIGGER);
+        taskImageView.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
         binding.bboxView.setEnabled(false);
         binding.bboxView.setVisibility(View.GONE);
 
@@ -152,6 +152,8 @@ public class BoundingBoxFragment extends TaskFragment {
             regions.put(mRegions.get(i).toJSONObject());
         }
         try {
+            rawAnswer.put("image_width", binding.bboxView.getBoundingRect().width());
+            rawAnswer.put("image_height", binding.bboxView.getBoundingRect().height());
             rawAnswer.put("regions", regions);
         } catch (JSONException e) {
             e.printStackTrace();

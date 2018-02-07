@@ -99,6 +99,12 @@ public class UserDbHandler {
         return mDbReference.updateChildren(keyValues);
     }
 
+    public Task<Void> updateUserImg(Uri newPicturePath) {
+        Map<String, Object> keyValues = new HashMap<>();
+        keyValues.put(DISPLAY_IMAGE, newPicturePath.toString());
+        return mDbReference.updateChildren(keyValues);
+    }
+
     public Task<String> fetchUserPicture(String uid) {
         final TaskCompletionSource<String> src = new TaskCompletionSource<>();
         mDbReference.getParent().child(uid).child(DISPLAY_IMAGE).addListenerForSingleValueEvent(new ValueEventListener() {

@@ -181,14 +181,8 @@ public class SplashActivity extends AppCompatActivity {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isFirstRun = preferences.getBoolean("firstRun", true);
         int themeId = Integer.parseInt(preferences.getString("theme", "1"));
-        Lang.language = preferences.getString("language", "");
+        Lang.setLanguage(preferences.getString("language", ""));
         Theme.setTheme(themeId);
-
-        if (isFirstRun) {
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean("firstRun", false);
-            editor.apply();
-        }
         return isFirstRun;
     }
 

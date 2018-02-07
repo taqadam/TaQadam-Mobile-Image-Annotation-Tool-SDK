@@ -3,6 +3,7 @@ package com.recoded.taqadam;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -31,6 +32,7 @@ public class AttributesFragment extends DialogFragment {
     private List<String> options;
     private LabelChangeListener listener;
     private FragAttributesBinding binding;
+    private boolean noLabel;
 
 
     public static AttributesFragment getInstance(Region region, List<String> options) {
@@ -46,9 +48,17 @@ public class AttributesFragment extends DialogFragment {
         View rootView = inflater.inflate(R.layout.frag_attributes, container, false);
         binding = DataBindingUtil.bind(rootView);
 
-        setStyle(DialogFragment.STYLE_NO_FRAME, R.style.AppTheme);
-
-        initSpinner();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setStyle(DialogFragment.STYLE_NO_FRAME, R.style.AppTheme);
+        } else {
+            binding.fragHeader.setVisibility(View.GONE);
+            getDialog().setTitle(R.string.region_attributes);
+        }
+        if (options.size() != 0) {
+            initSpinner();
+        } else {
+            noLabel = true;
+        }
         populateTable();
         createClickListeners();
 
@@ -102,8 +112,10 @@ public class AttributesFragment extends DialogFragment {
                     binding.tvError.setVisibility(View.INVISIBLE);
                     region.addRegionAttribute("label", binding.spinnerOptions.getSelectedItem().toString());
                 } else {
-                    binding.tvError.setVisibility(View.VISIBLE);
-                    return;
+                    if (!noLabel) {
+                        binding.tvError.setVisibility(View.VISIBLE);
+                        return;
+                    }
                 }
 
                 //other attributes
@@ -112,12 +124,13 @@ public class AttributesFragment extends DialogFragment {
                     String key = ((EditText) row.getChildAt(0)).getText().toString();
                     String val = ((EditText) row.getChildAt(1)).getText().toString();
 
-                    if (!key.isEmpty() && !val.isEmpty() && !key.equals("label")) {
+                    if (!key.isEmpty() && !val.isEmpty() && (noLabel || !key.equals("label"))) {
                         region.addRegionAttribute(key, val);
                     }
 
                 }
-                listener.onLabelSelected(binding.spinnerOptions.getSelectedItem().toString());
+                if (!noLabel)
+                    listener.onLabelSelected(binding.spinnerOptions.getSelectedItem().toString());
                 AttributesFragment.this.dismiss();
             }
         });
@@ -145,7 +158,7 @@ public class AttributesFragment extends DialogFragment {
         String keys[] = region.getRegionAttributes().keySet().toArray(new String[0]);
         String values[] = region.getRegionAttributes().values().toArray(new String[0]);
         for (int i = 0; i < keys.length; i++) {
-            if (keys[i].equals("label")) {
+            if (!noLabel && keys[i].equals("label")) {
                 binding.spinnerOptions.setSelection(options.indexOf(values[i]) + 1);
             } else {
                 binding.tableAttributes.addView(getRow(keys[i], values[i]));

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="Comment"
+            type="com.recoded.taqadam.models.Comment"/>
+    </data>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/iv_user"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="start"
+                android:layout_margin="4dp"
+                android:src="@drawable/no_image"
+                app:civ_border_color="?attr/colorWhiteOrBlack"
+                app:civ_border_width="1dp"/>
+
+            <LinearLayout
+                android:id="@+id/comment_area"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/bg_comment"
+                android:orientation="horizontal"
+                android:paddingBottom="8dp"
+                android:paddingLeft="6dp"
+                android:paddingRight="6dp"
+                android:paddingTop="8dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="55"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_full_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:singleLine="true"
+                        android:text="@{Comment.author}"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        tools:text="Wisam Naji"/>
+
+                    <ViewSwitcher
+                        android:id="@+id/vs_comment_editor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/tv_desc"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:text="@{Comment.body}"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="14sp"
+                            tools:text="Lorem Ipsum is simply dummy text"
+                            tools:visibility="gone"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <EditText
+                                android:id="@+id/et_desc"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="55"
+                                android:layout_gravity="center_vertical"
+                                android:background="@drawable/edit_text_bg"
+                                android:hint="@string/edit_comment"
+                                android:inputType="textCapSentences|textMultiLine"
+                                android:maxHeight="100dp"
+                                android:padding="6dp"
+                                android:text="@{Comment.body}"
+                                android:textColor="@color/colorBlack"
+                                android:textSize="14sp"
+                                tools:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."/>
+
+                            <FrameLayout
+                                android:id="@+id/comment_tools"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom"
+                                android:layout_marginBottom="-5dp"
+                                android:orientation="horizontal"
+                                tools:visibility="visible">
+
+                                <ImageButton
+                                    android:id="@+id/bt_discardComment"
+                                    android:layout_width="32dp"
+                                    android:layout_height="35dp"
+                                    android:src="@drawable/ic_close"/>
+
+                                <ImageButton
+                                    android:id="@+id/bt_updateComment"
+                                    android:layout_width="32dp"
+                                    android:layout_height="35dp"
+                                    android:src="@drawable/ic_send"
+                                    android:visibility="gone"/>
+                            </FrameLayout>
+
+                        </LinearLayout>
+                    </ViewSwitcher>
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:singleLine="true"
+            android:textColor="?attr/colorWhiteOrBlack"
+            android:textSize="14sp"
+            tools:text="Moments Ago"/>
+
+    </LinearLayout>
+</layout>

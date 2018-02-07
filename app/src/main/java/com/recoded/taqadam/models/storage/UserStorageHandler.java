@@ -1,5 +1,6 @@
 package com.recoded.taqadam.models.storage;
 
+import android.graphics.Bitmap;
 import android.net.Uri;
 
 import com.google.android.gms.tasks.Task;
@@ -7,6 +8,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.recoded.taqadam.models.auth.UserAuthHandler;
+
+import java.io.ByteArrayOutputStream;
 
 /**
  * Created by wisam on Dec 16 17.
@@ -38,7 +41,11 @@ public class UserStorageHandler {
         return imageRef.putFile(filePath);
     }
 
-    public Task<UploadTask.TaskSnapshot> uploadDisplayImage(Uri filePath) throws Exception {
-        return uploadFile("display_img.jpg", filePath);
+    public Task<UploadTask.TaskSnapshot> uploadImage(Bitmap img) {
+        StorageReference userFilesRef = FirebaseStorage.getInstance().getReference().child(USERS_FILES_ROOT);
+        StorageReference imageRef = userFilesRef.child(mUid).child("display_img.jpg");
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        img.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        return imageRef.putBytes(baos.toByteArray());
     }
 }

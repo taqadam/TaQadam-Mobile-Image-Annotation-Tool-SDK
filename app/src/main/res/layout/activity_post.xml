@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              tools:context="com.recoded.taqadam.PostActivity">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                tools:context="com.recoded.taqadam.PostActivity">
 
-    <include layout="@layout/toolbar_appbar"/>
+    <include
+        android:id="@+id/toolbar_layout"
+        layout="@layout/toolbar_appbar"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
+        android:layout_below="@id/toolbar_layout"
         android:orientation="vertical">
 
         <EditText
@@ -41,4 +44,19 @@
             android:padding="10dp"
             android:text="@string/submit"/>
     </LinearLayout>
-</LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/SigninActivityBG"
+        android:visibility="gone"
+        tools:visibility="invisible">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+    </FrameLayout>
+
+</RelativeLayout>

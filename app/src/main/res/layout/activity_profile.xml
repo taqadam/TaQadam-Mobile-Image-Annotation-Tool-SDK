@@ -59,11 +59,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal|bottom"
-                        android:drawableEnd="@drawable/ic_verified_user_green"
                         android:drawablePadding="8dp"
-                        android:drawableRight="@drawable/ic_verified_user_green"
                         android:gravity="center_vertical"
-                        android:text="@string/verified"
+                        android:text="@string/awaiting_verification"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                         android:textStyle="bold"/>
                 </LinearLayout>

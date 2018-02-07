@@ -12,6 +12,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.recoded.taqadam.models.Comment;
 import com.recoded.taqadam.models.Post;
@@ -38,6 +40,7 @@ public class PostDbHandler {
             TIMESTAMP = "ts",
             USER_ID = "uid",
             AUTHOR = "author",
+            AUTHOR_IMG = "u_img",
             COMMENTS = "comments";
 
     private static PostDbHandler handler;
@@ -229,7 +232,7 @@ public class PostDbHandler {
 
     //This will be used to read comments on a single post
     @NonNull
-    private Task<List<Comment>> getComments(final String postId) {
+    public Task<List<Comment>> getComments(final String postId) {
         final TaskCompletionSource<List<Comment>> fetcher = new TaskCompletionSource<>();
         mDataDbRef.child(postId).child(COMMENTS).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -244,7 +247,7 @@ public class PostDbHandler {
                         list.add(comment);
                     }
                 }
-
+                postsList.get(postId).setComments(list);
                 fetcher.setResult(list);
             }
 
@@ -258,10 +261,13 @@ public class PostDbHandler {
     }
 
     public void deletePost(Post post) {
-        if (post.getId() != null) {
+        if (post.getId() != null && post.getUid().equals(mUid)) {
             mThreadsDbRef.child(getTimeCycleFromTs(post.getPostTime())).child(post.getId()).setValue(null);
             mDataDbRef.child(post.getId())
                     .setValue(null);
+
+            postsList.remove(post.getId());
+            if (postsListener != null) postsListener.onPostsChanged(getRecentPosts());
         }
     }
 
@@ -275,16 +281,19 @@ public class PostDbHandler {
     }
 
     public void updatePost(Post post) {
-        if (post.getId() != null) {
+        if (post.getId() != null && post.getUid().equals(mUid)) {
             mThreadsDbRef.child(getTimeCycleFromTs(post.getPostTime())).child(post.getId()).setValue(post.toMap());
             mDataDbRef.child(post.getId())
                     .child(BODY)
                     .setValue(post.getBody());
+
+            postsList.put(post.getId(), post);
+            if (postsListener != null) postsListener.onPostsChanged(getRecentPosts());
         }
     }
 
     public void updateComment(Comment comment) {
-        if (comment.getPostId() != null && comment.getId() != null) {
+        if (comment.getPostId() != null && comment.getId() != null && comment.getUid().equals(mUid)) {
             mDataDbRef.child(comment.getPostId())
                     .child(COMMENTS)
                     .child(comment.getId())
@@ -296,6 +305,7 @@ public class PostDbHandler {
         if (post.getId() == null) {
             post.setId(mThreadsDbRef.child(getCurrentTimeCycle()).push().getKey());
             post.setAuthor(UserAuthHandler.getInstance().getCurrentUser().getDisplayName());
+            post.setAuthorImg(UserAuthHandler.getInstance().getCurrentUser().getPicturePath());
             post.setUid(mUid);
             post.setNoOfComments(0);
             post.setPostTime(new Date().getTime());
@@ -308,14 +318,45 @@ public class PostDbHandler {
         return post;
     }
 
-    public Comment writeComment(Comment comment) {
+    public Comment writeComment(final Comment comment) {
         if (comment.getPostId() != null && comment.getId() == null) {
             comment.setId(mDataDbRef.child(comment.getPostId()).child(COMMENTS).push().getKey());
+            comment.setAuthor(UserAuthHandler.getInstance().getCurrentUser().getDisplayName());
+            comment.setAuthorImage(UserAuthHandler.getInstance().getCurrentUser().getPicturePath());
+            comment.setUid(mUid);
+            comment.setCommentTime(new Date().getTime());
             mDataDbRef.child(comment.getPostId())
                     .child(COMMENTS)
                     .child(comment.getId())
                     .setValue(comment.toMap());
+
+            long postTs = postsList.get(comment.getPostId()).getPostTime();
+            mThreadsDbRef.child(getTimeCycleFromTs(postTs))
+                    .child(comment.getPostId()).child(COMMENTS)
+                    .runTransaction(new Transaction.Handler() {
+                        @Override
+                        public Transaction.Result doTransaction(MutableData mutableData) {
+                            if (mutableData.getValue() == null)
+                                return Transaction.success(mutableData);
+                            int comments = ((Long) mutableData.getValue()).intValue();
+                            mutableData.setValue(++comments);
+                            return Transaction.success(mutableData);
+                        }
+
+                        @Override
+                        public void onComplete(DatabaseError databaseError, boolean success, DataSnapshot dataSnapshot) {
+                            if (success) {
+                                if (dataSnapshot.getValue() != null) {
+                                    int comments = ((Long) dataSnapshot.getValue()).intValue();
+                                    postsList.get(comment.getPostId()).setNoOfComments(comments);
+                                    if (postsListener != null)
+                                        postsListener.onPostsChanged(getRecentPosts());
+                                }
+                            }
+                        }
+                    });
         }
+        postsList.get(comment.getPostId()).getComments().add(comment);
         return comment;
     }
 
