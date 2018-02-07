@@ -1,6 +1,9 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        release
+    }
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.recoded.taqadam"
@@ -14,9 +17,9 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
-
     dataBinding {
         enabled true
     }
@@ -31,8 +34,7 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.github.apl-devs:appintro:v4.2.2'
-    implementation "com.android.support:preference-v7:26.1.0"
-
+    implementation 'com.android.support:preference-v7:26.1.0'
     implementation 'com.google.firebase:firebase-core:11.8.0'
     implementation 'com.google.firebase:firebase-database:11.8.0'
     implementation 'com.google.firebase:firebase-storage:11.8.0'
@@ -48,3 +50,20 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 }
 apply plugin: 'com.google.gms.google-services'
+
+allprojects {
+    afterEvaluate { project ->
+        def propsFile = rootProject.file('keystore.properties')
+        def configName = 'release'
+
+        if (propsFile.exists() && android.signingConfigs.hasProperty(configName)) {
+            def props = new Properties()
+            props.load(new FileInputStream(propsFile))
+            def storeFile = rootProject.path + props['storeFileName']
+            android.signingConfigs[configName].storeFile = file(storeFile)
+            android.signingConfigs[configName].storePassword = props['storePassword']
+            android.signingConfigs[configName].keyAlias = props['keyAlias']
+            android.signingConfigs[configName].keyPassword = props['keyPassword']
+        }
+    }
+}
