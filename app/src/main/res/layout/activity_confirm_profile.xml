@@ -305,11 +305,11 @@
                 android:layout_weight="1"
                 android:clickable="true"
                 android:drawablePadding="8dp"
-                android:drawableTop="@mipmap/ic_launcher"
+                android:drawableTop="@drawable/ic_intent_camera"
                 android:focusable="true"
                 android:gravity="center_horizontal"
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead.Inverse"
-                tools:text="@string/camera"/>
+                android:text="@string/camera"/>
 
             <TextView
                 android:id="@+id/intent_gallery"
@@ -319,11 +319,11 @@
                 android:layout_weight="1"
                 android:clickable="true"
                 android:drawablePadding="8dp"
-                android:drawableTop="@mipmap/ic_launcher"
+                android:drawableTop="@drawable/ic_intent_gallery"
                 android:focusable="true"
                 android:gravity="center_horizontal"
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead.Inverse"
-                tools:text="@string/gallery"/>
+                android:text="@string/gallery"/>
 
             <TextView
                 android:id="@+id/intent_files"
@@ -333,11 +333,11 @@
                 android:layout_weight="1"
                 android:clickable="true"
                 android:drawablePadding="8dp"
-                android:drawableTop="@mipmap/ic_launcher"
+                android:drawableTop="@drawable/ic_intent_files"
                 android:focusable="true"
                 android:gravity="center_horizontal"
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead.Inverse"
-                tools:text="@string/files"/>
+                android:text="@string/files"/>
         </LinearLayout>
     </android.support.design.widget.CoordinatorLayout>
 </layout>

@@ -1,5 +1,6 @@
 package com.recoded.taqadam;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
@@ -15,8 +16,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -26,6 +25,9 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.Snackbar;
+import android.support.media.ExifInterface;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -66,6 +68,7 @@ public class ConfirmProfileActivity extends BaseActivity {
     private static final int ACTIVITY_REQUEST_CODE_FILES = 1990;
     private static final int ACTIVITY_REQUEST_CODE_CAMERA = 1991;
     private static final int ACTIVITY_REQUEST_CODE_GALLERY = 1992;
+    private static final int PERMISSION_REQUEST_CODE_STORAGE_READ = 2990;
     private static final String EMAIL_REGEX = "^[a-zA-Z]+[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.{1}[a-zA-Z0-9-.]{2,}(?<!\\.)$";
 
 
@@ -150,10 +153,15 @@ public class ConfirmProfileActivity extends BaseActivity {
         binding.bChangePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mIntentHandlerChooser.getState() == BottomSheetBehavior.STATE_HIDDEN) {
-                    mIntentHandlerChooser.setState(BottomSheetBehavior.STATE_EXPANDED);
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    if (mIntentHandlerChooser.getState() == BottomSheetBehavior.STATE_HIDDEN) {
+                        mIntentHandlerChooser.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    } else {
+                        mIntentHandlerChooser.setState(BottomSheetBehavior.STATE_HIDDEN);
+                    }
                 } else {
-                    mIntentHandlerChooser.setState(BottomSheetBehavior.STATE_HIDDEN);
+                    requestStoragePermission();
                 }
             }
         });
@@ -165,6 +173,42 @@ public class ConfirmProfileActivity extends BaseActivity {
         mCreatingAccountProgressDialog.setTitle(getString(R.string.updating_account));
         mCreatingAccountProgressDialog.setCanceledOnTouchOutside(false);
         mCreatingAccountProgressDialog.setMessage(getString(R.string.please_wait));
+    }
+
+    private void requestStoragePermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            // Provide an additional rationale to the user if the permission was not granted
+            // and the user would benefit from additional context for the use of the permission.
+            // Display a SnackBar with a button to request the missing permission.
+            Snackbar.make(binding.getRoot(), R.string.storage_permission,
+                    Snackbar.LENGTH_INDEFINITE).setAction(R.string.ok, new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Request the permission
+                    ActivityCompat.requestPermissions(ConfirmProfileActivity.this,
+                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                            PERMISSION_REQUEST_CODE_STORAGE_READ);
+                }
+            }).show();
+
+        } else {
+            // Request the permission. The result will be received in onRequestPermissionResult().
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    PERMISSION_REQUEST_CODE_STORAGE_READ);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == PERMISSION_REQUEST_CODE_STORAGE_READ) {
+            // Request for camera permission.
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission has been granted. Show intent chooser
+                mIntentHandlerChooser.setState(BottomSheetBehavior.STATE_EXPANDED);
+            } else {
+            }
+        }
     }
 
     private void checkAuthorized() {
@@ -399,19 +443,7 @@ public class ConfirmProfileActivity extends BaseActivity {
         ComponentName filesComponent = filesIntent.resolveActivity(pm);
 
         //Instantiate camera intent
-        if (cameraComponent != null) {
-            //File creation is passed to the camera button click listener
-            //Set the layout
-            try {
-                String pkgName = cameraComponent.getPackageName();
-                String appName = pm.getApplicationLabel(pm.getApplicationInfo(pkgName, 0)).toString();
-                Drawable packageIcon = pm.getApplicationIcon(pkgName);
-                binding.intentCamera.setText(appName);
-                binding.intentCamera.setCompoundDrawablesWithIntrinsicBounds(null, packageIcon, null, null);
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
-            }
-        } else {
+        if (cameraComponent == null) {
             binding.intentCamera.setVisibility(View.GONE);
         }
 
@@ -419,33 +451,12 @@ public class ConfirmProfileActivity extends BaseActivity {
         if (galleryComponent != null) {
             galleryIntent.setType("image/*");
             galleryIntent.putExtra(MediaStore.MEDIA_IGNORE_FILENAME, ".nomedia");
-
-            //Set the layout
-            try {
-                String pkgName = galleryComponent.getPackageName();
-                String appName = pm.getApplicationLabel(pm.getApplicationInfo(pkgName, 0)).toString();
-                Drawable packageIcon = pm.getApplicationIcon(pkgName);
-                binding.intentGallery.setText(appName);
-                binding.intentGallery.setCompoundDrawablesWithIntrinsicBounds(null, packageIcon, null, null);
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
-            }
         } else {
             binding.intentGallery.setVisibility(View.GONE);
         }
 
         //Set the layout for files intent
-        if (filesComponent != null) {
-            try {
-                String pkgName = filesComponent.getPackageName();
-                String appName = pm.getApplicationLabel(pm.getApplicationInfo(pkgName, 0)).toString();
-                Drawable packageIcon = pm.getApplicationIcon(pkgName);
-                binding.intentFiles.setText(appName);
-                binding.intentFiles.setCompoundDrawablesWithIntrinsicBounds(null, packageIcon, null, null);
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
-            }
-        } else {
+        if (filesComponent == null) {
             binding.intentFiles.setVisibility(View.GONE);
         }
 
@@ -543,7 +554,7 @@ public class ConfirmProfileActivity extends BaseActivity {
     private void processAndUploadImageToStorage(final Uri uri) {
         ImageProcessor ip = new ImageProcessor();
         String p = getPath(uri);
-        Log.d(TAG, "image path " + p);
+        Log.d(TAG, "image path: " + p);
         ip.execute(p);
         ip.processTask.addOnSuccessListener(this, new OnSuccessListener<Bitmap>() {
             @Override
@@ -693,7 +704,8 @@ public class ConfirmProfileActivity extends BaseActivity {
             float rotation = 0;
             try {
                 ExifInterface ei = new ExifInterface(path);
-                int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+                int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                        ExifInterface.ORIENTATION_NORMAL);
 
                 switch (orientation) {
                     case ExifInterface.ORIENTATION_ROTATE_90:

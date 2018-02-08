@@ -95,7 +95,7 @@
     <string name="date_of_birth">Date of Birth</string>
     <string name="camera">Camera</string>
     <string name="gallery">Gallery</string>
-    <string name="files">Files</string>
+    <string name="files">Files Manager</string>
     <string name="verified">Verified</string>
     <string name="balance_profile">Balance</string>
     <string name="basic_information">Basic information</string>
@@ -247,4 +247,5 @@
     <string name="delete_comment_confirmation">Are you sure you want to delete this comment?</string>
     <string name="delete_post">Delete Post</string>
     <string name="delete_post_confirmation">Are you sure you want to delete this post?</string>
+    <string name="storage_permission">Storage access is required to load gallery images.</string>
 </resources>

@@ -95,7 +95,7 @@
     <string name="date_of_birth">تارخ الميلاد</string>
     <string name="camera">الكاميرا</string>
     <string name="gallery">المعرض</string>
-    <string name="files">الملفات</string>
+    <string name="files">مدير الملفات</string>
     <string name="verified">مؤهل</string>
     <string name="balance_profile">الرصيد</string>
 
@@ -241,5 +241,6 @@
     <string name="delete_comment_confirmation">هل انت متأكد من حذف التعليق؟</string>
     <string name="delete_post">حذف المنشور</string>
     <string name="delete_post_confirmation">هل انت متأكد من حذف المنشور؟</string>
+    <string name="storage_permission">تصريح قراءة ذاكرة التخزين مطلوبة لرفع الصور</string>
     /
 </resources>
