@@ -8,11 +8,13 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.ColorInt;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.Window;
@@ -22,8 +24,16 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.recoded.taqadam.models.AppVersion;
 import com.recoded.taqadam.models.User;
 import com.recoded.taqadam.models.auth.UserAuthHandler;
+
+import java.util.Map;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -77,7 +87,7 @@ public class SplashActivity extends AppCompatActivity {
                                     .withEndAction(new Runnable() {
                                         @Override
                                         public void run() {
-                                            startApp();
+                                            checkVersion();
                                         }
                                     })
                                     .start();
@@ -106,6 +116,38 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void startApp() {
+        UserAuthHandler.getInstance().getInitTask().addOnSuccessListener(this, new OnSuccessListener<User>() {
+            @Override
+            public void onSuccess(User user) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(1000);
+                            if (firstRun()) {
+                                gotoIntro();
+                            } else {
+                                start();
+                            }
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+            }
+        });
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1500) {
+            finish();
+        }
+    }
+
+    private void checkVersion() {
         if (!isConnected()) {
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             dialog.setCancelable(false);
@@ -126,37 +168,98 @@ public class SplashActivity extends AppCompatActivity {
             });
             dialog.create().show();
         } else {
-            UserAuthHandler.getInstance().getInitTask().addOnSuccessListener(this, new OnSuccessListener<User>() {
+            if (BuildConfig.DEBUG) {
+                startApp();
+            }
+            DatabaseReference updates = FirebaseDatabase.getInstance().getReference()
+                    .child("App").child("Updates");
+            updates.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onSuccess(User user) {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                Thread.sleep(1000);
-                                if (firstRun()) {
-                                    gotoIntro();
-                                } else {
-                                    start();
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getValue() instanceof Map) {
+                        AppVersion latestVersion = new AppVersion();
+                        latestVersion.versionCode = BuildConfig.VERSION_CODE;
+                        latestVersion.required = false;
+
+                        Map<String, Object> value = (Map<String, Object>) dataSnapshot;
+                        for (String verName : value.keySet()) {
+                            AppVersion v = new AppVersion();
+                            v.versionName = verName.replace('-', '.');
+                            Map<String, Object> data = ((Map<String, Object>) value.get(verName));
+                            v.required = (Boolean) data.get("required");
+                            v.versionCode = (int) data.get("code");
+                            if (v.versionCode > latestVersion.versionCode) {
+                                latestVersion.versionCode = v.versionCode;
+                                if (v.required) {
+                                    latestVersion.required = true;
                                 }
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
                             }
                         }
-                    }).start();
+
+                        if (latestVersion.versionCode > BuildConfig.VERSION_CODE) {
+                            showUpdateDialog(latestVersion);
+                        } else {
+                            startApp();
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.d("Splash", "error while getting app versions" + databaseError.getMessage());
+                    startApp();
                 }
             });
-
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1500) {
-            finish();
+    private void showUpdateDialog(AppVersion appVersion) {
+        if (appVersion.required) {
+            AlertDialog.Builder b = new AlertDialog.Builder(SplashActivity.this);
+            b.setTitle("Update Required");
+            b.setCancelable(false);
+            b.setMessage("New app version " + appVersion.versionName + " is available. You need to update to continue");
+            b.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    final String appPackageName = getPackageName(); // getPackageName() from Context or Activity object
+                    try {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                    } catch (android.content.ActivityNotFoundException anfe) {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                    }
+                    finish();
+                }
+            });
+            b.create().show();
+        } else {
+            AlertDialog.Builder b = new AlertDialog.Builder(SplashActivity.this);
+            b.setTitle("Update Available");
+            b.setCancelable(false);
+            b.setMessage("New app version " + appVersion.versionName + " is available. do you want to update?");
+            b.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    final String appPackageName = getPackageName(); // getPackageName() from Context or Activity object
+                    try {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                    } catch (android.content.ActivityNotFoundException anfe) {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                    }
+                    finish();
+                }
+            });
+            b.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    startApp();
+                }
+            });
+            b.create().show();
         }
     }
+
 
     private void gotoIntro() {
         startActivityForResult(new Intent(this, IntroActivity.class), 1500);
