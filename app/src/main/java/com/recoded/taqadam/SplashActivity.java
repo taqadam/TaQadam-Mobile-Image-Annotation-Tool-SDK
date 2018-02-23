@@ -157,7 +157,7 @@ public class SplashActivity extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
-                    startApp();
+                    checkVersion();
                 }
             });
             dialog.setNegativeButton(R.string.quit, new DialogInterface.OnClickListener() {
@@ -170,6 +170,7 @@ public class SplashActivity extends AppCompatActivity {
         } else {
             if (BuildConfig.DEBUG) {
                 startApp();
+                return;
             }
             DatabaseReference updates = FirebaseDatabase.getInstance().getReference()
                     .child("App").child("Updates");
@@ -181,18 +182,19 @@ public class SplashActivity extends AppCompatActivity {
                         latestVersion.versionCode = BuildConfig.VERSION_CODE;
                         latestVersion.required = false;
 
-                        Map<String, Object> value = (Map<String, Object>) dataSnapshot;
+                        Map<String, Object> value = (Map<String, Object>) dataSnapshot.getValue();
                         for (String verName : value.keySet()) {
                             AppVersion v = new AppVersion();
                             v.versionName = verName.replace('-', '.');
                             Map<String, Object> data = ((Map<String, Object>) value.get(verName));
                             v.required = (Boolean) data.get("required");
-                            v.versionCode = (int) data.get("code");
+                            v.versionCode = ((Long) data.get("code")).intValue();
                             if (v.versionCode > latestVersion.versionCode) {
                                 latestVersion.versionCode = v.versionCode;
-                                if (v.required) {
-                                    latestVersion.required = true;
-                                }
+                                latestVersion.versionName = v.versionName;
+                            }
+                            if (v.versionCode > BuildConfig.VERSION_CODE && v.required) {
+                                latestVersion.required = true;
                             }
                         }
 
