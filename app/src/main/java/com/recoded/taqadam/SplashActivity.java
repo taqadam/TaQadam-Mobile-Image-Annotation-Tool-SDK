@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -169,6 +170,7 @@ public class SplashActivity extends AppCompatActivity {
             dialog.create().show();
         } else {
             if (BuildConfig.DEBUG) {
+                FirebaseCrash.setCrashCollectionEnabled(false);
                 startApp();
                 return;
             }

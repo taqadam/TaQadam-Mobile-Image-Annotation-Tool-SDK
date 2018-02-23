@@ -33,6 +33,8 @@ public class JobActivity extends BaseActivity {
     private Job job;
     private int totalTasksCount, loadedTasksCount;
 
+    private AlertDialog instructions;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +56,9 @@ public class JobActivity extends BaseActivity {
                 //setTitle(String.format(getString(R.string.job_activity_title), 1, totalTasksCount));
                 loadedTasksCount = 0;
                 toggleProgressFrame(true);
-                showInstructionsDialog();
+                if (savedInstanceState == null) {
+                    showInstructionsDialog();
+                }
                 loadTasks(3);
             } else {
                 finish();
@@ -88,23 +92,26 @@ public class JobActivity extends BaseActivity {
 
     private void showInstructionsDialog() {
         if (!job.getInstructions().isEmpty()) {
-            LinearLayout root = new LinearLayout(this);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            root.setLayoutParams(lp);
-            WebView wv = new WebView(this);
-            wv.loadData(job.getInstructions(), "text/html", "utf-8");
-            root.addView(wv);
+            if (instructions == null) {
+                LinearLayout root = new LinearLayout(this);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                root.setLayoutParams(lp);
+                WebView wv = new WebView(this);
+                wv.loadData(job.getInstructions(), "text/html", "utf-8");
+                root.addView(wv);
 
-            AlertDialog.Builder b = new AlertDialog.Builder(this);
-            b.setTitle("Instructions");
-            b.setView(root);
-            b.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.dismiss();
-                }
-            });
-            b.create().show();
+                AlertDialog.Builder b = new AlertDialog.Builder(this);
+                b.setTitle("Instructions");
+                b.setView(root);
+                b.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                instructions = b.create();
+            }
+            instructions.show();
         }
     }
 
@@ -228,5 +235,12 @@ public class JobActivity extends BaseActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (instructions != null && instructions.isShowing())
+            instructions.dismiss();
+        super.onDestroy();
     }
 }

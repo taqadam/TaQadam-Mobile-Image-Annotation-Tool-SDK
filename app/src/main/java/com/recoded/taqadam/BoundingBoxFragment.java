@@ -19,6 +19,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.recoded.taqadam.databinding.FragBoundingBoxBinding;
 import com.recoded.taqadam.models.Answer;
 import com.recoded.taqadam.models.Region;
+import com.recoded.taqadam.models.Task;
 import com.recoded.taqadam.models.db.JobDbHandler;
 import com.recoded.taqadam.models.db.TaskDbHandler;
 import com.squareup.picasso.Callback;
@@ -66,13 +67,18 @@ public class BoundingBoxFragment extends TaskFragment {
 
         View rootView = inflater.inflate(R.layout.frag_bounding_box, container, false);
         binding = DataBindingUtil.bind(rootView);
-
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey("regions")) {
+                mRegions = savedInstanceState.getParcelableArrayList("regions");
+            }
+            if (mTask == null && savedInstanceState.containsKey("task_id")) {
+                Task t = TaskDbHandler.getInstance().getTask(savedInstanceState.getString("task_id"));
+                setTask(t);
+            }
+        }
         initTaskImg();
 
         initToolbox();
-
-        if (savedInstanceState != null)
-            mRegions = savedInstanceState.getParcelableArrayList("regions");
 
         binding.tvInstruction.setVisibility(View.GONE);
 

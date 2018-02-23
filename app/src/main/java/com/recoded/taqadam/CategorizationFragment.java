@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.recoded.taqadam.databinding.FragCategorizationBinding;
 import com.recoded.taqadam.models.Answer;
+import com.recoded.taqadam.models.Task;
 import com.recoded.taqadam.models.db.JobDbHandler;
 import com.recoded.taqadam.models.db.TaskDbHandler;
 import com.squareup.picasso.Callback;
@@ -56,6 +57,12 @@ public class CategorizationFragment extends TaskFragment {
 
         setupOptionClickListener();
 
+        if (mTask == null && savedInstanceState != null) {
+            if (savedInstanceState.getString("task_id") != null) {
+                Task t = TaskDbHandler.getInstance().getTask(savedInstanceState.getString("task_id"));
+                setTask(t);
+            }
+        }
         taskImageView = binding.ivTaskImage;
         taskImageView.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
         Picasso.with(getContext()).load(mTask.getTaskImage()).into(taskImageView, new Callback() {

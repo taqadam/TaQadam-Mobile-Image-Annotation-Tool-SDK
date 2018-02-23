@@ -1,5 +1,7 @@
 package com.recoded.taqadam;
 
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
 
@@ -41,6 +43,12 @@ public class TaskFragment extends Fragment {
     }
 
     public TaskFragment() {
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putString("task_id", mTask.getTaskId());
+        super.onSaveInstanceState(outState);
     }
 
     public void setTask(Task t) {
