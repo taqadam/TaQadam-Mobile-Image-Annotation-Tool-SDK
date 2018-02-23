@@ -4,6 +4,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.recoded.taqadam.models.Task;
+import com.recoded.taqadam.models.db.TaskDbHandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,6 +20,17 @@ public class TasksPagerAdapter extends FragmentPagerAdapter {
     public TasksPagerAdapter(FragmentManager fm) {
         super(fm);
         tasksList = new ArrayList<>();
+        TaskDbHandler.getInstance().setImpressionsListener(new TaskDbHandler.OnImpressionsReachedListener() {
+            @Override
+            public void onImpressionsReached(String taskId) {
+                for (Task t : tasksList) {
+                    if (t.getTaskId().equals(taskId)) {
+                        tasksList.remove(t);
+                        notifyDataSetChanged();
+                    }
+                }
+            }
+        });
     }
 
     public void addNewTasks(Task... t) {
@@ -26,6 +38,10 @@ public class TasksPagerAdapter extends FragmentPagerAdapter {
         notifyDataSetChanged();
     }
 
+    public void removeTask(int position) {
+        tasksList.remove(position);
+        notifyDataSetChanged();
+    }
 
     @Override
     public TaskFragment getItem(int position) {

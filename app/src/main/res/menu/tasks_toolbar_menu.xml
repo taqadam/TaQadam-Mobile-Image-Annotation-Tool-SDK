@@ -6,9 +6,10 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never"/>
+    <!--TODO:CHANGE TITLE-->
     <item
         android:id="@+id/action_lock_slider"
-        android:icon="@drawable/ic_unlock"
+        android:icon="@drawable/ic_info_white"
         android:title="@string/freeze_slider"
         app:showAsAction="always"/>
     <item

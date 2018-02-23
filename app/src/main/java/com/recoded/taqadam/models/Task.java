@@ -4,10 +4,7 @@ import android.net.Uri;
 
 import com.recoded.taqadam.models.db.TaskDbHandler;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,12 +17,7 @@ public class Task {
 
     private String taskId;
     private String jobId;
-    private Date dateCreated;
-    private Date dateExpires;
     private Uri taskImage;
-    private String type;
-    private String description;
-    private List<String> options;
     private Map<String, String> attemptedBy;
     private Map<String, String> completedBy;
     public Answer answer; //Only a reference;
@@ -33,17 +25,8 @@ public class Task {
 
     public Task(String id) {
         taskId = id;
-        options = new ArrayList<>();
         attemptedBy = new HashMap<>();
         completedBy = new HashMap<>();
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     public String getTaskId() {
@@ -54,20 +37,8 @@ public class Task {
         return jobId;
     }
 
-    public Date getDateCreated() {
-        return dateCreated;
-    }
-
-    public Date getDateExpires() {
-        return dateExpires;
-    }
-
     public Uri getTaskImage() {
         return taskImage;
-    }
-
-    public List<String> getOptions() {
-        return options;
     }
 
     public Map<String, String> getAttemptedBy() {
@@ -93,21 +64,22 @@ public class Task {
     }
 
     public Task fromMap(Map<String, Object> map) {
-        type = (String) map.get(TaskDbHandler.TYPE);
-        jobId = (String) map.get(TaskDbHandler.JOB_ID);
-        dateCreated = new Date((long) map.get(TaskDbHandler.DATE_CREATED) * 1000);
-        dateExpires = new Date((long) map.get(TaskDbHandler.DATE_EXPIRES) * 1000);
-        description = (String) map.get(TaskDbHandler.DESC);
-        taskImage = Uri.parse((String) map.get(TaskDbHandler.TASK_IMAGE));
+        for (String k : map.keySet()) {
+            if (k.equals(TaskDbHandler.JOB_ID)) {
+                jobId = (String) map.get(k);
+            }
+            if (k.equals(TaskDbHandler.TASK_IMAGE)) {
+                taskImage = Uri.parse((String) map.get(k));
+            }
 
-        if (map.get(TaskDbHandler.ATTEMPTS) != null)
-            attemptedBy.putAll((Map<String, String>) map.get(TaskDbHandler.ATTEMPTS));
+            if (k.equals(TaskDbHandler.ATTEMPTS)) {
+                attemptedBy.putAll((Map<String, String>) map.get(k));
+            }
 
-        if (map.get(TaskDbHandler.COMPLETED_ATTEMPTS) != null)
-            completedBy.putAll((Map<String, String>) map.get(TaskDbHandler.COMPLETED_ATTEMPTS));
-
-        if (map.get(TaskDbHandler.OPTIONS) != null)
-            options.addAll((List<String>) map.get(TaskDbHandler.OPTIONS));
+            if (k.equals(TaskDbHandler.COMPLETED_ATTEMPTS)) {
+                completedBy.putAll((Map<String, String>) map.get(k));
+            }
+        }
         return this;
     }
 }

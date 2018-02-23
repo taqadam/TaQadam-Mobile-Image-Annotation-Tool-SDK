@@ -10,6 +10,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.widget.LinearLayout;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.recoded.taqadam.databinding.ActivityJobBinding;
@@ -48,9 +51,10 @@ public class JobActivity extends BaseActivity {
             job = JobDbHandler.getInstance().getJob(jobId);
             if (job != null && !job.getTasks().isEmpty()) {
                 totalTasksCount = job.getTasks().size();
-                setTitle(String.format(getString(R.string.job_activity_title), 1, totalTasksCount));
+                //setTitle(String.format(getString(R.string.job_activity_title), 1, totalTasksCount));
                 loadedTasksCount = 0;
                 toggleProgressFrame(true);
+                showInstructionsDialog();
                 loadTasks(3);
             } else {
                 finish();
@@ -60,6 +64,7 @@ public class JobActivity extends BaseActivity {
         mTasksPagerAdapter = new TasksPagerAdapter(getSupportFragmentManager());
         /* Set up the ViewPager with the sections adapter. */
         binding.viewPager.setAdapter(mTasksPagerAdapter);
+        binding.viewPager.setLocked(true);
         binding.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -81,6 +86,28 @@ public class JobActivity extends BaseActivity {
         });
     }
 
+    private void showInstructionsDialog() {
+        if (!job.getInstructions().isEmpty()) {
+            LinearLayout root = new LinearLayout(this);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            root.setLayoutParams(lp);
+            WebView wv = new WebView(this);
+            wv.loadData(job.getInstructions(), "text/html", "utf-8");
+            root.addView(wv);
+
+            AlertDialog.Builder b = new AlertDialog.Builder(this);
+            b.setTitle("Instructions");
+            b.setView(root);
+            b.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+            b.create().show();
+        }
+    }
+
     private void submitAnswer() {
         String tag = "android:switcher:" + binding.viewPager.getId() + ":" + binding.viewPager.getCurrentItem();
         TaskFragment frag = (TaskFragment) getSupportFragmentManager().findFragmentByTag(tag);
@@ -97,6 +124,7 @@ public class JobActivity extends BaseActivity {
             } else {
                 binding.viewPager.setCurrentItem(binding.viewPager.getCurrentItem() + 1);
             }
+            mTasksPagerAdapter.removeTask(binding.viewPager.getCurrentItem());
         }
     }
 
@@ -184,13 +212,14 @@ public class JobActivity extends BaseActivity {
             startActivity(intent);
             return true;
         } else if (id == R.id.action_lock_slider) {
-            if (binding.viewPager.isLocked()) {
+            /*if (binding.viewPager.isLocked()) {
                 item.setIcon(R.drawable.ic_unlock);
                 binding.viewPager.setLocked(false);
             } else {
                 item.setIcon(R.drawable.ic_lock);
                 binding.viewPager.setLocked(true);
-            }
+            }*/
+            showInstructionsDialog();
         } else if (id == R.id.action_submit_answer) {
             submitAnswer();
         } else if (id == android.R.id.home) {

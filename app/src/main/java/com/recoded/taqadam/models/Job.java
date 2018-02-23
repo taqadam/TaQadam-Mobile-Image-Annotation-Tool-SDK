@@ -1,6 +1,7 @@
 package com.recoded.taqadam.models;
 
 import com.recoded.taqadam.models.db.JobDbHandler;
+import com.recoded.taqadam.models.db.TaskDbHandler;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -20,6 +21,10 @@ public class Job {
     private String type;
     private int numberOfAttempts;
     private int successfulAttempts;
+    private int noOfImpressions;
+    private String tasksType;
+    private List<String> options;
+    private String instructions;
     private String description;
     private float taskReward;
     private List<String> tasks;
@@ -29,6 +34,7 @@ public class Job {
     public Job(String jobId) {
         this.jobId = jobId;
         tasks = new ArrayList<>();
+        options = new ArrayList<>();
     }
 
     public String getJobId() {
@@ -43,12 +49,28 @@ public class Job {
         return dateExpires;
     }
 
+    public List<String> getOptions() {
+        return options;
+    }
+
     public String getJobName() {
         return jobName;
     }
 
     public String getCompany() {
         return company;
+    }
+
+    public int getNoOfImpressions() {
+        return noOfImpressions;
+    }
+
+    public String getTasksType() {
+        return tasksType;
+    }
+
+    public String getInstructions() {
+        return instructions;
     }
 
     public String getType() {
@@ -76,52 +98,76 @@ public class Job {
     }
 
     public Job fromMap(Map<String, Object> map) {
-        dateCreated = new Date((long) map.get(JobDbHandler.DATE_CREATED) * 1000);
-        dateExpires = new Date((long) map.get(JobDbHandler.DATE_EXPIRES) * 1000);
-        type = (String) map.get(JobDbHandler.TYPE);
-        numberOfAttempts = ((Long) map.get(JobDbHandler.ATTEMPTS)).intValue();
-        successfulAttempts = ((Long) map.get(JobDbHandler.SUCCESSFUL_ATTEMPTS)).intValue();
-        jobName = (String) map.get(JobDbHandler.JOB_NAME);
-        description = (String) map.get(JobDbHandler.DESC);
-        company = (String) map.get(JobDbHandler.COMPANY);
-        if (map.get(JobDbHandler.TASK_REWARD) instanceof Double) {
-            double tReward = (double) map.get(JobDbHandler.TASK_REWARD);
-            BigDecimal bd = new BigDecimal(tReward);
-            bd = bd.setScale(2, RoundingMode.DOWN);
-            taskReward = bd.floatValue();
-        } else {
-            taskReward = ((long) map.get(JobDbHandler.TASK_REWARD)) * 1f;
-        }
-        if (map.get(JobDbHandler.TASKS) != null)
-            tasks.addAll((List<String>) map.get(JobDbHandler.TASKS));
-        return this;
-    }
-
-    public Job update(Map<String, Object> value) {
-        for (String k : value.keySet()) {
+        for (String k : map.keySet()) {
             switch (k) {
+                case JobDbHandler.DATE_CREATED:
+                    if (dateCreated == null) {
+                        dateCreated = new Date((long) map.get(k) * 1000);
+                    } else {
+                        dateCreated.setTime((long) map.get(k) * 1000);
+                    }
+                    break;
                 case JobDbHandler.DATE_EXPIRES:
-                    dateExpires.setTime((long) value.get(k) * 1000);
+                    if (dateExpires == null) {
+                        dateExpires = new Date((long) map.get(k) * 1000);
+                    } else {
+                        dateExpires.setTime((long) map.get(k) * 1000);
+                    }
                     break;
                 case JobDbHandler.TYPE:
-                    type = (String) value.get(k);
+                    type = (String) map.get(k);
+                    break;
+                case JobDbHandler.TASKS_TYPE:
+                    tasksType = (String) map.get(k);
+                    break;
+                case JobDbHandler.IMPRESSIONS:
+                    noOfImpressions = ((Long) map.get(k)).intValue();
+                    break;
+                case JobDbHandler.INSTRUCTIONS:
+                    instructions = (String) map.get(k);
                     break;
                 case JobDbHandler.JOB_NAME:
-                    jobName = (String) value.get(k);
+                    jobName = (String) map.get(k);
                     break;
                 case JobDbHandler.DESC:
-                    description = (String) value.get(k);
+                    description = (String) map.get(k);
                     break;
+                case JobDbHandler.COMPANY:
+                    company = (String) map.get(k);
+                    break;
+                case JobDbHandler.ATTEMPTS:
+                    numberOfAttempts = ((Long) map.get(k)).intValue();
+                    break;
+                case JobDbHandler.SUCCESSFUL_ATTEMPTS:
+                    successfulAttempts = ((Long) map.get(k)).intValue();
+                    break;
+
+                case JobDbHandler.OPTIONS:
+                    options.addAll((List<String>) map.get(k));
+                    break;
+
                 case JobDbHandler.TASK_REWARD:
-                    taskReward = ((long) value.get(k)) / 100f;
+                    if (map.get(k) instanceof Double) {
+                        double tReward = (double) map.get(k);
+                        BigDecimal bd = new BigDecimal(tReward);
+                        bd = bd.setScale(2, RoundingMode.DOWN);
+                        taskReward = bd.floatValue();
+                    } else {
+                        taskReward = ((long) map.get(k)) * 1f;
+                    }
                     break;
                 case JobDbHandler.TASKS:
-                    if (value.get(k) != null)
+                    if (!tasks.isEmpty()) {
+                        for (String taskId : tasks) {
+                            TaskDbHandler.getInstance().removeTask(taskId);
+                        }
                         tasks.clear();
-                    tasks.addAll((List<String>) value.get(k));
+                    }
+                    tasks.addAll((List<String>) map.get(k));
                     break;
             }
         }
+
         return this;
     }
 }

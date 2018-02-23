@@ -30,6 +30,10 @@ public class JobDbHandler {
             DATE_CREATED = "date_created",
             DATE_EXPIRES = "date_expires",
             TYPE = "type",
+            TASKS_TYPE = "tasks_type",
+            OPTIONS = "options",
+            INSTRUCTIONS = "instructions",
+            IMPRESSIONS = "impressions",
             ATTEMPTS = "number_of_attempts",
             SUCCESSFUL_ATTEMPTS = "successful_attempts",
             TASK_REWARD = "task_reward",
@@ -73,7 +77,7 @@ public class JobDbHandler {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Job j = jobList.get(dataSnapshot.getKey()).update((Map<String, Object>) dataSnapshot.getValue());
+                Job j = jobList.get(dataSnapshot.getKey()).fromMap((Map<String, Object>) dataSnapshot.getValue());
                 if (j.getDateExpires().getTime() < System.currentTimeMillis()) {
                     jobList.remove(dataSnapshot.getKey());
                 } else {
@@ -102,9 +106,7 @@ public class JobDbHandler {
         mJobsDbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getChildrenCount() == jobList.size()) {
-                    if (listener != null) listener.onJobsChanged(getRecentJobs());
-                }
+                if (listener != null) listener.onJobsChanged(getRecentJobs());
             }
 
             @Override

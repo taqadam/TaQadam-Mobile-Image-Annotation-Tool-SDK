@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.recoded.taqadam.databinding.FragCategorizationBinding;
 import com.recoded.taqadam.models.Answer;
+import com.recoded.taqadam.models.db.JobDbHandler;
 import com.recoded.taqadam.models.db.TaskDbHandler;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -71,8 +72,8 @@ public class CategorizationFragment extends TaskFragment {
             }
         });
 
-        binding.tvInstruction.setText(mTask.getDescription());
-        List<String> options = mTask.getOptions();
+        binding.tvInstruction.setVisibility(View.GONE);
+        List<String> options = JobDbHandler.getInstance().getJob(mTask.getJobId()).getOptions();
         for (int i = 0; i < options.size(); i++) {
             TextView option = getStyledTextView(options.get(i));
             option.setId(i);

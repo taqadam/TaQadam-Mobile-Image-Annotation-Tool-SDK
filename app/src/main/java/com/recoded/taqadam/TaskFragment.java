@@ -5,8 +5,10 @@ import android.util.DisplayMetrics;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.recoded.taqadam.models.Answer;
+import com.recoded.taqadam.models.Job;
 import com.recoded.taqadam.models.Task;
 import com.recoded.taqadam.models.auth.UserAuthHandler;
+import com.recoded.taqadam.models.db.JobDbHandler;
 import com.recoded.taqadam.models.db.TaskDbHandler;
 
 import java.util.Date;
@@ -26,7 +28,8 @@ public class TaskFragment extends Fragment {
 
     public static TaskFragment newTask(String taskId) {
         Task t = TaskDbHandler.getInstance().getTask(taskId);
-        if (t.getType().equals(Task.BOUNDING_BOX) || t.getType().equals(Task.BBOX)) { //We have two different values as of now
+        Job j = JobDbHandler.getInstance().getJob(t.getJobId());
+        if (j.getTasksType().equals(Task.BOUNDING_BOX) || j.getTasksType().equals(Task.BBOX)) { //We have two different values as of now
             TaskFragment frag = new BoundingBoxFragment();
             frag.setTask(t);
             return frag;

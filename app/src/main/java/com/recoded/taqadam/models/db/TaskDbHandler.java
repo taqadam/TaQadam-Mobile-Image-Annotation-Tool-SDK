@@ -5,8 +5,11 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.recoded.taqadam.models.Answer;
+import com.recoded.taqadam.models.Job;
 import com.recoded.taqadam.models.Task;
 import com.recoded.taqadam.models.auth.UserAuthHandler;
 
@@ -22,13 +25,9 @@ import java.util.Map;
 //This class handles both Tasks and Answers
 public class TaskDbHandler {
     public static final String
-            DESC = "description",
-            DATE_CREATED = "date_created",
-            DATE_EXPIRES = "date_expires",
-            TYPE = "type",
             ATTEMPTS = "attempted_by",
             COMPLETED_ATTEMPTS = "completed_by",
-            OPTIONS = "options",
+            IMPRESSIONS = "impressions",
             JOB_ID = "job_id",
             TASK_IMAGE = "task_image";
 
@@ -36,7 +35,10 @@ public class TaskDbHandler {
     private static TaskDbHandler handler;
     private DatabaseReference mTasksDbRef;
     private DatabaseReference mAnswersDbRef;
+    private OnImpressionsReachedListener impressionsListener;
     private Map<String, Task> tasksCache;
+
+    private Map<String, ValueEventListener> completedByRefs;
 
     public synchronized static TaskDbHandler getInstance() {
         if (handler == null) {
@@ -52,6 +54,7 @@ public class TaskDbHandler {
         this.mAnswersDbRef = FirebaseDatabase.getInstance().getReference()
                 .child("Temp").child("Answers");
         tasksCache = new HashMap<>();
+        completedByRefs = new HashMap<>();
     }
 
     public com.google.android.gms.tasks.Task<List<Task>> getTasks(final String... ids) {
@@ -77,10 +80,13 @@ public class TaskDbHandler {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     final Task task = new Task(ids[finalI])
                             .fromMap((Map<String, Object>) dataSnapshot.getValue());
-
-                    if (!task.getCompletedBy().containsValue(mUid)) {
-                        tasksCache.put(ids[finalI], task);
-                        tasks.add(task);
+                    final Job j = JobDbHandler.getInstance().getJob(task.getJobId());
+                    if (task.getCompletedBy().size() < j.getNoOfImpressions()) {
+                        if (!task.getCompletedBy().containsValue(mUid)) {
+                            tasksCache.put(ids[finalI], task);
+                            tasks.add(task);
+                            listenForImpressions(ids[finalI]);
+                        }
                     }
                     if (finalI == ids.length - 1) {
                         src.setResult(tasks);
@@ -100,8 +106,46 @@ public class TaskDbHandler {
         return src.getTask();
     }
 
+    public void setImpressionsListener(OnImpressionsReachedListener listener) {
+        impressionsListener = listener;
+    }
+
+    private void listenForImpressions(final String id) {
+        final DatabaseReference ref = mTasksDbRef.child(id).child(COMPLETED_ATTEMPTS);
+        final Job j = JobDbHandler.getInstance().getJob(getTask(id).getJobId());
+        ValueEventListener l = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if ((dataSnapshot.getValue()) != null) {
+                    HashMap<String, Object> ids = ((HashMap<String, Object>) dataSnapshot.getValue());
+                    if (j.getNoOfImpressions() <= ids.size()) {
+                        if (impressionsListener != null) {
+                            impressionsListener.onImpressionsReached(id);
+                        }
+                        tasksCache.remove(id);
+                        ref.removeEventListener(this);
+                        completedByRefs.remove(id);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        ref.addValueEventListener(l);
+        completedByRefs.put(id, l);
+    }
+
     public Task getTask(String taskId) {
         return tasksCache.get(taskId);
+    }
+
+    public void removeTask(String taskId) {
+        if (tasksCache.containsKey(taskId)) {
+            tasksCache.remove(taskId);
+        }
     }
 
     public com.google.android.gms.tasks.Task<Answer> getAnswer(final String taskId, final String answerId) {
@@ -152,8 +196,24 @@ public class TaskDbHandler {
                     mTasksDbRef.child(taskId).child(COMPLETED_ATTEMPTS).child(mUid).setValue(a.getAnswerId());
                     mAnswersDbRef.child(taskId).child(a.getAnswerId()).setValue(a.toMap());
 
-                    //add it to cache as well
-                    tasksCache.get(taskId).addComplete(mUid);
+                    tasksCache.remove(taskId);
+
+                    DatabaseReference attemptedRef = mTasksDbRef.child(taskId).child(IMPRESSIONS);
+                    attemptedRef.runTransaction(new Transaction.Handler() {
+                        @Override
+                        public Transaction.Result doTransaction(MutableData mutableData) {
+                            if (mutableData.getValue() == null)
+                                return Transaction.success(mutableData);
+                            int attempts = ((Long) mutableData.getValue()).intValue();
+                            mutableData.setValue(++attempts);
+                            return Transaction.success(mutableData);
+                        }
+
+                        @Override
+                        public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+
+                        }
+                    });
                 }
             }
         }
@@ -162,7 +222,18 @@ public class TaskDbHandler {
     public void release() {
         //for logging out
         this.mUid = null;
+        for (String k : completedByRefs.keySet()) {
+            mTasksDbRef.child(k).removeEventListener(completedByRefs.get(k));
+        }
         this.tasksCache.clear();
         handler = null;
+    }
+
+    public interface OnImpressionsReachedListener {
+        void onImpressionsReached(String taskId);
+    }
+
+    public interface OnTaskCompletedListener {
+        void onTaskCompleted(String taskId);
     }
 }

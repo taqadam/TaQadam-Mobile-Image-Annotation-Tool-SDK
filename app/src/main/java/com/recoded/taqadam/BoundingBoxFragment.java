@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,9 +14,12 @@ import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
 import android.widget.ImageButton;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
 import com.recoded.taqadam.databinding.FragBoundingBoxBinding;
 import com.recoded.taqadam.models.Answer;
 import com.recoded.taqadam.models.Region;
+import com.recoded.taqadam.models.db.JobDbHandler;
 import com.recoded.taqadam.models.db.TaskDbHandler;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -70,7 +74,7 @@ public class BoundingBoxFragment extends TaskFragment {
         if (savedInstanceState != null)
             mRegions = savedInstanceState.getParcelableArrayList("regions");
 
-        binding.tvInstruction.setText(mTask.getDescription());
+        binding.tvInstruction.setVisibility(View.GONE);
 
         /*//This library has an issue that it intercepts all touch events so I changed it's touch listener to dispatch other gestures as well
         binding.ivTaskImage.setOnTouchListener(new View.OnTouchListener() {
@@ -103,24 +107,51 @@ public class BoundingBoxFragment extends TaskFragment {
         taskImageView.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
         binding.bboxView.setEnabled(false);
         binding.bboxView.setVisibility(View.GONE);
+        if (mTask.getTaskImage().getScheme().equalsIgnoreCase("http") || mTask.getTaskImage().getScheme().equalsIgnoreCase("https")) {
+            Picasso.with(getContext()).load(mTask.getTaskImage()).into(taskImageView, new Callback() {
+                @Override
+                public void onSuccess() {
+                    binding.imageProgressBar.setVisibility(View.GONE);
+                    binding.bboxView.setBoundingRect(taskImageView.getBitmapRect());
+                    if (mRegions.size() != 0) binding.bboxView.addRegions(mRegions);
+                    binding.bboxView.setEnabled(true);
+                    binding.bboxView.setVisibility(View.VISIBLE);
+                }
 
-        Picasso.with(getContext()).load(mTask.getTaskImage()).into(taskImageView, new Callback() {
-            @Override
-            public void onSuccess() {
-                binding.imageProgressBar.setVisibility(View.GONE);
-                binding.bboxView.setBoundingRect(taskImageView.getBitmapRect());
-                if (mRegions.size() != 0) binding.bboxView.addRegions(mRegions);
-                binding.bboxView.setEnabled(true);
-                binding.bboxView.setVisibility(View.VISIBLE);
-            }
+                @Override
+                public void onError() {
+                    Log.d(TAG, "Error while loading image " + mTask.getTaskImage().toString());
+                    binding.imageProgressBar.setVisibility(View.GONE);
+                    binding.tvError.setVisibility(View.VISIBLE);
+                }
+            });
+        } else if (mTask.getTaskImage().getScheme().equalsIgnoreCase("gs")) {
+            int indexOfSlash = mTask.getTaskImage().toString().indexOf('/', 5);
+            String bucket = mTask.getTaskImage().toString().substring(0, indexOfSlash);
+            String ref = mTask.getTaskImage().toString().substring(indexOfSlash + 1);
+            FirebaseStorage.getInstance(bucket).getReference(ref).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    Picasso.with(getContext()).load(uri).into(taskImageView, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            binding.imageProgressBar.setVisibility(View.GONE);
+                            binding.bboxView.setBoundingRect(taskImageView.getBitmapRect());
+                            if (mRegions.size() != 0) binding.bboxView.addRegions(mRegions);
+                            binding.bboxView.setEnabled(true);
+                            binding.bboxView.setVisibility(View.VISIBLE);
+                        }
 
-            @Override
-            public void onError() {
-                Log.d(TAG, "Error while loading image " + mTask.getTaskImage().toString());
-                binding.imageProgressBar.setVisibility(View.GONE);
-                binding.tvError.setVisibility(View.VISIBLE);
-            }
-        });
+                        @Override
+                        public void onError() {
+                            Log.d(TAG, "Error while loading image " + mTask.getTaskImage().toString());
+                            binding.imageProgressBar.setVisibility(View.GONE);
+                            binding.tvError.setVisibility(View.VISIBLE);
+                        }
+                    });
+                }
+            });
+        }
     }
 
     @Override
@@ -309,13 +340,15 @@ public class BoundingBoxFragment extends TaskFragment {
                 selectedRegion = regionId;
                 if (regionId == -1) {
                     binding.buttonAttributes.setVisibility(View.GONE);
-                    binding.tvInstruction.setText(mTask.getDescription());
+                    binding.tvInstruction.setVisibility(View.GONE);
                 } else {
                     if (binding.bboxView.getRegion(selectedRegion).getRegionAttributes().containsKey("label")) {
                         String label = binding.bboxView.getRegion(selectedRegion).getRegionAttributes().get("label");
                         binding.tvInstruction.setText(label);
+                        binding.tvInstruction.setVisibility(View.VISIBLE);
                     } else {
                         binding.tvInstruction.setText(R.string.no_label);
+                        binding.tvInstruction.setVisibility(View.VISIBLE);
                     }
                     binding.buttonAttributes.setVisibility(View.VISIBLE);
                 }
@@ -356,7 +389,7 @@ public class BoundingBoxFragment extends TaskFragment {
     }
 
     private void dispatchAttributesDialog(Region region) {
-        AttributesFragment frag = AttributesFragment.getInstance(region, mTask.getOptions());
+        AttributesFragment frag = AttributesFragment.getInstance(region, JobDbHandler.getInstance().getJob(mTask.getJobId()).getOptions());
         frag.setCancelable(false);
         frag.setLabelChangeListener(listener);
         frag.show(getFragmentManager(), "AttributesFrag");
