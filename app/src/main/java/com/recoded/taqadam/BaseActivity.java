@@ -19,7 +19,8 @@ public class BaseActivity extends AppCompatActivity {
         inflatedTheme = Theme.theme;
         locale = Lang.locale;
         setTheme(inflatedTheme);
-        setLanguage();
+        if (locale != null)
+            setLanguage();
         super.onCreate(savedInstanceState);
     }
 
@@ -36,7 +37,7 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        if (inflatedTheme != Theme.theme || !locale.equals(Lang.locale)) {
+        if (inflatedTheme != Theme.theme || (Lang.locale != null && !locale.equals(Lang.locale))) {
             recreate();
         }
         super.onResume();
