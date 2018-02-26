@@ -8,6 +8,7 @@ import com.recoded.taqadam.models.db.TaskDbHandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -23,12 +24,14 @@ public class TasksPagerAdapter extends FragmentPagerAdapter {
         TaskDbHandler.getInstance().setImpressionsListener(new TaskDbHandler.OnImpressionsReachedListener() {
             @Override
             public void onImpressionsReached(String taskId) {
-                for (Task t : tasksList) {
-                    if (t.getTaskId().equals(taskId)) {
-                        tasksList.remove(t);
-                        notifyDataSetChanged();
-                    }
+                Iterator<Task> iter = tasksList.iterator();
+                while (iter.hasNext()) {
+                    Task t = iter.next();
+
+                    if (t.getTaskId().equals(taskId))
+                        iter.remove();
                 }
+                notifyDataSetChanged();
             }
         });
     }

@@ -60,6 +60,7 @@ public class BoundingBoxFragment extends TaskFragment {
     private List<Region> mRegions = new ArrayList<>();
 
     protected boolean imageFrozen = false;
+    private AttributesFragment attributesFragment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -168,6 +169,9 @@ public class BoundingBoxFragment extends TaskFragment {
 
     @Override
     public void onDestroy() {
+        if (attributesFragment != null && attributesFragment.isVisible()) {
+            attributesFragment.dismiss();
+        }
         getAnswer();
         TaskDbHandler.getInstance().attemptTask(mTask.getTaskId());
         super.onDestroy();
@@ -395,10 +399,10 @@ public class BoundingBoxFragment extends TaskFragment {
     }
 
     private void dispatchAttributesDialog(Region region) {
-        AttributesFragment frag = AttributesFragment.getInstance(region, JobDbHandler.getInstance().getJob(mTask.getJobId()).getOptions());
-        frag.setCancelable(false);
-        frag.setLabelChangeListener(listener);
-        frag.show(getFragmentManager(), "AttributesFrag");
+        attributesFragment = AttributesFragment.getInstance(region, JobDbHandler.getInstance().getJob(mTask.getJobId()).getOptions());
+        attributesFragment.setCancelable(false);
+        attributesFragment.setLabelChangeListener(listener);
+        attributesFragment.show(getFragmentManager(), "AttributesFrag");
     }
 
     private void toggleToolbox() {
