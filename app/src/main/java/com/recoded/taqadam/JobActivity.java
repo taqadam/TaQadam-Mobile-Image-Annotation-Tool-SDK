@@ -126,7 +126,7 @@ public class JobActivity extends BaseActivity {
         }
 
         if (answer != null && answer.isCompleted()) {
-            if (binding.viewPager.getCurrentItem() == mTasksPagerAdapter.getCount() - 1) {
+            if (mTasksPagerAdapter.getCount() == 0) {
                 showCompletedJobDialog();
             } else {
                 binding.viewPager.setCurrentItem(binding.viewPager.getCurrentItem() + 1);

@@ -1,5 +1,6 @@
 package com.recoded.taqadam.models.db;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -110,22 +111,27 @@ public class TaskDbHandler {
         impressionsListener = listener;
     }
 
-    private void listenForImpressions(final String id) {
-        final DatabaseReference ref = mTasksDbRef.child(id).child(COMPLETED_ATTEMPTS);
-        final Job j = JobDbHandler.getInstance().getJob(getTask(id).getJobId());
+    private void listenForImpressions(final String taskId) {
+        final DatabaseReference ref = mTasksDbRef.child(taskId).child(COMPLETED_ATTEMPTS);
+        final Job j = JobDbHandler.getInstance().getJob(getTask(taskId).getJobId());
         ValueEventListener l = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if ((dataSnapshot.getValue()) != null) {
-                    HashMap<String, Object> ids = ((HashMap<String, Object>) dataSnapshot.getValue());
-                    if (j.getNoOfImpressions() <= ids.size()) {
-                        if (impressionsListener != null) {
-                            impressionsListener.onImpressionsReached(id);
+                    if (tasksCache.containsKey(taskId)) {
+                        HashMap<String, Object> ids = ((HashMap<String, Object>) dataSnapshot.getValue());
+                        if (j.getNoOfImpressions() <= ids.size()) {
+                            if (impressionsListener != null) {
+                                impressionsListener.onImpressionsReached(taskId);
+                            }
+                            tasksCache.remove(taskId);
+                            ref.removeEventListener(this);
+                            completedByRefs.remove(taskId);
                         }
-                        tasksCache.remove(id);
-                        ref.removeEventListener(this);
-                        completedByRefs.remove(id);
                     }
+                } else {
+                    ref.removeEventListener(this);
+                    completedByRefs.remove(taskId);
                 }
             }
 
@@ -135,7 +141,7 @@ public class TaskDbHandler {
             }
         };
         ref.addValueEventListener(l);
-        completedByRefs.put(id, l);
+        completedByRefs.put(taskId, l);
     }
 
     public Task getTask(String taskId) {
@@ -182,36 +188,47 @@ public class TaskDbHandler {
                 }
 
                 a.setUserId(mUid);
+                if (a.isCompleted()) a.setCompleted(false);
                 mAnswersDbRef.child(taskId).child(id).setValue(a.toMap());
             }
         }
     }
 
-    public void completeTask(String taskId) {
+    public void completeTask(final String taskId) {
         if (tasksCache.containsKey(taskId)) {
             if (tasksCache.get(taskId).answer != null) {
-                Answer a = tasksCache.get(taskId).answer;
+                final Answer a = tasksCache.get(taskId).answer;
                 if (a.getAnswerId() != null && a.isCompleted()) {
-                    mTasksDbRef.child(taskId).child(ATTEMPTS).child(mUid).setValue(null);
-                    mTasksDbRef.child(taskId).child(COMPLETED_ATTEMPTS).child(mUid).setValue(a.getAnswerId());
-                    mAnswersDbRef.child(taskId).child(a.getAnswerId()).setValue(a.toMap());
-
-                    tasksCache.remove(taskId);
-
-                    DatabaseReference attemptedRef = mTasksDbRef.child(taskId).child(IMPRESSIONS);
-                    attemptedRef.runTransaction(new Transaction.Handler() {
+                    mTasksDbRef.child(taskId).child(ATTEMPTS).child(mUid).setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
-                        public Transaction.Result doTransaction(MutableData mutableData) {
-                            if (mutableData.getValue() == null)
-                                return Transaction.success(mutableData);
-                            int attempts = ((Long) mutableData.getValue()).intValue();
-                            mutableData.setValue(++attempts);
-                            return Transaction.success(mutableData);
-                        }
+                        public void onSuccess(Void aVoid) {
+                            mTasksDbRef.child(taskId).child(COMPLETED_ATTEMPTS).child(mUid).setValue(a.getAnswerId()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    mAnswersDbRef.child(taskId).child(a.getAnswerId()).setValue(a.toMap()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            tasksCache.remove(taskId);
+                                            DatabaseReference attemptedRef = mTasksDbRef.child(taskId).child(IMPRESSIONS);
+                                            attemptedRef.runTransaction(new Transaction.Handler() {
+                                                @Override
+                                                public Transaction.Result doTransaction(MutableData mutableData) {
+                                                    int attempts = 0;
+                                                    if (mutableData.getValue() != null) {
+                                                        attempts = ((Long) mutableData.getValue()).intValue();
+                                                    }
+                                                    mutableData.setValue(++attempts);
+                                                    return Transaction.success(mutableData);
+                                                }
 
-                        @Override
-                        public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
-
+                                                @Override
+                                                public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            });
                         }
                     });
                 }
