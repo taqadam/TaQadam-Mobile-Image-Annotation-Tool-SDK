@@ -3,12 +3,8 @@ package com.recoded.taqadam;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.recoded.taqadam.models.Task;
-import com.recoded.taqadam.models.db.TaskDbHandler;
+import com.recoded.taqadam.models.Image;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -16,44 +12,30 @@ import java.util.List;
  */
 
 public class TasksPagerAdapter extends FragmentPagerAdapter {
-    private List<Task> tasksList;
+    private List<Image> imagesList;
+    String type;
+    String jobId;
 
-    public TasksPagerAdapter(FragmentManager fm) {
+    public TasksPagerAdapter(FragmentManager fm, final List<Image> imagesList, String jobType, String jobId) {
         super(fm);
-        tasksList = new ArrayList<>();
-        TaskDbHandler.getInstance().setImpressionsListener(new TaskDbHandler.OnImpressionsReachedListener() {
-            @Override
-            public void onImpressionsReached(String taskId) {
-                Iterator<Task> iter = tasksList.iterator();
-                while (iter.hasNext()) {
-                    Task t = iter.next();
-
-                    if (t.getTaskId().equals(taskId))
-                        iter.remove();
-                }
-                notifyDataSetChanged();
-            }
-        });
+        this.imagesList = imagesList;
+        this.type = jobType;
+        this.jobId = jobId;
     }
 
-    public void addNewTasks(Task... t) {
-        tasksList.addAll(Arrays.asList(t));
-        notifyDataSetChanged();
-    }
 
-    public void removeTask(int position) {
-        tasksList.remove(position);
+    public void removeImage(int position) {
+        imagesList.remove(position);
         notifyDataSetChanged();
     }
 
     @Override
     public TaskFragment getItem(int position) {
-        Task t = tasksList.get(position);
-        return TaskFragment.newTask(t.getTaskId());
+        return TaskFragment.newTask(imagesList.get(position), type, jobId);
     }
 
     @Override
     public int getCount() {
-        return tasksList.size();
+        return imagesList.size();
     }
 }

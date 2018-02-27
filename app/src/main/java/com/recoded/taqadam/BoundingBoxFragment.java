@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,9 +20,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.recoded.taqadam.databinding.FragBoundingBoxBinding;
 import com.recoded.taqadam.models.Answer;
 import com.recoded.taqadam.models.Region;
-import com.recoded.taqadam.models.Task;
 import com.recoded.taqadam.models.db.JobDbHandler;
-import com.recoded.taqadam.models.db.TaskDbHandler;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -35,7 +34,7 @@ import java.util.List;
 import it.sephiroth.android.library.imagezoom.ImageViewTouchBase;
 
 /**
- * Created by Ahmad Siafaddin on 12/26/2017.
+ * Created by Wisam Naji on 12/26/2017.
  */
 
 public class BoundingBoxFragment extends TaskFragment {
@@ -63,7 +62,7 @@ public class BoundingBoxFragment extends TaskFragment {
     private AttributesFragment attributesFragment;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.frag_bounding_box, container, false);
@@ -72,11 +71,15 @@ public class BoundingBoxFragment extends TaskFragment {
             if (savedInstanceState.containsKey("regions")) {
                 mRegions = savedInstanceState.getParcelableArrayList("regions");
             }
-            if (mTask == null && savedInstanceState.containsKey("task_id")) {
-                Task t = TaskDbHandler.getInstance().getTask(savedInstanceState.getString("task_id"));
-                setTask(t);
+            if (mImage == null && savedInstanceState.containsKey("image")) {
+                mImage = savedInstanceState.getParcelable("image");
+            }
+            if (jobId == null && savedInstanceState.containsKey("job_id")) {
+                jobId = savedInstanceState.getString("job_id");
             }
         }
+        answer = new Answer(jobId, mImage.id);
+
         initTaskImg();
 
         initToolbox();
@@ -102,10 +105,6 @@ public class BoundingBoxFragment extends TaskFragment {
 
         toggleToolbox(); //hide or show the toolbox
 
-        if (mTask.answer != null) {
-            notifyFragmentForAnswer();
-        }
-
         return rootView;
     }
 
@@ -114,56 +113,46 @@ public class BoundingBoxFragment extends TaskFragment {
         taskImageView.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
         binding.bboxView.setEnabled(false);
         binding.bboxView.setVisibility(View.GONE);
-        if (mTask.getTaskImage().getScheme().equalsIgnoreCase("http") || mTask.getTaskImage().getScheme().equalsIgnoreCase("https")) {
-            Picasso.with(getContext()).load(mTask.getTaskImage()).into(taskImageView, new Callback() {
-                @Override
-                public void onSuccess() {
-                    binding.imageProgressBar.setVisibility(View.GONE);
-                    binding.bboxView.setBoundingRect(taskImageView.getBitmapRect());
-                    if (mRegions.size() != 0) binding.bboxView.addRegions(mRegions);
-                    binding.bboxView.setEnabled(true);
-                    binding.bboxView.setVisibility(View.VISIBLE);
-                }
-
-                @Override
-                public void onError() {
-                    Log.d(TAG, "Error while loading image " + mTask.getTaskImage().toString());
-                    binding.imageProgressBar.setVisibility(View.GONE);
-                    binding.tvError.setVisibility(View.VISIBLE);
-                }
-            });
-        } else if (mTask.getTaskImage().getScheme().equalsIgnoreCase("gs")) {
-            int indexOfSlash = mTask.getTaskImage().toString().indexOf('/', 5);
-            String bucket = mTask.getTaskImage().toString().substring(0, indexOfSlash);
-            String ref = mTask.getTaskImage().toString().substring(indexOfSlash + 1);
+        if (mImage.path.getScheme().equalsIgnoreCase("http") || mImage.path.getScheme().equalsIgnoreCase("https")) {
+            loadTaskImage(mImage.path);
+        } else if (mImage.path.getScheme().equalsIgnoreCase("gs")) {
+            int indexOfSlash = mImage.path.toString().indexOf('/', 5);
+            String bucket = mImage.path.toString().substring(0, indexOfSlash);
+            String ref = mImage.path.toString().substring(indexOfSlash + 1);
             FirebaseStorage.getInstance(bucket).getReference(ref).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
                 public void onSuccess(Uri uri) {
-                    Picasso.with(getContext()).load(uri).into(taskImageView, new Callback() {
-                        @Override
-                        public void onSuccess() {
-                            binding.imageProgressBar.setVisibility(View.GONE);
-                            binding.bboxView.setBoundingRect(taskImageView.getBitmapRect());
-                            if (mRegions.size() != 0) binding.bboxView.addRegions(mRegions);
-                            binding.bboxView.setEnabled(true);
-                            binding.bboxView.setVisibility(View.VISIBLE);
-                        }
-
-                        @Override
-                        public void onError() {
-                            Log.d(TAG, "Error while loading image " + mTask.getTaskImage().toString());
-                            binding.imageProgressBar.setVisibility(View.GONE);
-                            binding.tvError.setVisibility(View.VISIBLE);
-                        }
-                    });
+                    loadTaskImage(uri);
                 }
             });
         }
     }
 
+    private void loadTaskImage(Uri uri) {
+        Picasso.with(getContext()).load(uri).into(taskImageView, new Callback() {
+            @Override
+            public void onSuccess() {
+                binding.imageProgressBar.setVisibility(View.GONE);
+                binding.bboxView.setBoundingRect(taskImageView.getBitmapRect());
+                if (mRegions.size() != 0) binding.bboxView.addRegions(mRegions);
+                binding.bboxView.setEnabled(true);
+                binding.bboxView.setVisibility(View.VISIBLE);
+                imageLoaded = true;
+            }
+
+            @Override
+            public void onError() {
+                Log.d(TAG, "Error while loading image " + mImage.path.toString());
+                binding.imageProgressBar.setVisibility(View.GONE);
+                binding.tvError.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList("regions", (ArrayList<Region>) binding.bboxView.getDrawnRegions());
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        if (binding.bboxView != null)
+            outState.putParcelableArrayList("regions", (ArrayList<Region>) binding.bboxView.getDrawnRegions());
         super.onSaveInstanceState(outState);
     }
 
@@ -172,21 +161,15 @@ public class BoundingBoxFragment extends TaskFragment {
         if (attributesFragment != null && attributesFragment.isVisible()) {
             attributesFragment.dismiss();
         }
-        getAnswer();
-        TaskDbHandler.getInstance().attemptTask(mTask.getTaskId());
         super.onDestroy();
     }
 
     @Override
     public Answer getAnswer() {
         if (mRegions.size() == 0) {
-            mTask.answer.setRawAnswerData(null);
             return null;
         }
 
-        if (mTask.answer.isCompleted()) {
-            return mTask.answer;
-        }
         JSONObject rawAnswer = new JSONObject();
         JSONArray regions = new JSONArray();
         for (int i = 0; i < mRegions.size(); i++) {
@@ -195,37 +178,13 @@ public class BoundingBoxFragment extends TaskFragment {
         try {
             rawAnswer.put("image_width", binding.bboxView.getBoundingRect().width());
             rawAnswer.put("image_height", binding.bboxView.getBoundingRect().height());
+            rawAnswer.put("image_name", mImage.path.getLastPathSegment());
             rawAnswer.put("regions", regions);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        mTask.answer.setRawAnswerData(rawAnswer.toString());
-        return mTask.answer;
-    }
-
-    @Override
-    protected void notifyFragmentForAnswer() {
-        if (binding == null) {
-            return;
-        }
-        if (mTask.answer.isCompleted()) binding.completedTaskOverlay.setVisibility(View.VISIBLE);
-        String rawData = mTask.answer.getRawAnswerData();
-        if (rawData == null || rawData.isEmpty()) return;
-        try {
-            JSONObject rawAnswer = new JSONObject(mTask.answer.getRawAnswerData());
-            JSONArray regions = rawAnswer.getJSONArray("regions");
-            mRegions.clear();
-            for (int i = 0; i < regions.length(); i++) {
-                JSONObject shapeAndRegionAttr = regions.getJSONObject(i);
-                Region r = Region.fromJSONObject(shapeAndRegionAttr);
-                if (r != null) {
-                    mRegions.add(r);
-                }
-            }
-            binding.bboxView.addRegions(mRegions);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        answer.setRawAnswerData(rawAnswer.toString());
+        return answer;
     }
 
     private void initToolbox() {
@@ -399,7 +358,7 @@ public class BoundingBoxFragment extends TaskFragment {
     }
 
     private void dispatchAttributesDialog(Region region) {
-        attributesFragment = AttributesFragment.getInstance(region, JobDbHandler.getInstance().getJob(mTask.getJobId()).getOptions());
+        attributesFragment = AttributesFragment.getInstance(region, JobDbHandler.getInstance().getJob(jobId).getOptions());
         attributesFragment.setCancelable(false);
         attributesFragment.setLabelChangeListener(listener);
         attributesFragment.show(getFragmentManager(), "AttributesFrag");

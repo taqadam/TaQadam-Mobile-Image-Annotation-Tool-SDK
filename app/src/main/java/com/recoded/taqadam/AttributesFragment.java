@@ -54,7 +54,7 @@ public class AttributesFragment extends DialogFragment {
             binding.fragHeader.setVisibility(View.GONE);
             getDialog().setTitle(R.string.region_attributes);
         }
-        if (options.size() != 0) {
+        if (options != null && options.size() != 0) {
             initSpinner();
         } else {
             noLabel = true;

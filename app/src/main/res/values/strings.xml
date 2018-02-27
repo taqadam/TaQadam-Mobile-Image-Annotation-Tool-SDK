@@ -190,7 +190,7 @@
     <string name="not_verified_contact_method">Not Verified</string>
     <string name="jobs">Jobs</string>
     <string name="loading_tasks">Loading Tasks..</string>
-    <string name="error_while_loading_image">Error while loading image!</string>
+    <string name="error_while_loading_image">Error while loading image!\nPress check mark to skip for now</string>
     <string name="job_activity_title">Task %d/%d</string>
     <string name="attribute">Attribute</string>
     <string name="value">Value</string>
@@ -205,7 +205,7 @@
     <string name="region_delete_title">Delete Bounding Box</string>
     <string name="answer_has_already_been_submitted">Answer has already been submitted</string>
     <string name="no_more_tasks">No more tasks!</string>
-    <string name="you_completed_tasks">You\'ve already completed all the tasks in this job.</string>
+    <string name="you_completed_tasks">There are no more tasks in this job.</string>
     <string name="ok">OK</string>
     <string name="network_error">Make sure you are connected to the internet</string>
     <string name="job_item_tasks">%s Tasks</string>

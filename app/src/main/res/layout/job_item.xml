@@ -68,17 +68,6 @@
                     tools:text="@string/task_type"/>
 
                 <TextView
-                    android:id="@+id/tasks_counter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:background="@color/colorPrimary"
-                    android:padding="8dp"
-                    android:text="@{String.format(@string/job_item_tasks, String.valueOf(Job.tasks.size()))}"
-                    android:textColor="@color/colorWhite"
-                    tools:text="15/50"/>
-
-                <TextView
                     android:id="@+id/job_reward"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -2,6 +2,7 @@ package com.recoded.taqadam;
 
 import android.databinding.DataBindingUtil;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
@@ -10,11 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
 import com.recoded.taqadam.databinding.FragCategorizationBinding;
 import com.recoded.taqadam.models.Answer;
-import com.recoded.taqadam.models.Task;
 import com.recoded.taqadam.models.db.JobDbHandler;
-import com.recoded.taqadam.models.db.TaskDbHandler;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -38,7 +39,6 @@ public class CategorizationFragment extends TaskFragment {
     private SparseArray<String> selectedOptions = new SparseArray<>();
     private boolean multiSelection = true;
     private Point displayDims;
-    private boolean hasPendingAnswer = false;
 
     public CategorizationFragment() {
 
@@ -57,48 +57,57 @@ public class CategorizationFragment extends TaskFragment {
 
         setupOptionClickListener();
 
-        if (mTask == null && savedInstanceState != null) {
-            if (savedInstanceState.getString("task_id") != null) {
-                Task t = TaskDbHandler.getInstance().getTask(savedInstanceState.getString("task_id"));
-                setTask(t);
+        if (savedInstanceState != null) {
+            if (mImage == null && savedInstanceState.containsKey("image")) {
+                mImage = savedInstanceState.getParcelable("image");
+            }
+            if (jobId == null && savedInstanceState.containsKey("job_id")) {
+                jobId = savedInstanceState.getString("job_id");
             }
         }
+        answer = new Answer(jobId, mImage.id);
         taskImageView = binding.ivTaskImage;
         taskImageView.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
-        Picasso.with(getContext()).load(mTask.getTaskImage()).into(taskImageView, new Callback() {
-            @Override
-            public void onSuccess() {
-                binding.imageProgressBar.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onError() {
-                Log.d(TAG, "Error while loading image " + mTask.getTaskImage().toString());
-                binding.imageProgressBar.setVisibility(View.GONE);
-                binding.tvError.setVisibility(View.VISIBLE);
-            }
-        });
+        if (mImage.path.getScheme().equalsIgnoreCase("http") || mImage.path.getScheme().equalsIgnoreCase("https")) {
+            loadTaskImage(mImage.path);
+        } else if (mImage.path.getScheme().equalsIgnoreCase("gs")) {
+            int indexOfSlash = mImage.path.toString().indexOf('/', 5);
+            String bucket = mImage.path.toString().substring(0, indexOfSlash);
+            String ref = mImage.path.toString().substring(indexOfSlash + 1);
+            FirebaseStorage.getInstance(bucket).getReference(ref).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    loadTaskImage(uri);
+                }
+            });
+        }
 
         binding.tvInstruction.setVisibility(View.GONE);
-        List<String> options = JobDbHandler.getInstance().getJob(mTask.getJobId()).getOptions();
+        List<String> options = JobDbHandler.getInstance().getJob(jobId).getOptions();
         for (int i = 0; i < options.size(); i++) {
             TextView option = getStyledTextView(options.get(i));
             option.setId(i);
             addOptionToGrid(option);
         }
 
-        if (hasPendingAnswer) {
-            notifyFragmentForAnswer();
-        }
-
         return rootView;
     }
 
-    @Override
-    public void onDestroy() {
-        getAnswer();
-        TaskDbHandler.getInstance().attemptTask(mTask.getTaskId());
-        super.onDestroy();
+    private void loadTaskImage(Uri uri) {
+        Picasso.with(getContext()).load(uri).into(taskImageView, new Callback() {
+            @Override
+            public void onSuccess() {
+                binding.imageProgressBar.setVisibility(View.GONE);
+                imageLoaded = true;
+            }
+
+            @Override
+            public void onError() {
+                Log.d(TAG, "Error while loading image " + mImage.path.toString());
+                binding.imageProgressBar.setVisibility(View.GONE);
+                binding.tvError.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     private void addOptionToGrid(TextView option) {
@@ -149,12 +158,7 @@ public class CategorizationFragment extends TaskFragment {
     @Override
     public Answer getAnswer() {
         if (selectedOptions.size() == 0) {
-            mTask.answer.setRawAnswerData(null);
             return null;
-        }
-
-        if (mTask.answer.isCompleted()) {
-            return mTask.answer;
         }
 
         JSONObject rawAnswer = new JSONObject();
@@ -168,44 +172,7 @@ public class CategorizationFragment extends TaskFragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        mTask.answer.setRawAnswerData(rawAnswer.toString());
-        return mTask.answer;
-    }
-
-    @Override
-    protected void notifyFragmentForAnswer() {
-        if (binding == null) {
-            hasPendingAnswer = true;
-            return;
-        }
-        if (mTask.answer.isCompleted()) {
-            binding.completedTaskOverlay.setVisibility(View.VISIBLE);
-            for (int i = 0; i < binding.optionsGrid.getChildCount(); i++) {
-                binding.optionsGrid.getChildAt(i).setEnabled(false);
-            }
-        }
-
-        String rawData = mTask.answer.getRawAnswerData();
-        if (rawData == null || rawData.isEmpty()) return;
-
-        for (int i = 0; i < selectedOptions.size(); i++) {
-            binding.optionsGrid.findViewById(selectedOptions.keyAt(i)).setBackgroundResource(R.drawable.options_background_normal);
-        }
-        selectedOptions.clear();
-
-        try {
-            JSONObject rawAnswer = new JSONObject(mTask.answer.getRawAnswerData());
-            JSONArray categories = rawAnswer.getJSONArray("categories");
-            for (int i = 0; i < categories.length(); i++) {
-                String cat = categories.getString(i);
-                View v = binding.optionsGrid.findViewWithTag(cat);
-                if (v != null) {
-                    selectedOptions.put(v.getId(), cat);
-                    v.setBackgroundResource(R.drawable.options_background_selected);
-                }
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        answer.setRawAnswerData(rawAnswer.toString());
+        return answer;
     }
 }

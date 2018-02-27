@@ -5,15 +5,9 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.recoded.taqadam.models.Answer;
+import com.recoded.taqadam.models.Image;
 import com.recoded.taqadam.models.Job;
-import com.recoded.taqadam.models.Task;
-import com.recoded.taqadam.models.auth.UserAuthHandler;
-import com.recoded.taqadam.models.db.JobDbHandler;
-import com.recoded.taqadam.models.db.TaskDbHandler;
-
-import java.util.Date;
 
 import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 
@@ -24,20 +18,21 @@ import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 public class TaskFragment extends Fragment {
     private static final String TAG = TaskFragment.class.getSimpleName();
 
-    protected Task mTask;
+    protected Image mImage;
     protected ImageViewTouch taskImageView;
-    protected Answer taskAnswer;
+    protected String jobId;
+    protected Answer answer;
+    protected boolean imageLoaded = false;
 
-    public static TaskFragment newTask(String taskId) {
-        Task t = TaskDbHandler.getInstance().getTask(taskId);
-        Job j = JobDbHandler.getInstance().getJob(t.getJobId());
-        if (j.getTasksType().equals(Task.BOUNDING_BOX) || j.getTasksType().equals(Task.BBOX)) { //We have two different values as of now
+    public static TaskFragment newTask(Image img, String type, String jobId) {
+        if (type.equals(Job.BBOX)) {
             TaskFragment frag = new BoundingBoxFragment();
-            frag.setTask(t);
+            frag.setImage(img);
+            frag.setJobId(jobId);
             return frag;
         } else {
             TaskFragment frag = new CategorizationFragment();
-            frag.setTask(t);
+            frag.setImage(img);
             return frag;
         }
     }
@@ -47,35 +42,13 @@ public class TaskFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putString("task_id", mTask.getTaskId());
+        outState.putParcelable("image", mImage);
+        outState.putString("job_id", jobId);
         super.onSaveInstanceState(outState);
     }
 
-    public void setTask(Task t) {
-        mTask = t;
-        if (t.answer == null) {
-            //check if the task was attempted
-            if (mTask.getAttemptedBy().containsKey(UserAuthHandler.getInstance().getUid())) {
-                String answerId = mTask.getAttemptedBy().get(UserAuthHandler.getInstance().getUid());
-
-                mTask.answer = new Answer(mTask.getTaskId(), answerId); //to not make new ids all the time
-
-                TaskDbHandler.getInstance().getAnswer(mTask.getTaskId(), answerId).addOnSuccessListener(new OnSuccessListener<Answer>() {
-                    @Override
-                    public void onSuccess(Answer answer) {
-                        mTask.answer = answer;
-                        notifyFragmentForAnswer();
-                    }
-                });
-            } else {
-                taskAnswer = new Answer(mTask.getTaskId());
-                taskAnswer.setAnswerStartTime(new Date());
-                t.answer = taskAnswer;
-            }
-        } else {
-            taskAnswer = t.answer;
-            this.notifyFragmentForAnswer();
-        }
+    public void setImage(Image img) {
+        mImage = img;
     }
 
     protected int pxToDp(int px) {
@@ -92,6 +65,7 @@ public class TaskFragment extends Fragment {
         return null;
     }
 
-    protected void notifyFragmentForAnswer() {
+    public void setJobId(String jobId) {
+        this.jobId = jobId;
     }
 }

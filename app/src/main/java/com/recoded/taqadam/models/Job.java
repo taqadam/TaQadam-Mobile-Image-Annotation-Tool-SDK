@@ -1,12 +1,16 @@
 package com.recoded.taqadam.models;
 
+import android.net.Uri;
+
+import com.recoded.taqadam.models.auth.UserAuthHandler;
+import com.recoded.taqadam.models.db.ImageDbHandler;
 import com.recoded.taqadam.models.db.JobDbHandler;
-import com.recoded.taqadam.models.db.TaskDbHandler;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -15,26 +19,28 @@ import java.util.Map;
  */
 
 public class Job {
+    public static final String CATEGORIZATION = "categorization";
+    public static final String BBOX = "bbox";
+
     private String jobId;
     private Date dateCreated;
     private Date dateExpires;
     private String type;
-    private int numberOfAttempts;
-    private int successfulAttempts;
     private int noOfImpressions;
     private String tasksType;
     private List<String> options;
     private String instructions;
     private String description;
     private float taskReward;
-    private List<String> tasks;
     private String jobName;
     private String company;
 
+    private List<Image> imagesList;
+
     public Job(String jobId) {
         this.jobId = jobId;
-        tasks = new ArrayList<>();
         options = new ArrayList<>();
+        imagesList = new ArrayList<>();
     }
 
     public String getJobId() {
@@ -77,14 +83,6 @@ public class Job {
         return type;
     }
 
-    public int getNumberOfAttempts() {
-        return numberOfAttempts;
-    }
-
-    public int getSuccessfulAttempts() {
-        return successfulAttempts;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -93,8 +91,38 @@ public class Job {
         return taskReward;
     }
 
-    public List<String> getTasks() {
-        return tasks;
+    public List<Image> getImagesList() {
+        return imagesList;
+    }
+
+    public void removeeImage(String imageId) {
+        Iterator<Image> i = imagesList.iterator();
+        while (i.hasNext()) {
+            Image image = i.next();
+            if (image.id.equals(imageId))
+                i.remove();
+        }
+    }
+
+    public void setImages(Map<String, Map<String, Object>> val) {
+        imagesList.clear();
+        for (String k : val.keySet()) {
+            boolean done = false;
+            if (val.get(k).containsKey(ImageDbHandler.COMPLETED_BY)) {
+                Map<String, Boolean> uids = (Map<String, Boolean>) val.get(k).get(ImageDbHandler.COMPLETED_BY);
+                if (uids.containsKey(UserAuthHandler.getInstance().getUid())) {
+                    done = true;
+                } else if (uids.size() >= noOfImpressions) {
+                    done = true;
+                }
+            }
+            if (!done) {
+                Image im = new Image();
+                im.id = k;
+                im.path = Uri.parse((String) val.get(k).get(ImageDbHandler.TASK_IMAGE));
+                imagesList.add(im);
+            }
+        }
     }
 
     public Job fromMap(Map<String, Object> map) {
@@ -135,12 +163,6 @@ public class Job {
                 case JobDbHandler.COMPANY:
                     company = (String) map.get(k);
                     break;
-                case JobDbHandler.ATTEMPTS:
-                    numberOfAttempts = ((Long) map.get(k)).intValue();
-                    break;
-                case JobDbHandler.SUCCESSFUL_ATTEMPTS:
-                    successfulAttempts = ((Long) map.get(k)).intValue();
-                    break;
 
                 case JobDbHandler.OPTIONS:
                     options.addAll((List<String>) map.get(k));
@@ -156,18 +178,12 @@ public class Job {
                         taskReward = ((long) map.get(k)) * 1f;
                     }
                     break;
-                case JobDbHandler.TASKS:
-                    if (!tasks.isEmpty()) {
-                        for (String taskId : tasks) {
-                            TaskDbHandler.getInstance().removeTask(taskId);
-                        }
-                        tasks.clear();
-                    }
-                    tasks.addAll((List<String>) map.get(k));
-                    break;
             }
         }
-
         return this;
+    }
+
+    public void release() {
+        imagesList.clear();
     }
 }
