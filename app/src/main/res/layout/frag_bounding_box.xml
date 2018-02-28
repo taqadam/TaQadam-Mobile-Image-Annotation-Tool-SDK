@@ -128,25 +128,5 @@
             android:text="@string/error_while_loading_image"
             android:textSize="24sp"
             android:visibility="gone"/>
-
-        <RelativeLayout
-            android:id="@+id/completed_task_overlay"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorTransparentOverlay"
-            android:clickable="true"
-            android:focusable="true"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:drawablePadding="16dp"
-                android:drawableTop="@drawable/ic_check_big"
-                android:gravity="center"
-                android:text="@string/answer_has_already_been_submitted"
-                android:textSize="16sp"/>
-        </RelativeLayout>
     </FrameLayout>
 </layout>

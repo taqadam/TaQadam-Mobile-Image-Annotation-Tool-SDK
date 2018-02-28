@@ -1,5 +1,6 @@
 package com.recoded.taqadam.models;
 
+import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.os.Parcel;
@@ -25,7 +26,8 @@ public abstract class Region implements Parcelable {
     protected List<PointF> points;
     protected HashMap<String, String> regionAttributes;
     protected boolean closed;
-    protected float scale;
+    private final Matrix mTransformMatrix = new Matrix();
+    //private float scale = 1f;
     //protected RectF imageRect;
 
     //protected float pointRadius;
@@ -35,6 +37,18 @@ public abstract class Region implements Parcelable {
         points = new ArrayList<>();
         regionAttributes = new HashMap<>();
         closed = false;
+    }
+
+    public static Region copyRegion(Region in) {
+        Region out = Region.newRegion(in.shape);
+        for (PointF p : in.getPoints()) {
+            out.addPoint(new PointF(p.x, p.y));
+        }
+        if (in.closed) {
+            out.close();
+        }
+        out.setRegionAttributes(in.regionAttributes);
+        return out;
     }
 
     protected boolean rectContains(PointF p) {
@@ -207,9 +221,29 @@ public abstract class Region implements Parcelable {
 
     public abstract boolean contains(PointF p);
 
+
+    public void transform(float mScale) {
+        //scale = mScale;
+        mTransformMatrix.reset();
+        mTransformMatrix.postScale(mScale, mScale);
+        float[] pts = getPointsArray();
+        mTransformMatrix.mapPoints(pts);
+        points.clear();
+        for (int i = 0; i < pts.length; i += 2) {
+            points.add(new PointF(pts[i], pts[i + 1]));
+        }
+        close();
+    }
+
+    /*
     public void setScale(float scale) {
         this.scale = scale;
     }
+
+    public float getScale() {
+        return scale;
+    }
+    */
 
     /*public void setImageRect(RectF imageRect) {
         this.imageRect = imageRect;
@@ -269,7 +303,7 @@ public abstract class Region implements Parcelable {
         dest.writeTypedList(this.points);
         dest.writeByte(this.closed ? (byte) 1 : (byte) 0);
         dest.writeSerializable(this.regionAttributes);
-        dest.writeFloat(this.scale);
+        //dest.writeFloat(this.scale);
     }
 
     public static Region createFromParcel(Parcel in) {
@@ -283,7 +317,10 @@ public abstract class Region implements Parcelable {
         }
 
         r.setRegionAttributes((HashMap<String, String>) in.readSerializable()); //4 attributes
-        r.setScale(in.readFloat()); //5 scale
+        //r.setScale(in.readFloat()); //5 scale
+        //if (r.getScale() != 1f) {
+        //    r.transform(r.getScale());
+        //}
         return r;
 
     }

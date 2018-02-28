@@ -5,6 +5,9 @@ import android.animation.AnimatorListenerAdapter;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
+import android.graphics.Matrix;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -110,7 +113,7 @@ public class BoundingBoxFragment extends TaskFragment {
 
     private void initTaskImg() {
         taskImageView = binding.ivTaskImage;
-        taskImageView.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
+        taskImageView.setDisplayType(ImageViewTouchBase.DisplayType.NONE);
         binding.bboxView.setEnabled(false);
         binding.bboxView.setVisibility(View.GONE);
         if (mImage.path.getScheme().equalsIgnoreCase("http") || mImage.path.getScheme().equalsIgnoreCase("https")) {
@@ -133,11 +136,25 @@ public class BoundingBoxFragment extends TaskFragment {
             @Override
             public void onSuccess() {
                 binding.imageProgressBar.setVisibility(View.GONE);
-                binding.bboxView.setBoundingRect(taskImageView.getBitmapRect());
+                RectF boundingRect = taskImageView.getBitmapRect();
+                if (boundingRect.width() == 0 || boundingRect.height() == 0) {
+                    Rect localRect = new Rect();
+                    taskImageView.getLocalVisibleRect(localRect);
+                    boundingRect.set(localRect);
+                }
+                binding.bboxView.setBoundingRect(boundingRect);
+                binding.bboxView.setImageRect(boundingRect);
                 if (mRegions.size() != 0) binding.bboxView.addRegions(mRegions);
                 binding.bboxView.setEnabled(true);
                 binding.bboxView.setVisibility(View.VISIBLE);
                 imageLoaded = true;
+                taskImageView.setOnMatrixChangeListener(new ImageViewTouchBase.OnMatrixChangeListener() {
+                    @Override
+                    public void onMatrixChanged(Matrix m) {
+                        binding.bboxView.transformRegions(taskImageView.getBitmapRect());
+                    }
+                });
+                taskImageView.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
             }
 
             @Override
@@ -151,8 +168,8 @@ public class BoundingBoxFragment extends TaskFragment {
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        if (binding.bboxView != null)
-            outState.putParcelableArrayList("regions", (ArrayList<Region>) binding.bboxView.getDrawnRegions());
+        //if (binding.bboxView != null)
+        //outState.putParcelableArrayList("regions", (ArrayList<Region>) binding.bboxView.getDrawnRegions());
         super.onSaveInstanceState(outState);
     }
 
@@ -172,12 +189,15 @@ public class BoundingBoxFragment extends TaskFragment {
 
         JSONObject rawAnswer = new JSONObject();
         JSONArray regions = new JSONArray();
-        for (int i = 0; i < mRegions.size(); i++) {
-            regions.put(mRegions.get(i).toJSONObject());
+        float scaleTo = binding.bboxView.getImageRect().width() / binding.bboxView.getBoundingRect().width();
+        for (Region r : binding.bboxView.getDrawnRegions()) {
+            Region newRegion = Region.copyRegion(r);
+            newRegion.transform(scaleTo);
+            regions.put(newRegion.toJSONObject());
         }
         try {
-            rawAnswer.put("image_width", binding.bboxView.getBoundingRect().width());
-            rawAnswer.put("image_height", binding.bboxView.getBoundingRect().height());
+            rawAnswer.put("image_width", binding.bboxView.getImageRect().width());
+            rawAnswer.put("image_height", binding.bboxView.getImageRect().height());
             rawAnswer.put("image_name", mImage.path.getLastPathSegment());
             rawAnswer.put("regions", regions);
         } catch (JSONException e) {
@@ -277,8 +297,6 @@ public class BoundingBoxFragment extends TaskFragment {
         binding.buttonEllipse.setOnClickListener(mToolsClickListener);
         binding.buttonLockImage.setOnClickListener(mToolsClickListener);
 
-        binding.buttonLockImage.performClick();
-
         binding.buttonAttributes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -373,9 +391,9 @@ public class BoundingBoxFragment extends TaskFragment {
     }
 
     private void toggleImageFreeze() {
-        taskImageView.setScaleEnabled(false);//imageFrozen); until scaling feature is implemented
-        taskImageView.setScrollEnabled(false);//imageFrozen);
-        taskImageView.setDoubleTapEnabled(false);///imageFrozen);
+        taskImageView.setScaleEnabled(imageFrozen);
+        taskImageView.setScrollEnabled(imageFrozen);
+        taskImageView.setDoubleTapEnabled(imageFrozen);
         imageFrozen = !imageFrozen;
     }
 

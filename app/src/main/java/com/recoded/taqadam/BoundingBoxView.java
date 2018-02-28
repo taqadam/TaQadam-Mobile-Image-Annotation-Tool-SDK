@@ -43,7 +43,9 @@ public class BoundingBoxView extends View {
     private int mSelectedRegion = -1; //for region manipulation
     private int mSelectedPoint = -1; //point manipulation
     private RectF mBoundingRectangle; //To snap the drawing to this
+    private RectF mImageRect;
     private Paint mLinePaint;
+    private float mScale = 1f;
 
     private Paint mPointPaint;
 
@@ -92,7 +94,15 @@ public class BoundingBoxView extends View {
     }
 
     public void setBoundingRect(RectF rect) {
-        mBoundingRectangle = rect;
+        mBoundingRectangle = new RectF(rect);
+    }
+
+    public void setImageRect(RectF rect) {
+        mImageRect = new RectF(rect);
+    }
+
+    public RectF getImageRect() {
+        return mImageRect;
     }
 
     public RectF getBoundingRect() {
@@ -159,8 +169,13 @@ public class BoundingBoxView extends View {
         invalidate();
     }
 
-    public void transformRegions(float scaleFactor) {
-
+    public void transformRegions(RectF newRect) {
+        mScale = newRect.width() / mBoundingRectangle.width();
+        mBoundingRectangle.set(newRect);
+        for (Region r : drawnRegions) {
+            r.transform(mScale);
+        }
+        invalidate();
     }
 
     public void setOnDrawingFinishedListener(OnDrawingFinished listener) {
@@ -556,7 +571,8 @@ public class BoundingBoxView extends View {
         return p;
     }
 
-    private int getRegionUnderTouch(PointF p) {
+    private int getRegionUnderTouch(PointF downTouch) {
+        PointF p = new PointF(downTouch.x, downTouch.y);
         if (mBoundingRectangle != null) {
             p.x = p.x - mBoundingRectangle.left;
             p.y = p.y - mBoundingRectangle.top;
