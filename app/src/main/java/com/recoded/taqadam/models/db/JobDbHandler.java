@@ -30,6 +30,7 @@ public class JobDbHandler {
             TYPE = "type",
             TASKS_TYPE = "tasks_type",
             OPTIONS = "options",
+            COUNT = "images_count",
             INSTRUCTIONS = "instructions",
             IMPRESSIONS = "impressions",
             TASK_REWARD = "task_reward";
@@ -69,8 +70,7 @@ public class JobDbHandler {
                     if (job.getType().equalsIgnoreCase("Qualifier")
                             || job.getType().equalsIgnoreCase("Tutorial")
                             || (job.getType().equalsIgnoreCase("Paid")
-                            && UserAuthHandler.getInstance().getCurrentUser().isAccountApproved())
-                            || true) { //remove true to add restrictions
+                            && UserAuthHandler.getInstance().getCurrentUser().isAccountApproved())) {
                         jobsCache.put(job.getJobId(), job);
                     }
                 }
@@ -80,7 +80,7 @@ public class JobDbHandler {
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Job job = jobsCache.get(dataSnapshot.getKey()).fromMap((Map<String, Object>) dataSnapshot.getValue());
                 if (job.getDateExpires().getTime() < System.currentTimeMillis()
-                        || (job.getType().equalsIgnoreCase("Paid") && false //remove for restriction
+                        || (job.getType().equalsIgnoreCase("Paid")
                         && !UserAuthHandler.getInstance().getCurrentUser().isAccountApproved())) {
                     jobsCache.remove(dataSnapshot.getKey());
                 } else {

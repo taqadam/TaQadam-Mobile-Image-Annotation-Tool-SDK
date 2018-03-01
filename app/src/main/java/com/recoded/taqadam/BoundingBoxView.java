@@ -86,7 +86,7 @@ public class BoundingBoxView extends View {
 
         mPointPaint.setStyle(Paint.Style.FILL_AND_STROKE);
 
-        mLinePaint = getNewPaint(mPointRadius / 3, mColorNormal);
+        mLinePaint = getNewPaint(mPointRadius / 5, mColorNormal);
 
         mCrossPaint = getNewPaint(mPointRadius / 2, Color.RED);
 

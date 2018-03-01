@@ -27,6 +27,7 @@ public class Job {
     private Date dateExpires;
     private String type;
     private int noOfImpressions;
+    private int imagesCount;
     private String tasksType;
     private List<String> options;
     private String instructions;
@@ -65,6 +66,10 @@ public class Job {
 
     public String getCompany() {
         return company;
+    }
+
+    public int getImagesCount() {
+        return imagesCount;
     }
 
     public int getNoOfImpressions() {
@@ -151,6 +156,9 @@ public class Job {
                 case JobDbHandler.IMPRESSIONS:
                     noOfImpressions = ((Long) map.get(k)).intValue();
                     break;
+                case JobDbHandler.COUNT:
+                    imagesCount = ((Long) map.get(k)).intValue();
+                    break;
                 case JobDbHandler.INSTRUCTIONS:
                     instructions = (String) map.get(k);
                     break;
@@ -165,6 +173,7 @@ public class Job {
                     break;
 
                 case JobDbHandler.OPTIONS:
+                    options.clear();
                     options.addAll((List<String>) map.get(k));
                     break;
 

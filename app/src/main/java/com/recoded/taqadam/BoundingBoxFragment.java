@@ -313,7 +313,9 @@ public class BoundingBoxFragment extends TaskFragment {
         binding.bboxView.setOnDrawingFinishedListener(new BoundingBoxView.OnDrawingFinished() {
             @Override
             public void onDrawingFinished(Region region, int regionIndex) {
-                binding.getRoot().findViewById(mSelectedId).setAlpha(1);
+                if (mSelectedId != -1) {
+                    binding.getRoot().findViewById(mSelectedId).setAlpha(1);
+                }
                 mSelectedId = -1;
                 mRegions.add(region);
                 dispatchAttributesDialog(region);
