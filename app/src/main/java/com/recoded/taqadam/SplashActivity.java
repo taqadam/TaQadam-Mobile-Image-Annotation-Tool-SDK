@@ -273,6 +273,7 @@ public class SplashActivity extends AppCompatActivity {
         if (UserAuthHandler.getInstance().getCurrentUser() == null) {
             Intent i = new Intent(this, SigninActivity.class);
             startActivity(i);
+            finish();
         } else if (!UserAuthHandler.getInstance().getCurrentUser().isCompleteProfile()) {
             Intent i = new Intent(SplashActivity.this, ConfirmProfileActivity.class);
             startActivity(i);

@@ -90,7 +90,7 @@ public class UserDbHandler {
         keyValues.put(FIRST_NAME, user.getFirstName());
         keyValues.put(LAST_NAME, user.getLastName());
         keyValues.put(DISPLAY_NAME, user.getDisplayName());
-        keyValues.put(EMAIL_ADDRESS, user.getEmailAddress());
+        //keyValues.put(EMAIL_ADDRESS, user.getEmailAddress());
         keyValues.put(PHONE_NUMBER, user.getPhoneNumber());
         keyValues.put(USER_ADDRESS, user.getUserCity().getName());
         keyValues.put(USER_DOB_TS, user.getDateOfBirth().getTime());

@@ -17,6 +17,8 @@ public class FragmentQA extends WebViewerFragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        loadUrl("http://www.taqadam.io");
+        webView.loadData("<h3><b>Help & FAQ</b></h3>", "text/html", "utf-8");
+        //@todo link to better website this is causing high memory consumption
+        //loadUrl("http://www.taqadam.io/work");
     }
 }

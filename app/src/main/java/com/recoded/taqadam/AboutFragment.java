@@ -32,7 +32,7 @@ public class AboutFragment extends Fragment {
         binding.bPrivacy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onButtonClicked("http://www.taqadam.io");
+                listener.onButtonClicked("http://www.taqadam.io/docs/docs.php?doc=privacy_policy");
             }
         });
         binding.bTaqadam.setOnClickListener(new View.OnClickListener() {
@@ -44,7 +44,7 @@ public class AboutFragment extends Fragment {
         binding.bTos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onButtonClicked("http://www.taqadam.io");
+                listener.onButtonClicked("http://www.taqadam.io/docs/docs.php?doc=trainer_agreement");
             }
         });
         binding.bUs.setOnClickListener(new View.OnClickListener() {

@@ -24,11 +24,8 @@ public class WebViewerFragment extends Fragment {
         webView = r.findViewById(R.id.web_viewer);
         webView.setWebViewClient(new WebViewClient());
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.getSettings().setLoadWithOverviewMode(true);
-        webView.getSettings().setUseWideViewPort(true);
         webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
         webView.getSettings().setSupportMultipleWindows(false);
-        webView.getSettings().setSupportZoom(false);
         return r;
     }
 

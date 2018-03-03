@@ -2,6 +2,7 @@ package com.recoded.taqadam;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,7 +13,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.recoded.taqadam.databinding.ActivityProfileBinding;
 import com.recoded.taqadam.models.User;
@@ -22,6 +25,7 @@ import com.squareup.picasso.Picasso;
 public class ProfileActivity extends BaseActivity {
     private ActivityProfileBinding binding;
     private User user;
+    private TextView selectedTab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +51,42 @@ public class ProfileActivity extends BaseActivity {
 
         Picasso.with(this).load(user.getPicturePath()).into(binding.ivDisplayImage);
 
+        binding.agreementCard.setWebViewClient(new WebViewClient());
+        binding.agreementCard.loadUrl("http://www.taqadam.io/docs/docs.php?doc=trainer_agreement");
+
         setImageViewClickListener();
+        setPagerTabs();
+    }
+
+    private void setPagerTabs() {
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (selectedTab != null && selectedTab.getId() == v.getId()) {
+                    return;
+                }
+                int drawableId = 0;
+                if (v.getId() == R.id.b_about) {
+                    binding.agreementCard.setVisibility(View.GONE);
+                    binding.aboutCard.setVisibility(View.VISIBLE);
+                    drawableId = R.drawable.ic_person_purple_48dp;
+                } else if (v.getId() == R.id.b_agreement) {
+                    binding.agreementCard.setVisibility(View.VISIBLE);
+                    binding.aboutCard.setVisibility(View.GONE);
+                    drawableId = R.drawable.ic_agreement_purple_48dp;
+                }
+
+                if (selectedTab != null && selectedTab.getTag() != null) {
+                    selectedTab.setCompoundDrawablesWithIntrinsicBounds(null, (Drawable) selectedTab.getTag(), null, null);
+                }
+                selectedTab = (TextView) v;
+                selectedTab.setTag(selectedTab.getCompoundDrawables()[1]);
+                selectedTab.setCompoundDrawablesWithIntrinsicBounds(0, drawableId, 0, 0);
+            }
+        };
+        binding.bAbout.setOnClickListener(listener);
+        binding.bAgreement.setOnClickListener(listener);
+        binding.bAbout.performClick();
     }
 
     private void setImageViewClickListener() {

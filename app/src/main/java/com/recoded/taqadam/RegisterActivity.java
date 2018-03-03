@@ -14,6 +14,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -33,10 +35,6 @@ import com.recoded.taqadam.models.User;
 import com.recoded.taqadam.models.auth.UserAuthHandler;
 import com.recoded.taqadam.models.auth.UserAuthHandler.AuthSignUpException;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 public class RegisterActivity extends BaseActivity {
     private static final String TAG = RegisterActivity.class.getSimpleName();
     private static final String EMAIL_REGEX = "^[a-zA-Z]+[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]{2,}(?<!\\.)$";
@@ -47,12 +45,14 @@ public class RegisterActivity extends BaseActivity {
 
     private CallbackManager mCallbackManager;
     private UserAuthHandler mAuth;
-    private boolean agreementSigned = true; //TODO-wisam: Implement proper check
+    private boolean agreementSigned = false;
     private EditText etEmailField, etPwField;
     private TextInputLayout etEmailLayout, etPwLayout;
     private TextView tvPwMeter;
     private LoginButton bFbLogin;
     private Button bSignin;
+
+    private AlertDialog agreementDialog;
 
     ProgressDialog mCreatingAccountProgressDialog;
 
@@ -73,8 +73,10 @@ public class RegisterActivity extends BaseActivity {
             }
             finish();
         }
+
         setContentView(R.layout.activity_signup);
 
+        showAgreement();
         setupForm();
         setupFbAuth();
         bSignin = findViewById(R.id.b_signin);
@@ -255,6 +257,10 @@ public class RegisterActivity extends BaseActivity {
     }
 
     private void handleFacebookAccessToken(AccessToken token) {
+        if (!agreementSigned) {
+            showAgreement();
+            return;
+        }
         mCreatingAccountProgressDialog.show();
         mAuth.signIn(token).addOnSuccessListener(this, new OnSuccessListener<User>() {
             @Override
@@ -279,47 +285,47 @@ public class RegisterActivity extends BaseActivity {
         });
     }
 
-    //Agreement parts for later
     private void showAgreement() {
-        // Use the Builder class for convenient dialog construction
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar_MinWidth);
-        builder.setMessage(getAgreement())
-                .setTitle(R.string.worker_agreement)
-                .setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        Toast.makeText(RegisterActivity.this, R.string.accepted, Toast.LENGTH_LONG).show();
-                    }
-                })
-                .setNegativeButton(R.string.decline, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        Toast.makeText(RegisterActivity.this, R.string.decline, Toast.LENGTH_LONG).show();
-                        dialog.dismiss();
-                    }
-                })
-                .setCancelable(false)
-                .setIcon(R.drawable.ic_agreement_purple_48dp);
-        // Create the AlertDialog object and return it
-        builder.create().show();
-    }
+        if (agreementDialog == null) {
+            LinearLayout root = new LinearLayout(this);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            root.setLayoutParams(lp);
+            WebView wv = new WebView(this);
+            WebViewClient wvc = new WebViewClient() {
+                @Override
+                public void onPageFinished(WebView view, String url) {
+                    agreementDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                    agreementDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setEnabled(true);
+                }
+            };
+            wv.setWebViewClient(wvc);
+            wv.loadUrl("https://taqadam.io/docs/docs.php?doc=trainer_agreement");
+            root.addView(wv);
 
-    private CharSequence getAgreement() {
-        String txt = "";
-        BufferedReader br;
-        try {
-            br = new BufferedReader(new InputStreamReader(getAssets().open("Worker_Agreement")));
-            StringBuilder sb = new StringBuilder();
-            String line = br.readLine();
-            while (line != null) {
-                sb.append(line);
-                sb.append("\n");
-                line = br.readLine();
-            }
-            txt = sb.toString();
-            br.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+            AlertDialog.Builder b = new AlertDialog.Builder(this);
+            b.setTitle("Trainer Agreement");
+            b.setView(root);
+            b.setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    agreementSigned = true;
+                    dialog.dismiss();
+                }
+            });
+            b.setNegativeButton(R.string.decline, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    Toast.makeText(RegisterActivity.this, "You need to accept the agreement to continue", Toast.LENGTH_LONG).show();
+                    finish();
+                    dialog.dismiss();
+                }
+            });
+            b.setCancelable(false);
+            b.setIcon(R.drawable.ic_agreement_purple_48dp);
+
+            agreementDialog = b.create();
         }
-        return txt;
+        agreementDialog.show();
+        agreementDialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
+        agreementDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setEnabled(false);
     }
 
     private void setupFbAuth() {
@@ -461,6 +467,9 @@ public class RegisterActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
+        if (agreementDialog != null && agreementDialog.isShowing()) {
+            agreementDialog.dismiss();
+        }
         super.onDestroy();
 
         if (keyboardListenersAttached) {

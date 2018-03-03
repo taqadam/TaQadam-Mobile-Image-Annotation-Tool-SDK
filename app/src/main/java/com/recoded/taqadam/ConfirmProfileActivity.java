@@ -74,6 +74,7 @@ public class ConfirmProfileActivity extends BaseActivity {
 
     private ActivityConfirmProfileBinding binding;
     private User user;
+    private boolean emailChanged = false;
     private OnCompleteListener<Void> mUserCreatedListener;
     private Calendar mCalendar;
     private DatePickerDialog.OnDateSetListener mDatePickedListener;
@@ -167,6 +168,9 @@ public class ConfirmProfileActivity extends BaseActivity {
         });
         setupUserDbCreationListener();
         setUser();
+        if (user.getEmailAddress() != null && !user.getEmailAddress().isEmpty()) {
+            binding.etEmail.setVisibility(View.GONE);
+        }
 
         mCreatingAccountProgressDialog = new ProgressDialog(this);
         mCreatingAccountProgressDialog.setCancelable(false);
@@ -395,6 +399,8 @@ public class ConfirmProfileActivity extends BaseActivity {
                 if (task.isSuccessful()) {
                     mCreatingAccountProgressDialog.dismiss();
                     if (!user.isCompleteProfile()) {
+                        UserAuthHandler.getInstance().sendEmailVerification(user.getEmailAddress());
+                        UserAuthHandler.getInstance().updateUserProfile(user);
                         UserAuthHandler.getInstance().getCurrentUser().setCompleteProfile(true);
                         Toast.makeText(ConfirmProfileActivity.this, R.string.user_created, Toast.LENGTH_LONG).show();
                     }
@@ -632,7 +638,8 @@ public class ConfirmProfileActivity extends BaseActivity {
     private void createUserDbEntry() {
         //TODO: CHECK IF THE USER HAS A CONFIRMED COMPLETE PROFILE
         user.setDisplayName(binding.etDisplayName.getText().toString());
-        user.setEmailAddress(binding.etEmail.getEditText().getText().toString());
+        if (user.getEmailAddress() == null || user.getEmailAddress().isEmpty())
+            user.setEmailAddress(binding.etEmail.getEditText().getText().toString());
         user.setFirstName(binding.etFName.getEditText().getText().toString());
         user.setLastName(binding.etLName.getEditText().getText().toString());
         user.setPhoneNumber(binding.etPhoneNumber.getEditText().getText().toString());

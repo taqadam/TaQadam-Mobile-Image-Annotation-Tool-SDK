@@ -313,5 +313,6 @@ public class User implements Serializable {
 
     public User(FirebaseUser u) {
         mEMailAddr = u.getEmail();
+
     }
 }

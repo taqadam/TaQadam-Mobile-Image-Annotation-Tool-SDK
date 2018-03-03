@@ -17,7 +17,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.ProviderQueryResult;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.recoded.taqadam.models.FacebookUser;
 import com.recoded.taqadam.models.User;
@@ -73,6 +76,9 @@ public class UserAuthHandler {
                 public void onSuccess(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists() && dataSnapshot.getChildrenCount() > 1) {
                         currentUser = User.fromMap((HashMap) dataSnapshot.getValue());
+                        if (!currentUser.isEmailVerified() && mAuth.getCurrentUser().isEmailVerified()) {
+                            currentUser.setEmailVerified(mAuth.getCurrentUser().isEmailVerified());
+                        }
                         currentUser.setCompleteProfile(true);
                         initTask.setResult(currentUser);
                     } else {
@@ -192,6 +198,7 @@ public class UserAuthHandler {
             public void onSuccess(AuthResult authResult) {
                 mUid = mAuth.getUid();
                 currentUser = new User(authResult.getUser());
+                authResult.getUser().sendEmailVerification();
                 signUpTask.setResult(currentUser);
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -259,6 +266,44 @@ public class UserAuthHandler {
         mAuth.signOut();
     }
 
+    public void sendEmailVerification(final String email) {
+        final FirebaseUser u = mAuth.getCurrentUser();
+        if (u != null && u.getProviders() != null && u.getProviders().contains(FacebookAuthProvider.PROVIDER_ID)) {
+            if (u.getEmail() == null || u.getEmail().isEmpty()) {
+                u.updateEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        sendEmailVerification(email);
+                    }
+                });
+            } else if (!u.isEmailVerified()) {
+                u.sendEmailVerification().addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        if (e instanceof FirebaseAuthRecentLoginRequiredException) {
+                            AuthCredential a = FacebookAuthProvider.getCredential(AccessToken.getCurrentAccessToken().getToken());
+                            u.reauthenticate(a).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    u.sendEmailVerification();
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        }
+    }
+
+    public void updateUserProfile(User user) {
+        if (mAuth.getCurrentUser() != null) {
+            UserProfileChangeRequest b = new UserProfileChangeRequest.Builder()
+                    .setDisplayName(user.getDisplayName())
+                    .build();
+            mAuth.getCurrentUser().updateProfile(b);
+        }
+    }
+
     public static class AuthSignUpException extends Exception {
         public static final int PW_WRONG = 2001;
         public static final int EMAIL_ASSOC_FB = 2000;
@@ -272,6 +317,7 @@ public class UserAuthHandler {
         public int getErrorCode() {
             return errorCode;
         }
+
     }
 
     public void updateCurrentUser(User user) {

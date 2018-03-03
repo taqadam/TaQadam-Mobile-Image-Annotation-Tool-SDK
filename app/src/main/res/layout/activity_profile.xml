@@ -91,18 +91,18 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/b_about"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_weight="1"
-                        android:drawableTint="@color/colorPrimary"
                         android:drawableTop="?attr/ic_person_48"
                         android:gravity="center_horizontal"
                         android:text="@string/about"
-                        android:textColor="@color/colorPrimary"
                         android:textSize="14sp"/>
 
                     <TextView
+                        android:id="@+id/b_agreement"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
@@ -124,9 +124,11 @@
                 </LinearLayout>
 
                 <android.support.v7.widget.CardView
+                    android:id="@+id/about_card"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
+                    android:visibility="gone"
                     app:cardElevation="8dp">
 
                     <android.support.constraint.ConstraintLayout
@@ -328,6 +330,13 @@
                     </android.support.constraint.ConstraintLayout>
 
                 </android.support.v7.widget.CardView>
+
+                <WebView
+                    android:id="@+id/agreement_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:layout_margin="8dp"/>
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
 

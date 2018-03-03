@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.recoded.taqadam.databinding.ActivityFeedbackBinding;
+import com.recoded.taqadam.models.db.FeedbackDbHandler;
 
 public class FeedbackActivity extends BaseActivity implements View.OnClickListener {
 
@@ -37,10 +38,13 @@ public class FeedbackActivity extends BaseActivity implements View.OnClickListen
             public void onClick(View v) {
                 if (feedback != null && !feedback.isEmpty()) {
                     String toastMsg;
-                    if (feedbackButton.getId() == R.id.sad_feedback && feedbackComment.getText().toString().isEmpty()) {
+                    String comment = feedbackComment.getText().toString();
+                    if (feedbackButton.getId() == R.id.sad_feedback && comment.isEmpty()) {
                         toastMsg = "Please help us make it better by writing a reason";
                         Toast.makeText(FeedbackActivity.this, toastMsg, Toast.LENGTH_SHORT).show();
                     } else {
+                        comment = comment.isEmpty() ? "no comment" : comment;
+                        FeedbackDbHandler.getInstance().submitFeedback(feedback, comment);
                         toastMsg = "Thank you for your feedback!";
                         Toast.makeText(FeedbackActivity.this, toastMsg, Toast.LENGTH_SHORT).show();
                         finish();
@@ -67,6 +71,7 @@ public class FeedbackActivity extends BaseActivity implements View.OnClickListen
         if (feedbackComment != null) {
             feedbackComment.setVisibility(View.GONE);
             feedbackComment.setText("");
+            feedback = "";
         }
         toggleDrawables();
 
@@ -78,6 +83,7 @@ public class FeedbackActivity extends BaseActivity implements View.OnClickListen
         switch (v.getId()) {
             case R.id.happy_feedback:
                 feedbackComment = binding.happyFeedbackComment;
+                feedback = "good";
                 ((Button) v).setCompoundDrawablesWithIntrinsicBounds(
                         R.drawable.ic_down,
                         0,
@@ -86,6 +92,7 @@ public class FeedbackActivity extends BaseActivity implements View.OnClickListen
                 break;
             case R.id.neutral_feedback:
                 feedbackComment = binding.neutralFeedbackComment;
+                feedback = "ok";
                 ((Button) v).setCompoundDrawablesWithIntrinsicBounds(
                         R.drawable.ic_down,
                         0,
@@ -95,6 +102,7 @@ public class FeedbackActivity extends BaseActivity implements View.OnClickListen
 
             case R.id.sad_feedback:
                 feedbackComment = binding.sadFeedbackComment;
+                feedback = "bad";
                 ((Button) v).setCompoundDrawablesWithIntrinsicBounds(
                         R.drawable.ic_down,
                         0,
@@ -103,7 +111,6 @@ public class FeedbackActivity extends BaseActivity implements View.OnClickListen
                 break;
         }
         feedbackButton = (Button) v;
-        feedback = ((Button) v).getText().toString();
         feedbackComment.setVisibility(View.VISIBLE);
     }
 

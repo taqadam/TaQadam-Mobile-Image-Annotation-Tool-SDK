@@ -58,7 +58,13 @@ public class BaseActivity extends AppCompatActivity {
         } else if (diff < 172800) {
             return String.format(getString(R.string.yesterday_at), new SimpleDateFormat("HH:mm aa", locale).format(postDate));
         } else {
-            return new SimpleDateFormat("dd/M/yyyy", locale).format(postDate);
+            SimpleDateFormat sdf;
+            if (locale == null) {
+                sdf = new SimpleDateFormat("dd/M/yyyy", Locale.US);
+            } else {
+                sdf = new SimpleDateFormat("dd/M/yyyy", locale);
+            }
+            return sdf.format(postDate);
         }
     }
 }
