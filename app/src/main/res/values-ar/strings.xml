@@ -242,5 +242,14 @@
     <string name="delete_post">حذف المنشور</string>
     <string name="delete_post_confirmation">هل انت متأكد من حذف المنشور؟</string>
     <string name="storage_permission">تصريح قراءة ذاكرة التخزين مطلوبة لرفع الصور</string>
+    <string name="skipped_images">الصور المهملة</string>
+    <string name="skipped_images_msg">الصور التالية تم تخطيها من قبلك مسبقا. بامكانك الاطلاع عليها او الرجوع لقائمة الاعمال</string>
+    <string name="get_out">رجوع</string>
+    <string name="review">متابعة</string>
+    <string name="reached_impressions">لقد وصلت هذا الصورة لعدد الاجوبة المطلوبة</string>
+    <string name="skipping_image">لم يتم تسجيل اجابة. جاري التخطي..</string>
+    <string name="skip_count_toast">قام %d من العاملين بتخطي هذه الصورة</string>
+
+
     /
 </resources>

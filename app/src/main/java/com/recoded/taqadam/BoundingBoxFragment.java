@@ -81,7 +81,7 @@ public class BoundingBoxFragment extends TaskFragment {
                 jobId = savedInstanceState.getString("job_id");
             }
         }
-        answer = new Answer(jobId, mImage.id);
+        answer = new Answer(jobId, mImage);
 
         initTaskImg();
 

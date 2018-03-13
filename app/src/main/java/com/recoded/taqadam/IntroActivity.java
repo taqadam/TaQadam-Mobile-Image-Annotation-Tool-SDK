@@ -37,7 +37,7 @@ public class IntroActivity extends AppIntro {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("firstRun", false);
         editor.apply();
-        startActivity(new Intent(this, RegisterActivity.class));
+        startActivity(new Intent(this, SigninActivity.class));
         finish();
     }
 }

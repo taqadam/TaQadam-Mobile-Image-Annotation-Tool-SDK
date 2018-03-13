@@ -31,7 +31,8 @@ public class JobActivity extends BaseActivity {
     private TasksPagerAdapter mTasksPagerAdapter;
     private ActivityJobBinding binding;
     private Job job;
-    private AlertDialog instructions, completedDialog;
+    private AlertDialog instructions, completedDialog, skippedDialog;
+    private boolean skippedDialogShown = false;
     private TaskFragment currentFragment;
     private List<String> completedImgs = new ArrayList<>(); //to input impressions
     private boolean instructionsSeen = false;
@@ -70,13 +71,13 @@ public class JobActivity extends BaseActivity {
                         binding.viewPager.setAdapter(mTasksPagerAdapter);
                         binding.viewPager.setLocked(true);
                         toggleProgressFrame(false);
-                        setCurrentFragment();
+                        setCurrentFragment(0);
                         ImageDbHandler.getInstance().setImpressionsReachedListener(new ImageDbHandler.OnImpressionsReachedListener() {
                             @Override
                             public void onImpressionsReached(String imgId) {
                                 completedImgs.add(imgId);
                                 if (currentFragment.mImage.id.equals(imgId)) {
-                                    Toast.makeText(JobActivity.this, "This image has reached the required impressions", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(JobActivity.this, R.string.reached_impressions, Toast.LENGTH_LONG).show();
                                     gotoNextImage();
                                 }
                             }
@@ -97,9 +98,9 @@ public class JobActivity extends BaseActivity {
             @Override
             public void onPageSelected(int position) {
                 //setTitle(String.format(getString(R.string.job_activity_title), position + 1, job.getImagesList().size()));
-                setCurrentFragment();
+                setCurrentFragment(position);
                 if (completedImgs.contains(currentFragment.mImage.id)) {
-                    Toast.makeText(JobActivity.this, "This image has reached the required impressions", Toast.LENGTH_LONG).show();
+                    Toast.makeText(JobActivity.this, R.string.reached_impressions, Toast.LENGTH_LONG).show();
                     gotoNextImage();
                 }
             }
@@ -143,10 +144,45 @@ public class JobActivity extends BaseActivity {
         }
     }
 
-    public void setCurrentFragment() {
-        String tag = "android:switcher:" + binding.viewPager.getId() + ":" + binding.viewPager.getCurrentItem();
-        this.currentFragment = (TaskFragment) getSupportFragmentManager().findFragmentByTag(tag);
+    public void setCurrentFragment(int pos) {
+        //String tag = "android:switcher:" + binding.viewPager.getId() + ":" + binding.viewPager.getCurrentItem();
+        //this.currentFragment = (TaskFragment) getSupportFragmentManager().findFragmentByTag(tag);
+        if (pos == mTasksPagerAdapter.currentPosition)
+            currentFragment = mTasksPagerAdapter.mCurrentFrag;
+        if (currentFragment.mImage.skipped) {
+            showSkippedDialog();
+        }
+        if (currentFragment.mImage.skipCount >= 4) {
+            Toast.makeText(this, String.format(getString(R.string.skip_count_toast), currentFragment.mImage.skipCount), Toast.LENGTH_LONG).show();
+        }
         setTitle(String.format(getString(R.string.job_activity_title), binding.viewPager.getCurrentItem() + 1, job.getImagesList().size()));
+    }
+
+    private void showSkippedDialog() {
+        if (skippedDialogShown) {
+            return;
+        }
+        if (skippedDialog == null) {
+            AlertDialog.Builder d = new AlertDialog.Builder(this);
+            d.setTitle(R.string.skipped_images);
+            d.setMessage(R.string.skipped_images_msg);
+            d.setPositiveButton(R.string.get_out, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    finish();
+                }
+            });
+            d.setNegativeButton(R.string.review, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            skippedDialog = d.create();
+        }
+        skippedDialog.show();
+        skippedDialogShown = true;
     }
 
     private void submitAnswer() {
@@ -159,7 +195,8 @@ public class JobActivity extends BaseActivity {
                     gotoNextImage();
                 }
             } else {
-                Toast.makeText(this, "No answer was submitted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.skipping_image, Toast.LENGTH_SHORT).show();
+                ImageDbHandler.getInstance().skipImage(currentFragment.jobId, currentFragment.mImage);
                 gotoNextImage();
             }
         }
@@ -235,6 +272,8 @@ public class JobActivity extends BaseActivity {
             instructions.dismiss();
         if (completedDialog != null && completedDialog.isShowing())
             completedDialog.dismiss();
+        if (skippedDialog != null && skippedDialog.isShowing())
+            skippedDialog.dismiss();
 
         if (job != null) job.release();
         ImageDbHandler.getInstance().release();

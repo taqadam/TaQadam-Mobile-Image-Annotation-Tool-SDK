@@ -9,6 +9,8 @@ import com.recoded.taqadam.models.db.JobDbHandler;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -112,7 +114,8 @@ public class Job {
     public void setImages(Map<String, Map<String, Object>> val) {
         imagesList.clear();
         for (String k : val.keySet()) {
-            boolean done = false;
+            boolean done = false, skipped = false;
+            int skipCount = 0;
             if (val.get(k).containsKey(ImageDbHandler.COMPLETED_BY)) {
                 Map<String, Boolean> uids = (Map<String, Boolean>) val.get(k).get(ImageDbHandler.COMPLETED_BY);
                 if (uids.containsKey(UserAuthHandler.getInstance().getUid())) {
@@ -121,13 +124,31 @@ public class Job {
                     done = true;
                 }
             }
+            if (val.get(k).containsKey(ImageDbHandler.SKIPPED_BY)) {
+                Map<String, Boolean> skippedBy = (Map<String, Boolean>) val.get(k).get(ImageDbHandler.SKIPPED_BY);
+                skipCount = skippedBy.size();
+                if (skippedBy.containsKey(UserAuthHandler.getInstance().getUid())) {
+                    skipped = true;
+                }
+            }
             if (!done) {
                 Image im = new Image();
                 im.id = k;
                 im.path = Uri.parse((String) val.get(k).get(ImageDbHandler.TASK_IMAGE));
+                im.skipCount = skipCount;
+                im.skipped = skipped;
                 imagesList.add(im);
             }
         }
+
+        Collections.sort(imagesList, new Comparator<Image>() {
+            @Override
+            public int compare(Image o1, Image o2) {
+                int b1 = o1.skipped ? 1 : 0;
+                int b2 = o2.skipped ? 1 : 0;
+                return b1 - b2;
+            }
+        });
     }
 
     public Job fromMap(Map<String, Object> map) {

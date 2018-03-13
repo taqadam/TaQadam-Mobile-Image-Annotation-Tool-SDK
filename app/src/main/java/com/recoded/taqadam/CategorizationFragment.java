@@ -65,7 +65,7 @@ public class CategorizationFragment extends TaskFragment {
                 jobId = savedInstanceState.getString("job_id");
             }
         }
-        answer = new Answer(jobId, mImage.id);
+        answer = new Answer(jobId, mImage);
         taskImageView = binding.ivTaskImage;
         taskImageView.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
         if (mImage.path.getScheme().equalsIgnoreCase("http") || mImage.path.getScheme().equalsIgnoreCase("https")) {

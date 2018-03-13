@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
@@ -274,6 +275,11 @@ public class UserAuthHandler {
                     @Override
                     public void onSuccess(Void aVoid) {
                         sendEmailVerification(email);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Crashlytics.log(Log.ERROR, TAG, "Error updating FirebaseUser " + email + ": " + e);
                     }
                 });
             } else if (!u.isEmailVerified()) {

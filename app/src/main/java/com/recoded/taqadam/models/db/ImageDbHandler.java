@@ -25,6 +25,7 @@ import java.util.Map;
 public class ImageDbHandler {
     public static final String
             TASK_IMAGE = "task_image",
+            SKIPPED_BY = "skipped_by",
             COMPLETED_BY = "completed_by";
 
     private String mUid;
@@ -96,19 +97,34 @@ public class ImageDbHandler {
         impressionsReachedListener = listener;
     }
 
-    public boolean submitAnswer(final Answer answer) {
+    public boolean submitAnswer(Answer answer) {
         if (answer.getRawAnswerData() != null && !answer.getRawAnswerData().isEmpty()) {
-            mAnswersDbRef.child(answer.getImageId()).child(mUid).setValue(answer.toMap()).addOnSuccessListener(new OnSuccessListener<Void>() {
+            final String jobId = answer.getJobId();
+            final Image img = answer.getImage();
+            mAnswersDbRef.child(img.id).child(mUid).setValue(answer.toMap()).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
-                    mImagesDbRef.child(answer.getJobId()).child(answer.getImageId())
-                            .child(COMPLETED_BY).child(mUid).setValue(true);
+                    mImagesDbRef.child(jobId).child(img.id).child(COMPLETED_BY).child(mUid).setValue(true)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    if (img.skipped)
+                                        mImagesDbRef.child(jobId).child(img.id).child(SKIPPED_BY).child(mUid).removeValue();
+                                }
+                            });
+
                 }
             });
 
             return true;
         }
         return false;
+    }
+
+    public void skipImage(String jobId, Image image) {
+        if (jobId != null && image != null && image.id != null && !image.skipped) {
+            mImagesDbRef.child(jobId).child(image.id).child(SKIPPED_BY).child(mUid).setValue(true);
+        }
     }
 
     public void release() {

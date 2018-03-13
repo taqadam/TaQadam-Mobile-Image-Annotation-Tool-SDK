@@ -11,11 +11,11 @@ import java.util.Map;
 public class Answer {
     private Date answerStartTime;
     private String rawAnswerData;
-    private String imageId;
+    private Image image;
     private String jobId;
 
-    public Answer(String jobId, String imageId) {
-        this.imageId = imageId;
+    public Answer(String jobId, Image image) {
+        this.image = image;
         this.jobId = jobId;
         answerStartTime = new Date();
     }
@@ -28,8 +28,8 @@ public class Answer {
         return rawAnswerData;
     }
 
-    public String getImageId() {
-        return imageId;
+    public Image getImage() {
+        return image;
     }
 
     public Map<String, Object> toMap() {

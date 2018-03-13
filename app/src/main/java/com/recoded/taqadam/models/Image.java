@@ -11,6 +11,8 @@ import android.os.Parcelable;
 public class Image implements Parcelable {
     public Uri path;
     public String id;
+    public boolean skipped = false;
+    public int skipCount;
 
     @Override
     public int describeContents() {

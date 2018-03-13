@@ -24,7 +24,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,6 +34,8 @@ import com.recoded.taqadam.models.User;
 import com.recoded.taqadam.models.auth.UserAuthHandler;
 
 import java.util.Map;
+
+//import com.google.firebase.crash.FirebaseCrash;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -170,7 +171,8 @@ public class SplashActivity extends AppCompatActivity {
             dialog.create().show();
         } else {
             if (BuildConfig.DEBUG) {
-                FirebaseCrash.setCrashCollectionEnabled(false);
+                //FirebaseCrash.setCrashCollectionEnabled(false);
+                //Crashlytics.getInstance().crash();
                 startApp();
                 return;
             }

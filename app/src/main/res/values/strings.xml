@@ -248,4 +248,11 @@
     <string name="delete_post">Delete Post</string>
     <string name="delete_post_confirmation">Are you sure you want to delete this post?</string>
     <string name="storage_permission">Storage access is required to load gallery images.</string>
+    <string name="skipped_images">Skipped Images</string>
+    <string name="skipped_images_msg">The following images were all skipped by you. You can review them again or go back</string>
+    <string name="get_out">Get out</string>
+    <string name="review">Review</string>
+    <string name="reached_impressions">This image has reached the required impressions</string>
+    <string name="skipping_image">No answer was submitted. Skipping</string>
+    <string name="skip_count_toast">%d trainers have skipped this image</string>
 </resources>
