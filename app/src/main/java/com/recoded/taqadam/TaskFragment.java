@@ -33,6 +33,7 @@ public class TaskFragment extends Fragment {
         } else {
             TaskFragment frag = new CategorizationFragment();
             frag.setImage(img);
+            frag.setJobId(jobId);
             return frag;
         }
     }

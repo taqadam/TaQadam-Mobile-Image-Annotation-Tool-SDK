@@ -28,6 +28,7 @@ public class JobDbHandler {
             DATE_CREATED = "date_created",
             DATE_EXPIRES = "date_expires",
             TYPE = "type",
+            MULTI_CHOICE = "multi_choice",
             TASKS_TYPE = "tasks_type",
             OPTIONS = "options",
             COUNT = "images_count",

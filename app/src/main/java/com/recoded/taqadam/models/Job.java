@@ -28,6 +28,7 @@ public class Job {
     private Date dateCreated;
     private Date dateExpires;
     private String type;
+    private boolean multiChoice = false;
     private int noOfImpressions;
     private int imagesCount;
     private String tasksType;
@@ -80,6 +81,10 @@ public class Job {
 
     public String getTasksType() {
         return tasksType;
+    }
+
+    public boolean isMultiChoice() {
+        return multiChoice;
     }
 
     public String getInstructions() {
@@ -208,6 +213,9 @@ public class Job {
                         taskReward = ((long) map.get(k)) * 1f;
                     }
                     break;
+
+                case JobDbHandler.MULTI_CHOICE:
+                    multiChoice = (boolean) map.get(k);
             }
         }
         return this;

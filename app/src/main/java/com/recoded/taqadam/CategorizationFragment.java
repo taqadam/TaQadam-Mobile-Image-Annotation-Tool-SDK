@@ -6,11 +6,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.recoded.taqadam.databinding.FragCategorizationBinding;
@@ -23,6 +25,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import it.sephiroth.android.library.imagezoom.ImageViewTouchBase;
@@ -37,8 +40,9 @@ public class CategorizationFragment extends TaskFragment {
     private FragCategorizationBinding binding;
     private View.OnClickListener optionClickListener;
     private SparseArray<String> selectedOptions = new SparseArray<>();
-    private boolean multiSelection = true;
+    private boolean multiSelection = false;
     private Point displayDims;
+    private List<TextView> viewsToBeAdded = new ArrayList<>();
 
     public CategorizationFragment() {
 
@@ -83,6 +87,7 @@ public class CategorizationFragment extends TaskFragment {
         }
 
         binding.tvInstruction.setVisibility(View.GONE);
+        this.multiSelection = JobDbHandler.getInstance().getJob(jobId).isMultiChoice();
         List<String> options = JobDbHandler.getInstance().getJob(jobId).getOptions();
         for (int i = 0; i < options.size(); i++) {
             TextView option = getStyledTextView(options.get(i));
@@ -112,11 +117,12 @@ public class CategorizationFragment extends TaskFragment {
 
     private void addOptionToGrid(TextView option) {
         option.measure(displayDims.x, displayDims.y);
-        int gridTotalWidth = binding.optionsGrid.getWidth();
-        int gridTotalHeight = binding.optionsGrid.getHeight();
-
-        //Do better Aligning
-        binding.optionsGrid.addView(option, option.getMeasuredWidth(), option.getMeasuredHeight());
+        FlexboxLayout.LayoutParams lp = new FlexboxLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lp.setOrder(-1);
+        lp.setFlexGrow(2);
+        lp.setMargins(dpToPx(4), dpToPx(2), dpToPx(2), dpToPx(4));
+        option.setLayoutParams(lp);
+        binding.optionsGrid.addView(option);
     }
 
     private void setupOptionClickListener() {
@@ -147,6 +153,7 @@ public class CategorizationFragment extends TaskFragment {
         tv.setText(text);
         tv.setTag(text);
         tv.setTextSize(16);
+        tv.setGravity(Gravity.CENTER);
         tv.setTextColor(getResources().getColor(R.color.colorWhite));
         tv.setPadding(dpToPx(4), dpToPx(4), dpToPx(4), dpToPx(4));
         tv.setBackgroundResource(R.drawable.options_background_normal);

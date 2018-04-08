@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
-    <data/>
+    <data />
 
-    <FrameLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -15,7 +14,7 @@
             android:id="@+id/iv_task_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -30,36 +29,52 @@
                 android:padding="8dp"
                 android:textColor="@color/colorWhite"
                 android:textSize="16sp"
-                tools:text="Select A category for this image"/>
+                tools:text="Select A category for this image" />
         </ScrollView>
 
-        <android.support.v7.widget.CardView
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
             android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginBottom="12dp"
-            app:cardBackgroundColor="#ff000000"
-            app:cardCornerRadius="4dp"
-            app:cardElevation="8dp">
+            android:layout_marginBottom="12dp">
 
-            <GridLayout
-                android:id="@+id/options_grid"
-                android:layout_width="wrap_content"
+            <android.support.v7.widget.CardView
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:background="@color/colorTransparent"
-                android:useDefaultMargins="true">
+                app:cardBackgroundColor="#ff000000"
+                app:cardCornerRadius="4dp"
+                android:layout_gravity="bottom"
+                app:cardElevation="8dp">
 
-            </GridLayout>
+                <android.support.v4.widget.NestedScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-        </android.support.v7.widget.CardView>
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scrollbars="vertical">
+
+                        <com.google.android.flexbox.FlexboxLayout
+                            android:id="@+id/options_grid"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            app:alignContent="stretch"
+                            app:alignItems="stretch"
+                            app:flexWrap="wrap" />
+                    </ScrollView>
+                </android.support.v4.widget.NestedScrollView>
+            </android.support.v7.widget.CardView>
+
+        </LinearLayout>
 
         <ProgressBar
             android:id="@+id/image_progress_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="visible"/>
+            android:visibility="visible" />
 
         <TextView
             android:id="@+id/tv_error"
@@ -68,7 +83,7 @@
             android:layout_gravity="center"
             android:text="@string/error_while_loading_image"
             android:textSize="24sp"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <RelativeLayout
             android:id="@+id/completed_task_overlay"
@@ -87,7 +102,7 @@
                 android:drawableTop="@drawable/ic_check_big"
                 android:gravity="center"
                 android:text="@string/answer_has_already_been_submitted"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
         </RelativeLayout>
     </FrameLayout>
 </layout>
