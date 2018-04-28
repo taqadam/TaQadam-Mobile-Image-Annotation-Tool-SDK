@@ -34,6 +34,7 @@ public class JobDbHandler {
             COUNT = "images_count",
             INSTRUCTIONS = "instructions",
             IMPRESSIONS = "impressions",
+            VISIBLE_TO = "visible_to",
             TASK_REWARD = "task_reward";
 
     private static JobDbHandler handler;
@@ -71,7 +72,8 @@ public class JobDbHandler {
                     if (job.getType().equalsIgnoreCase("Qualifier")
                             || job.getType().equalsIgnoreCase("Tutorial")
                             || (job.getType().equalsIgnoreCase("Paid")
-                            && UserAuthHandler.getInstance().getCurrentUser().isAccountApproved())) {
+                            && UserAuthHandler.getInstance().getCurrentUser().isAccountApproved()
+                            && job.isVisibleTo(mUid))) {
                         jobsCache.put(job.getJobId(), job);
                     }
                 }
@@ -81,6 +83,7 @@ public class JobDbHandler {
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Job job = jobsCache.get(dataSnapshot.getKey()).fromMap((Map<String, Object>) dataSnapshot.getValue());
                 if (job.getDateExpires().getTime() < System.currentTimeMillis()
+                        || !job.isVisibleTo(mUid)
                         || (job.getType().equalsIgnoreCase("Paid")
                         && !UserAuthHandler.getInstance().getCurrentUser().isAccountApproved())) {
                     jobsCache.remove(dataSnapshot.getKey());

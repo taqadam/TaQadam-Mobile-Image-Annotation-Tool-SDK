@@ -5,8 +5,9 @@
     <string name="hello_tasks_fragment">مرحبا!</string>
     <string name="hello_blank_fragment">مرحبا!</string>
     <string name="currentbalance">الرصيد الحالي:</string>
+    <string name="balance">الرصيد</string>
     <string name="amount_cash_text">ادخل قيمة الرصيد التي ترغب بسحبه في الاسفل</string>
-    <string name="enter_amount">ادخل قيمة الرصيد</string>
+    <string name="enter_amount">المبلغ</string>
     <string name="confirm">تأكيد</string>
     <string name="agree_text">"بالضغط على \"تأكيد\" انا اوافق على الشروط والاحكام "</string>
     <string name="need_help">تحتاج للمساعدة؟</string>
@@ -249,6 +250,9 @@
     <string name="reached_impressions">لقد وصلت هذا الصورة لعدد الاجوبة المطلوبة</string>
     <string name="skipping_image">لم يتم تسجيل اجابة. جاري التخطي..</string>
     <string name="skip_count_toast">قام %d من العاملين بتخطي هذه الصورة</string>
+    <string name="deposit">ايداع</string>
+    <string name="withdrawal">سحب</string>
+    <string name="redeem">سحب رصيد</string>
 
 
     /

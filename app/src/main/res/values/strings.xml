@@ -40,8 +40,9 @@
     <string name="hello_tasks_fragment">Hello tasks fragment</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="currentbalance">Your Current Balance:</string>
+    <string name="balance">Balance</string>
     <string name="amount_cash_text">Please enter the amount you would like to cash out bellow:</string>
-    <string name="enter_amount">Enter Your Amount</string>
+    <string name="enter_amount">Amount</string>
     <string name="confirm">Confirm</string>
     <string name="agree_text">By clicking on \'confirm\' I agree on the terms and conditions</string>
     <string name="need_help">Need Help ?</string>
@@ -255,4 +256,7 @@
     <string name="reached_impressions">This image has reached the required impressions</string>
     <string name="skipping_image">No answer was submitted. Skipping</string>
     <string name="skip_count_toast">%d trainers have skipped this image</string>
+    <string name="deposit">Deposit</string>
+    <string name="withdrawal">Withdrawal</string>
+    <string name="redeem">Redeem</string>
 </resources>

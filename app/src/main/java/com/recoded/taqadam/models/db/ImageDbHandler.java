@@ -69,7 +69,7 @@ public class ImageDbHandler {
         return src.getTask();
     }
 
-    private void listenForImpressions(String jobId) {
+    private void listenForImpressions(final String jobId) {
         final Job job = JobDbHandler.getInstance().getJob(jobId);
         for (final Image img : job.getImagesList()) {
             ValueEventListener l = new ValueEventListener() {
@@ -77,8 +77,8 @@ public class ImageDbHandler {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.getChildrenCount() >= job.getNoOfImpressions()) {
                         //job.removeImage(img.id);
-                        mAnswersDbRef.child(img.id).removeEventListener(this);
-                        listeners.remove(img.id);
+                        mAnswersDbRef.child(jobId).child(img.id).removeEventListener(this);
+                        listeners.remove(jobId + "#-#" + img.id);
                         impressionsReachedListener.onImpressionsReached(img.id);
                     }
                 }
@@ -88,8 +88,8 @@ public class ImageDbHandler {
 
                 }
             };
-            mAnswersDbRef.child(img.id).addValueEventListener(l);
-            listeners.put(img.id, l);
+            mAnswersDbRef.child(jobId).child(img.id).addValueEventListener(l);
+            listeners.put(jobId + "#-#" + img.id, l);
         }
     }
 
@@ -101,7 +101,9 @@ public class ImageDbHandler {
         if (answer.getRawAnswerData() != null && !answer.getRawAnswerData().isEmpty()) {
             final String jobId = answer.getJobId();
             final Image img = answer.getImage();
-            mAnswersDbRef.child(img.id).child(mUid).setValue(answer.toMap()).addOnSuccessListener(new OnSuccessListener<Void>() {
+
+            //database changed on april 25 2018 at 11-utc
+            mAnswersDbRef.child(jobId).child(img.id).child(mUid).setValue(answer.toMap()).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     mImagesDbRef.child(jobId).child(img.id).child(COMPLETED_BY).child(mUid).setValue(true)
@@ -131,7 +133,9 @@ public class ImageDbHandler {
         //for logging out
         this.mUid = null;
         for (String id : listeners.keySet()) {
-            mAnswersDbRef.child(id).removeEventListener(listeners.get(id));
+            String jobId = id.substring(0, id.indexOf("#-#"));
+            String imgId = id.substring(id.indexOf("#-#") + 3);
+            mAnswersDbRef.child(jobId).child(imgId).removeEventListener(listeners.get(id));
         }
         handler = null;
     }

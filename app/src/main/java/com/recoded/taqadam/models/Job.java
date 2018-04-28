@@ -33,6 +33,7 @@ public class Job {
     private int imagesCount;
     private String tasksType;
     private List<String> options;
+    private List<String> visibleTo;
     private String instructions;
     private String description;
     private float taskReward;
@@ -45,6 +46,7 @@ public class Job {
         this.jobId = jobId;
         options = new ArrayList<>();
         imagesList = new ArrayList<>();
+        visibleTo = new ArrayList<>();
     }
 
     public String getJobId() {
@@ -69,6 +71,20 @@ public class Job {
 
     public String getCompany() {
         return company;
+    }
+
+    public boolean isVisibleTo(String uid) {
+        if (visibleTo.size() == 0) return true;
+        boolean negativeIds = false;
+        if (visibleTo.get(0).startsWith("!:")) {
+            negativeIds = true;
+        }
+
+        if (!negativeIds) {
+            return visibleTo.contains(uid);
+        } else {
+            return !visibleTo.contains("!:" + uid);
+        }
     }
 
     public int getImagesCount() {
@@ -201,6 +217,11 @@ public class Job {
                 case JobDbHandler.OPTIONS:
                     options.clear();
                     options.addAll((List<String>) map.get(k));
+                    break;
+
+                case JobDbHandler.VISIBLE_TO:
+                    visibleTo.clear();
+                    visibleTo.addAll((List<String>) map.get(k));
                     break;
 
                 case JobDbHandler.TASK_REWARD:

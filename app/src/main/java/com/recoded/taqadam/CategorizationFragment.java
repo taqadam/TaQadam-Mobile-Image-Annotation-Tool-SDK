@@ -175,6 +175,7 @@ public class CategorizationFragment extends TaskFragment {
         }
 
         try {
+            rawAnswer.put("image_name", mImage.path.getLastPathSegment());
             rawAnswer.put("categories", categories);
         } catch (JSONException e) {
             e.printStackTrace();
