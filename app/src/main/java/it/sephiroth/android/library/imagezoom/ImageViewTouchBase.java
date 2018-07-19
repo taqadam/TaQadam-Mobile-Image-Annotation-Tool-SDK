@@ -62,23 +62,23 @@ public abstract class ImageViewTouchBase extends ImageView implements IDisposabl
      */
     public enum DisplayType {
         /**
-         * Image is not scaled by default
+         * ImageOld is not scaled by default
          */
         NONE,
         /**
-         * Image will be always presented using this view's bounds
+         * ImageOld will be always presented using this view's bounds
          */
         FIT_TO_SCREEN,
         /**
-         * Image will be scaled only if bigger than the bounds of this view
+         * ImageOld will be scaled only if bigger than the bounds of this view
          */
         FIT_IF_BIGGER,
         /**
-         * Image will be scaled to fit the Height of the device
+         * ImageOld will be scaled to fit the Height of the device
          */
         FIT_HEIGHT,
         /**
-         * Image will be scaled to fit the Width of the device
+         * ImageOld will be scaled to fit the Width of the device
          */
         FIT_WIDTH
     }

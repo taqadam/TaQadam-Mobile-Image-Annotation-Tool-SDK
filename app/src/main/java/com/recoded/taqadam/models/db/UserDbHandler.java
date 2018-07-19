@@ -1,27 +1,11 @@
 package com.recoded.taqadam.models.db;
 
-import android.net.Uri;
-
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.TaskCompletionSource;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.recoded.taqadam.models.User;
-import com.recoded.taqadam.models.auth.UserAuthHandler;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created by wisam on Dec 13 17.
  */
 
 public class UserDbHandler {
+    /*
     private static final String TAG = UserDbHandler.class.getSimpleName();
     private static final String EXCEPTION_MSG = "Used not signed in";
     public static final String
@@ -76,7 +60,7 @@ public class UserDbHandler {
         keyValues.put(PHONE_CONFIRMED, false);
         keyValues.put(USER_ADDRESS, user.getUserCity().getName());
         keyValues.put(USER_DOB_TS, user.getDateOfBirth().getTime());
-        keyValues.put(USER_GENDER, user.getGender().getGenderName());
+        keyValues.put(USER_GENDER, user.getGenderEnum().getGenderName());
         keyValues.put(DISPLAY_IMAGE, user.getPicturePath().toString());
         keyValues.put(GOVT_ID, "null");
         keyValues.put(IS_APPROVED, false);
@@ -94,7 +78,7 @@ public class UserDbHandler {
         keyValues.put(PHONE_NUMBER, user.getPhoneNumber());
         keyValues.put(USER_ADDRESS, user.getUserCity().getName());
         keyValues.put(USER_DOB_TS, user.getDateOfBirth().getTime());
-        keyValues.put(USER_GENDER, user.getGender().getGenderName());
+        keyValues.put(USER_GENDER, user.getGenderEnum().getGenderName());
         keyValues.put(DISPLAY_IMAGE, user.getPicturePath().toString());
         return mDbReference.updateChildren(keyValues);
     }
@@ -231,4 +215,5 @@ public class UserDbHandler {
                 break;
         }
     }
+    */
 }

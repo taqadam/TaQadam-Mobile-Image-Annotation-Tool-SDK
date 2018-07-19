@@ -45,7 +45,7 @@
                 android:layout_height="100dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="16dp"
-                android:src="@drawable/taqadam_logo"/>
+                android:src="@drawable/logo_dark" />
 
             <TextView
                 android:layout_width="match_parent"

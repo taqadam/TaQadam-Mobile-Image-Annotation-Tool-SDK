@@ -1,28 +1,12 @@
 package com.recoded.taqadam.models.db;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.TaskCompletionSource;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.recoded.taqadam.models.Answer;
-import com.recoded.taqadam.models.Image;
-import com.recoded.taqadam.models.Job;
-import com.recoded.taqadam.models.auth.UserAuthHandler;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 /**
  * Created by wisam on Jan 15 18.
  */
 
 //This class handles both Tasks and Answers
 public class ImageDbHandler {
+    /*
     public static final String
             TASK_IMAGE = "task_image",
             SKIPPED_BY = "skipped_by",
@@ -51,8 +35,8 @@ public class ImageDbHandler {
         listeners = new HashMap<>();
     }
 
-    public Task<List<Image>> getTasks(final String jobId) {
-        final TaskCompletionSource<List<Image>> src = new TaskCompletionSource<>();
+    public Task<List<ImageOld>> getTasks(final String jobId) {
+        final TaskCompletionSource<List<ImageOld>> src = new TaskCompletionSource<>();
         mImagesDbRef.child(jobId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -71,7 +55,7 @@ public class ImageDbHandler {
 
     private void listenForImpressions(final String jobId) {
         final Job job = JobDbHandler.getInstance().getJob(jobId);
-        for (final Image img : job.getImagesList()) {
+        for (final ImageOld img : job.getImagesList()) {
             ValueEventListener l = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -100,7 +84,7 @@ public class ImageDbHandler {
     public boolean submitAnswer(Answer answer) {
         if (answer.getRawAnswerData() != null && !answer.getRawAnswerData().isEmpty()) {
             final String jobId = answer.getJobId();
-            final Image img = answer.getImage();
+            final ImageOld img = answer.getImage();
 
             //database changed on april 25 2018 at 11-utc
             mAnswersDbRef.child(jobId).child(img.id).child(mUid).setValue(answer.toMap()).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -123,7 +107,7 @@ public class ImageDbHandler {
         return false;
     }
 
-    public void skipImage(String jobId, Image image) {
+    public void skipImage(String jobId, ImageOld image) {
         if (jobId != null && image != null && image.id != null && !image.skipped) {
             mImagesDbRef.child(jobId).child(image.id).child(SKIPPED_BY).child(mUid).setValue(true);
         }
@@ -143,4 +127,5 @@ public class ImageDbHandler {
     public interface OnImpressionsReachedListener {
         void onImpressionsReached(String imgId);
     }
+    */
 }

@@ -26,7 +26,7 @@ public class HelpActivity extends AppCompatActivity {
         webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
         webView.getSettings().setSupportMultipleWindows(false);
         webView.getSettings().setSupportZoom(false);
-        webView.loadUrl("http://www.taqadam.io");
+        webView.loadUrl("https://www.taqadam.io");
     }
 
     @Override

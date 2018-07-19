@@ -13,11 +13,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.android.flexbox.FlexboxLayout;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
 import com.recoded.taqadam.databinding.FragCategorizationBinding;
 import com.recoded.taqadam.models.Answer;
-import com.recoded.taqadam.models.db.JobDbHandler;
+import com.recoded.taqadam.models.Service;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -61,34 +59,16 @@ public class CategorizationFragment extends TaskFragment {
 
         setupOptionClickListener();
 
-        if (savedInstanceState != null) {
-            if (mImage == null && savedInstanceState.containsKey("image")) {
-                mImage = savedInstanceState.getParcelable("image");
-            }
-            if (jobId == null && savedInstanceState.containsKey("job_id")) {
-                jobId = savedInstanceState.getString("job_id");
-            }
-        }
-        answer = new Answer(jobId, mImage);
+        answer = new Answer(assignment.getId(), task.getId());
         taskImageView = binding.ivTaskImage;
         taskImageView.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
-        if (mImage.path.getScheme().equalsIgnoreCase("http") || mImage.path.getScheme().equalsIgnoreCase("https")) {
-            loadTaskImage(mImage.path);
-        } else if (mImage.path.getScheme().equalsIgnoreCase("gs")) {
-            int indexOfSlash = mImage.path.toString().indexOf('/', 5);
-            String bucket = mImage.path.toString().substring(0, indexOfSlash);
-            String ref = mImage.path.toString().substring(indexOfSlash + 1);
-            FirebaseStorage.getInstance(bucket).getReference(ref).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                @Override
-                public void onSuccess(Uri uri) {
-                    loadTaskImage(uri);
-                }
-            });
+        if (task.getUrl().getScheme().equalsIgnoreCase("http") || task.getUrl().getScheme().equalsIgnoreCase("https")) {
+            loadTaskImage(task.getUrl());
         }
 
         binding.tvInstruction.setVisibility(View.GONE);
-        this.multiSelection = JobDbHandler.getInstance().getJob(jobId).isMultiChoice();
-        List<String> options = JobDbHandler.getInstance().getJob(jobId).getOptions();
+        this.multiSelection = type == Service.Services.CLASSIFICATION;
+        List<String> options = assignment.getJob().getOptions();
         for (int i = 0; i < options.size(); i++) {
             TextView option = getStyledTextView(options.get(i));
             option.setId(i);
@@ -108,7 +88,7 @@ public class CategorizationFragment extends TaskFragment {
 
             @Override
             public void onError() {
-                Log.d(TAG, "Error while loading image " + mImage.path.toString());
+                Log.d(TAG, "Error while loading image " + task.getUrl().toString());
                 binding.imageProgressBar.setVisibility(View.GONE);
                 binding.tvError.setVisibility(View.VISIBLE);
             }
@@ -169,18 +149,18 @@ public class CategorizationFragment extends TaskFragment {
         }
 
         JSONObject rawAnswer = new JSONObject();
-        JSONArray categories = new JSONArray();
+        JSONArray selections = new JSONArray();
         for (int i = 0; i < selectedOptions.size(); i++) {
-            categories.put(selectedOptions.valueAt(i));
+            selections.put(selectedOptions.valueAt(i));
         }
 
         try {
-            rawAnswer.put("image_name", mImage.path.getLastPathSegment());
-            rawAnswer.put("categories", categories);
+            rawAnswer.put("image_name", task.getFileName());
+            rawAnswer.put("selections", selections);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        answer.setRawAnswerData(rawAnswer.toString());
+        answer.setData(rawAnswer.toString());
         return answer;
     }
 }

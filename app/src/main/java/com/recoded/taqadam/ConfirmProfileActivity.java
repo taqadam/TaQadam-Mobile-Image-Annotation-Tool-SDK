@@ -44,15 +44,18 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
-import com.google.firebase.storage.UploadTask;
 import com.recoded.taqadam.databinding.ActivityConfirmProfileBinding;
+import com.recoded.taqadam.models.Api.Api;
+import com.recoded.taqadam.models.Api.ApiError;
+import com.recoded.taqadam.models.Api.InvalidException;
+import com.recoded.taqadam.models.Error;
+import com.recoded.taqadam.models.Profile;
 import com.recoded.taqadam.models.User;
 import com.recoded.taqadam.models.auth.UserAuthHandler;
-import com.recoded.taqadam.models.db.UserDbHandler;
-import com.recoded.taqadam.models.storage.UserStorageHandler;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -61,7 +64,9 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class ConfirmProfileActivity extends BaseActivity {
     private static final String TAG = ConfirmProfileActivity.class.getSimpleName();
@@ -73,9 +78,9 @@ public class ConfirmProfileActivity extends BaseActivity {
 
 
     private ActivityConfirmProfileBinding binding;
-    private User user;
+    private Profile profile;
     private boolean emailChanged = false;
-    private OnCompleteListener<Void> mUserCreatedListener;
+    private OnCompleteListener<User> mUserCreatedListener;
     private Calendar mCalendar;
     private DatePickerDialog.OnDateSetListener mDatePickedListener;
     private boolean isAnimating = false; // a work around for image animation
@@ -166,11 +171,8 @@ public class ConfirmProfileActivity extends BaseActivity {
                 }
             }
         });
-        setupUserDbCreationListener();
-        setUser();
-        if (user.getEmailAddress() != null && !user.getEmailAddress().isEmpty()) {
-            binding.etEmail.setVisibility(View.GONE);
-        }
+        createProfileUpdatedListener();
+        setProfile();
 
         mCreatingAccountProgressDialog = new ProgressDialog(this);
         mCreatingAccountProgressDialog.setCancelable(false);
@@ -216,8 +218,8 @@ public class ConfirmProfileActivity extends BaseActivity {
     }
 
     private void checkAuthorized() {
-        if (UserAuthHandler.getInstance().getCurrentUser() == null) {
-            user = new User();
+        if (UserAuthHandler.getInstance().shouldLogin()) {
+            profile = new Profile();
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.error);
             builder.setIcon(R.drawable.ic_error_black);
@@ -239,26 +241,27 @@ public class ConfirmProfileActivity extends BaseActivity {
             builder.setCancelable(false);
             builder.create().show();
         } else {
-            user = UserAuthHandler.getInstance().getCurrentUser();
+            profile = UserAuthHandler.getInstance().getCurrentUser().getProfile();
         }
     }
 
-    private void setUser() {
-        binding.setUser(user);
-        if (user.getGender() == User.Gender.MALE) {
+    private void setProfile() {
+        if (profile == null) return;
+        binding.setProfile(profile);
+        if (profile.getGenderEnum() == Profile.Gender.MALE) {
             binding.spinnerGender.setSelection(1);
-        } else if (user.getGender() == User.Gender.FEMALE) {
+        } else if (profile.getGenderEnum() == Profile.Gender.FEMALE) {
             binding.spinnerGender.setSelection(2);
         }
 
-        if (user.getUserCity() != null) {
-            binding.spinnerCities.setSelection(user.getUserCity().getId());
+        if (profile.getAddress() != null) {
+            binding.spinnerCities.setSelection(profile.getAddressId());
         }
 
-        binding.ivDisplayImage.setTag(user.getPicturePath());
+        binding.ivDisplayImage.setTag(profile.getAvatar());
         loadImage();
-        if (user.getDateOfBirth() != null) {
-            mCalendar.setTime(user.getDateOfBirth());
+        if (profile.getBirthDateObject() != null) {
+            mCalendar.setTime(profile.getBirthDateObject());
             updateDobField();
         }
     }
@@ -279,7 +282,7 @@ public class ConfirmProfileActivity extends BaseActivity {
     }
 
     private void updateDobField() {
-        String format = "dd/MM/yyyy";
+        String format = "yyyy-MM-dd";
         SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
         binding.etDob.setError("");
         binding.etDob.getEditText().setText(sdf.format(mCalendar.getTime()));
@@ -292,24 +295,6 @@ public class ConfirmProfileActivity extends BaseActivity {
         final String INVALID_CITY = getString(R.string.select_valid_city);
 
         boolean valid = true;
-
-        //Display Name Validator
-        if (binding.etDisplayName.getText().toString().isEmpty()) {
-            binding.etDisplayName.setError(EMPTY);
-            valid = false;
-        } else if (binding.etDisplayName.getText().length() < 4) {
-            binding.etDisplayName.setError(INVALID);
-            valid = false;
-        }
-
-        //Email Validator
-        if (binding.etEmail.getEditText().getText().toString().isEmpty()) {
-            binding.etEmail.getEditText().setError(EMPTY);
-            valid = false;
-        } else if (!binding.etEmail.getEditText().getText().toString().matches(EMAIL_REGEX)) {
-            binding.etEmail.getEditText().setError(INVALID);
-            valid = false;
-        }
 
         //First Name Validator
         if (binding.etFName.getEditText().getText().toString().isEmpty()) {
@@ -358,7 +343,7 @@ public class ConfirmProfileActivity extends BaseActivity {
             binding.tvSpinnerCitiesError.setText(""); //We need to clear only this field because set to the layout
         }
 
-        //Image Validator
+        //ImageOld Validator
         if (binding.ivDisplayImage.getTag() == null) {
             if (!isAnimating) {
                 isAnimating = true;
@@ -379,7 +364,7 @@ public class ConfirmProfileActivity extends BaseActivity {
 
         //Push Data
         if (valid) {
-            createUserDbEntry();
+            postProfile();
         }
     }
 
@@ -391,30 +376,60 @@ public class ConfirmProfileActivity extends BaseActivity {
         return diff < acceptableDiff;
     }
 
-    private void setupUserDbCreationListener() {
-        mUserCreatedListener = new OnCompleteListener<Void>() {
+    private void createProfileUpdatedListener() {
+        mUserCreatedListener = new OnCompleteListener<User>() {
 
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
+            public void onComplete(@NonNull Task<User> task) {
                 if (task.isSuccessful()) {
                     mCreatingAccountProgressDialog.dismiss();
-                    if (!user.isCompleteProfile()) {
-                        UserAuthHandler.getInstance().sendEmailVerification(user.getEmailAddress());
-                        UserAuthHandler.getInstance().updateUserProfile(user);
-                        UserAuthHandler.getInstance().getCurrentUser().setCompleteProfile(true);
-                        Toast.makeText(ConfirmProfileActivity.this, R.string.user_created, Toast.LENGTH_LONG).show();
+                    User user = task.getResult();
+                    if (user.getProfile() != null) {
+                        UserAuthHandler.getInstance().updateUser(user);
+                        Toast.makeText(ConfirmProfileActivity.this, R.string.profile_updated, Toast.LENGTH_LONG).show();
                     }
                     Intent i = new Intent(ConfirmProfileActivity.this, MainActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     startActivity(i);
                     finish();
                 } else {
-                    Log.d(TAG, "Error writing user data to Firebase db: " + task.getException());
-                    Toast.makeText(ConfirmProfileActivity.this, R.string.error_updating_account, Toast.LENGTH_LONG).show();
+                    mCreatingAccountProgressDialog.dismiss();
+                    ApiError error = (ApiError) task.getException();
+                    if (error instanceof InvalidException)
+                        indicateErrors((InvalidException) error);
+                    else
+                        Toast.makeText(ConfirmProfileActivity.this, R.string.error_updating_account, Toast.LENGTH_LONG).show();
                 }
             }
         };
     }
+
+    private void indicateErrors(InvalidException error) {
+        Map<String, List<Error>> errors = error.getErrors();
+        for (String field : errors.keySet()) {
+            String msg = errors.get(field).get(0).getMessage();
+            switch (field) {
+                case "first_name":
+                    binding.etFName.getEditText().setError(msg);
+                    break;
+                case "last_name":
+                    binding.etLName.getEditText().setError(msg);
+                    break;
+                case "birth_date":
+                    binding.etDob.setError(msg);
+                    break;
+                case "phone":
+                    binding.etPhoneNumber.getEditText().setError(msg);
+                    break;
+                case "address":
+                    binding.tvSpinnerCitiesError.setText(msg);
+                    break;
+                default:
+                    Toast.makeText(this, field + ": " + msg, Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
 
     private void loadImage() {
         if (binding.ivDisplayImage.getTag() != null) {
@@ -541,7 +556,7 @@ public class ConfirmProfileActivity extends BaseActivity {
                         binding.pbDisplayImage.setVisibility(View.VISIBLE);
                         processAndUploadImageToStorage(uri);
                     } else {
-                        Log.d(TAG, "Image file is null");
+                        Log.d(TAG, "ImageOld file is null");
                     }
                     break;
 
@@ -617,65 +632,60 @@ public class ConfirmProfileActivity extends BaseActivity {
     }
 
     private void uploadImage(Bitmap bmp) {
+        File img = createImageFile();
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 9, bos);
+        byte[] bytes = bos.toByteArray();
+
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(img);
+            fos.write(bytes);
+            fos.flush();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         Log.d(TAG, "Uploading bitmap display image");
-        UserStorageHandler.getInstance().uploadImage(bmp)
-                .addOnCompleteListener(ConfirmProfileActivity.this, new OnCompleteListener<UploadTask.TaskSnapshot>() {
+        Api.uploadImage(img)
+                .addOnCompleteListener(ConfirmProfileActivity.this, new OnCompleteListener<Uri>() {
                     @Override
-                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                    public void onComplete(@NonNull Task<Uri> task) {
                         if (task.isSuccessful()) {
-                            binding.ivDisplayImage.setTag(task.getResult().getDownloadUrl());
+                            binding.ivDisplayImage.setTag(task.getResult());
                             //Todo: implement old and new in the future to allow user to revert
-                            UserDbHandler.getInstance().updateUserImg(task.getResult().getDownloadUrl());
+                            //user.getProfile().setAvatar(task.getResult().toString());
                             loadImage();
                         } else {
                             Log.d(TAG, "Display image upload failed. Reason:" + task.getException());
-                            Toast.makeText(ConfirmProfileActivity.this, "Image upload failed", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ConfirmProfileActivity.this, "ImageOld upload failed", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
 
-    private void createUserDbEntry() {
-        //TODO: CHECK IF THE USER HAS A CONFIRMED COMPLETE PROFILE
-        user.setDisplayName(binding.etDisplayName.getText().toString());
-        if (user.getEmailAddress() == null || user.getEmailAddress().isEmpty())
-            user.setEmailAddress(binding.etEmail.getEditText().getText().toString());
-        user.setFirstName(binding.etFName.getEditText().getText().toString());
-        user.setLastName(binding.etLName.getEditText().getText().toString());
-        user.setPhoneNumber(binding.etPhoneNumber.getEditText().getText().toString());
-        user.setDateOfBirth(mCalendar.getTime());
-        user.setPicturePath((Uri) binding.ivDisplayImage.getTag());
-        switch (binding.spinnerGender.getSelectedItemPosition()) {
-            case 0:
-                user.setGender(User.Gender.NOT_SPECIFIED);
-                break;
-            case 1:
-                user.setGender(User.Gender.MALE);
-                break;
-            case 2:
-                user.setGender(User.Gender.FEMALE);
-                break;
-        }
+    private void postProfile() {
+        Profile p = new Profile();
+        p.setFirstName(binding.etFName.getEditText().getText().toString());
+        p.setLastName(binding.etLName.getEditText().getText().toString());
+        p.setAvatar(binding.ivDisplayImage.getTag().toString());
+        p.setBirthDate(binding.etDob.getEditText().getText().toString());
+        p.setPhone(binding.etPhoneNumber.getEditText().getText().toString());
+        p.setGender(binding.spinnerGender.getSelectedItem().toString());
+        p.setAddress(binding.spinnerCities.getSelectedItem().toString());
 
-        //Setting the city
-        for (User.City city : User.City.values()) {
-            if (city.getId() == binding.spinnerCities.getSelectedItemPosition()) {
-                user.setUserCity(city);
-            }
-        }
-
-
-        if (!user.isCompleteProfile()) {
-            Log.d(TAG, "Creating user");
-            UserDbHandler.getInstance().writeNewUser(user).addOnCompleteListener(ConfirmProfileActivity.this, mUserCreatedListener);
+        if (profile == null) {
+            Log.d(TAG, "Posting profile");
             mCreatingAccountProgressDialog.show();
+            Api.updateProfile(p, false).addOnCompleteListener(this, this.mUserCreatedListener);
         } else {
-            Log.d(TAG, "Updating user");
-            UserDbHandler.getInstance().updateUser(user).addOnCompleteListener(ConfirmProfileActivity.this, mUserCreatedListener);
+            Log.d(TAG, "Putting profile");
             mCreatingAccountProgressDialog.show();
+            Api.updateProfile(p, true).addOnCompleteListener(this, this.mUserCreatedListener);
         }
-
-
     }
 
     private static class ImageProcessor extends AsyncTask<String, Void, Void> {

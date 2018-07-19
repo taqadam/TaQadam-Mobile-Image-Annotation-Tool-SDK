@@ -18,12 +18,9 @@ import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
 import android.widget.ImageButton;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
 import com.recoded.taqadam.databinding.FragBoundingBoxBinding;
 import com.recoded.taqadam.models.Answer;
 import com.recoded.taqadam.models.Region;
-import com.recoded.taqadam.models.db.JobDbHandler;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -74,14 +71,8 @@ public class BoundingBoxFragment extends TaskFragment {
             if (savedInstanceState.containsKey("regions")) {
                 mRegions = savedInstanceState.getParcelableArrayList("regions");
             }
-            if (mImage == null && savedInstanceState.containsKey("image")) {
-                mImage = savedInstanceState.getParcelable("image");
-            }
-            if (jobId == null && savedInstanceState.containsKey("job_id")) {
-                jobId = savedInstanceState.getString("job_id");
-            }
         }
-        answer = new Answer(jobId, mImage);
+        answer = new Answer(assignment.getId(), task.getId());
 
         initTaskImg();
 
@@ -116,18 +107,8 @@ public class BoundingBoxFragment extends TaskFragment {
         taskImageView.setDisplayType(ImageViewTouchBase.DisplayType.NONE);
         binding.bboxView.setEnabled(false);
         binding.bboxView.setVisibility(View.GONE);
-        if (mImage.path.getScheme().equalsIgnoreCase("http") || mImage.path.getScheme().equalsIgnoreCase("https")) {
-            loadTaskImage(mImage.path);
-        } else if (mImage.path.getScheme().equalsIgnoreCase("gs")) {
-            int indexOfSlash = mImage.path.toString().indexOf('/', 5);
-            String bucket = mImage.path.toString().substring(0, indexOfSlash);
-            String ref = mImage.path.toString().substring(indexOfSlash + 1);
-            FirebaseStorage.getInstance(bucket).getReference(ref).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                @Override
-                public void onSuccess(Uri uri) {
-                    loadTaskImage(uri);
-                }
-            });
+        if (task.getUrl().getScheme().equalsIgnoreCase("http") || task.getUrl().getScheme().equalsIgnoreCase("https")) {
+            loadTaskImage(task.getUrl());
         }
     }
 
@@ -159,7 +140,7 @@ public class BoundingBoxFragment extends TaskFragment {
 
             @Override
             public void onError() {
-                Log.d(TAG, "Error while loading image " + mImage.path.toString());
+                Log.d(TAG, "Error while loading image " + task.getUrl().toString());
                 binding.imageProgressBar.setVisibility(View.GONE);
                 binding.tvError.setVisibility(View.VISIBLE);
             }
@@ -198,12 +179,12 @@ public class BoundingBoxFragment extends TaskFragment {
         try {
             rawAnswer.put("image_width", binding.bboxView.getImageRect().width());
             rawAnswer.put("image_height", binding.bboxView.getImageRect().height());
-            rawAnswer.put("image_name", mImage.path.getLastPathSegment());
+            rawAnswer.put("image_name", task.getFileName());
             rawAnswer.put("regions", regions);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        answer.setRawAnswerData(rawAnswer.toString());
+        answer.setData(rawAnswer.toString());
         return answer;
     }
 
@@ -378,7 +359,7 @@ public class BoundingBoxFragment extends TaskFragment {
     }
 
     private void dispatchAttributesDialog(Region region) {
-        attributesFragment = AttributesFragment.getInstance(region, JobDbHandler.getInstance().getJob(jobId).getOptions());
+        attributesFragment = AttributesFragment.getInstance(region, assignment.getJob().getOptions());
         attributesFragment.setCancelable(false);
         attributesFragment.setLabelChangeListener(listener);
         attributesFragment.show(getFragmentManager(), "AttributesFrag");

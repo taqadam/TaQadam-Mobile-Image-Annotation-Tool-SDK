@@ -21,7 +21,7 @@ public class SettingsActivity extends BaseActivity implements SharedPreferences.
                 .replace(R.id.content, new SettingsFragment())
                 .commit();
 
-        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
+        this.getSharedPreferences("config", MODE_PRIVATE).registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override

@@ -31,8 +31,8 @@
 
             <ImageView
                 android:id="@+id/iv_logo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="14dp"
                 android:src="?attr/taqadam_logo"/>
@@ -46,7 +46,7 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/etc_email"
+                android:id="@+id/etc_creds"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -54,6 +54,37 @@
                 android:layout_marginRight="32dp"
                 android:layout_marginTop="32dp"
                 android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginTop="-8dp"
+                        android:contentDescription="@string/email_content_desc"
+                        android:src="?attr/ic_person" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/et_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:errorEnabled="true"
+                        app:hintTextAppearance="@style/signup_form_hint_appearance"
+                        app:errorTextAppearance="@style/AppTheme.ErrorTextAppearance">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/eti_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/input_name" />
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -165,6 +196,7 @@
 
             <com.facebook.login.widget.LoginButton
                 android:id="@+id/b_fb"
+                android:visibility="invisible"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

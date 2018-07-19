@@ -16,23 +16,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.recoded.taqadam.models.Responses.SuccessResponse;
 import com.recoded.taqadam.models.User;
 import com.recoded.taqadam.models.auth.UserAuthHandler;
-import com.recoded.taqadam.models.db.ImageDbHandler;
-import com.recoded.taqadam.models.db.JobDbHandler;
-import com.recoded.taqadam.models.db.PostDbHandler;
 import com.squareup.picasso.Picasso;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private User user;
+    private UserAuthHandler mAuth;
     private View drawerHeader;
     private LockableViewPager pager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.mAuth = UserAuthHandler.getInstance();
+        this.user = mAuth.getCurrentUser();
         checkAuthorized();
         setContentView(R.layout.activity_main);
 
@@ -74,7 +77,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.navigation_jobs:
+                    case R.id.navigation_assignments:
                         setTitle(item.getTitle());
                         pager.setCurrentItem(0);
 
@@ -125,9 +128,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         } else if (id == R.id.nav_about) {
             startActivity(new Intent(this, AboutActivity.class));
         } else if (id == R.id.nav_logout) {
-            UserAuthHandler.getInstance().signOut();
-            startActivity(new Intent(this, SigninActivity.class));
-            finish();
+            UserAuthHandler.getInstance().logout().addOnSuccessListener(this, new OnSuccessListener<SuccessResponse>() {
+                @Override
+                public void onSuccess(SuccessResponse successResponse) {
+                    Toast.makeText(MainActivity.this, successResponse.getMessage(), Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(MainActivity.this, SigninActivity.class));
+                    finish();
+                }
+            });
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -136,7 +144,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void checkAuthorized() {
-        if (UserAuthHandler.getInstance().getCurrentUser() == null) {
+        if (user == null) {
             user = new User();
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.error);
@@ -158,16 +166,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             });
             builder.setCancelable(false);
             builder.create().show();
-        } else {
-            user = UserAuthHandler.getInstance().getCurrentUser();
         }
     }
 
     private void initHeader() {
         TextView tv = drawerHeader.findViewById(R.id.tv_display_name);
         ImageView iv = drawerHeader.findViewById(R.id.iv_display_image);
-        Picasso.with(this).load(user.getPicturePath()).into(iv);
-        tv.setText(user.getDisplayName());
+        Picasso.with(this).load(user.getProfile().getAvatar()).into(iv);
+        tv.setText(user.getName());
     }
 
     @Override
@@ -214,9 +220,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     protected void onDestroy() {
-        JobDbHandler.getInstance().release();
+        /*JobDbHandler.getInstance().release();
         ImageDbHandler.getInstance().release();
-        PostDbHandler.getInstance().release();
+        PostDbHandler.getInstance().release();*/
         super.onDestroy();
     }
 }

@@ -3,70 +3,48 @@ package com.recoded.taqadam.models;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
-import com.google.firebase.database.Exclude;
-import com.google.firebase.database.IgnoreExtraProperties;
-import com.recoded.taqadam.models.auth.UserAuthHandler;
-import com.recoded.taqadam.models.db.PostDbHandler;
+import com.google.gson.annotations.Expose;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by wisam on Dec 25 17.
  */
 
-@IgnoreExtraProperties
-public class Post implements Comparable<Post> {
+public class Post extends Model implements Comparable<Post> {
 
-    private String uid;
-    private String author;
-    private Uri authorImg;
+    @Expose
+    private User user;
+    @Expose
     private List<Comment> comments;
-    private int noOfComments;
+
+    @Expose
+    private Long commentsCount;
+    @Expose
     private String title;
+    @Expose
     private String body;
-    private long postTime;
-    private String id;
-
-    public Post() {
-    }
-
-    ;
-
-    public Post(String id) {
-        this.id = id;
-    }
-
-    public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
+    @Expose
+    private Date createdAt;
 
     public String getAuthor() {
-        return author;
+        return user.getName();
     }
 
     public Uri getAuthorImage() {
-        return authorImg;
+        return user.getProfile().getAvatar();
     }
 
-    public void setAuthorImg(Uri imgUri) {
-        authorImg = imgUri;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public User getUser() {
+        return user;
     }
 
     public List<Comment> getComments() {
-        if (comments == null) {
-            comments = new ArrayList<>();
-        }
         return comments;
     }
 
@@ -74,12 +52,12 @@ public class Post implements Comparable<Post> {
         this.comments = comments;
     }
 
-    public int getNoOfComments() {
-        return noOfComments;
+    public Long getCommentsCount() {
+        return commentsCount;
     }
 
-    public void setNoOfComments(int noOfComments) {
-        this.noOfComments = noOfComments;
+    public void setCommentsCount(Long commentsCount) {
+        this.commentsCount = commentsCount;
     }
 
     public String getTitle() {
@@ -98,59 +76,19 @@ public class Post implements Comparable<Post> {
         this.body = body;
     }
 
-    public long getPostTime() {
-        return postTime;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setPostTime(long postTime) {
-        this.postTime = postTime;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Post fromMap(Map<String, Object> map) {
-        uid = (String) map.get(PostDbHandler.USER_ID);
-        title = (String) map.get(PostDbHandler.TITLE);
-        author = (String) map.get(PostDbHandler.AUTHOR);
-        if (map.containsKey(PostDbHandler.AUTHOR_IMG))
-            authorImg = Uri.parse((String) map.get(PostDbHandler.AUTHOR_IMG));
-        else
-            authorImg = UserAuthHandler.getInstance().getCurrentUser().getPicturePath();
-        noOfComments = ((Long) map.get(PostDbHandler.COMMENTS)).intValue();
-
-        postTime = (long) map.get(PostDbHandler.TIMESTAMP);
-        body = (String) map.get(PostDbHandler.TRUNCATED_BODY);
-
-        return this;
-    }
-
-    @Exclude
-    public Map<String, Object> toMap() {
-        HashMap<String, Object> result = new HashMap<>();
-        result.put(PostDbHandler.USER_ID, uid);
-        result.put(PostDbHandler.AUTHOR, author);
-        result.put(PostDbHandler.AUTHOR_IMG, authorImg.toString());
-        result.put(PostDbHandler.TITLE, title);
-        result.put(PostDbHandler.COMMENTS, noOfComments);
-
-        String truncatedBody = getTruncatedBody();
-
-        result.put(PostDbHandler.TRUNCATED_BODY, truncatedBody);
-        result.put(PostDbHandler.TIMESTAMP, postTime);
-        return result;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     @Override
     public int compareTo(@NonNull Post o) {
-        long compareTime = o.getPostTime();
+        long compareTime = o.getCreatedAt().getTime();
 
-        return (int) (compareTime - this.getPostTime());
+        return (int) (compareTime - this.getCreatedAt().getTime());
     }
 
     public String getTruncatedBody() {

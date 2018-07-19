@@ -4,8 +4,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.view.ViewGroup;
 
-import com.recoded.taqadam.models.Image;
+import com.recoded.taqadam.models.Assignment;
+import com.recoded.taqadam.models.Service;
+import com.recoded.taqadam.models.Task;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,33 +16,34 @@ import java.util.List;
  */
 
 public class TasksPagerAdapter extends FragmentStatePagerAdapter {
-    private List<Image> imagesList;
-    String type;
-    String jobId;
+    private List<Task> tasks;
+    Service.Services type;
+    Assignment assignment;
     TaskFragment mCurrentFrag;
     int currentPosition;
 
-    public TasksPagerAdapter(FragmentManager fm, final List<Image> imagesList, String jobType, String jobId) {
+    public TasksPagerAdapter(FragmentManager fm, final List<Task> tasks, Service.Services serviceType, Assignment assignment) {
         super(fm);
-        this.imagesList = imagesList;
-        this.type = jobType;
-        this.jobId = jobId;
+        this.tasks = new ArrayList<>();
+        this.tasks.addAll(tasks);
+        this.type = serviceType;
+        this.assignment = assignment;
     }
 
-
-    public void removeImage(int position) {
-        imagesList.remove(position);
+    public void addNewTasks(List<Task> tasks) {
+        this.tasks.clear();
+        this.tasks.addAll(tasks);
         notifyDataSetChanged();
     }
 
     @Override
     public TaskFragment getItem(int position) {
-        return TaskFragment.newTask(imagesList.get(position), type, jobId);
+        return TaskFragment.newTask(tasks.get(position), type, assignment);
     }
 
     @Override
     public int getCount() {
-        return imagesList.size();
+        return tasks.size();
     }
 
     @Override

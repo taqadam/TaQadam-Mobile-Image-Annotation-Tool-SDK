@@ -107,6 +107,7 @@
     <string name="taqadam">تقدّم!</string>
     <string name="email_content_desc">البريد الألكتروني</string>
     <string name="input_email">ادخل البريد الألكتروني</string>
+    <string name="input_name">اسم المعرف</string>
     <string name="input_password">ادخل كلمة المرور</string>
     <string name="password_strength">قوة كلمة المرور:</string>
     <string name="already_registered">لديك حساب مسبقا"؟</string>
@@ -133,9 +134,11 @@
     <string name="submit">تأكيد</string>
     <string name="creatingAccount">يتم انشاء حساب</string>
     <string name="short_email_errorm">البريد الألكتروني قصير جدا!</string>
+    <string name="short_name_errorm">يرجى اختيار اسم معرف</string>
+    <string name="long_name_errom">اسم المعرف طويل جدا!</string>
     <string name="email_format_errorm">البريد الألكتروني غير صحيح يجب ان يكون على الصيغة:john@example.com</string>
-    <string name="short_pass_errorm">كلمة المرور قصيرة جدا!  يجب ان تكون اكثر من 5 احرف </string>
-    <string name="pass_instruction_errorm">كلمة المرور يجب انت تكون اكثر من 6 احرف ويجب ان تحتوي على رقم واحد وحرف واحد على الأقل</string>
+    <string name="short_pass_errorm">كلمة المرور قصيرة جدا!  يجب ان تكون على الاقل 8 احرف </string>
+    <string name="pass_instruction_errorm">كلمة المرور يجب انت تكون اكثر من 8 احرف ويجب ان تحتوي على رقم واحد وحرف واحد على الأقل</string>
     <string name="write_email_errorm">اكتب البريد الألكتروني</string>
     <string name="allready_registed_email_errorm">البريد الألكتروني مسجل سابقا و مرتبط بحساب فيس بوك</string>
     <string name="sign_in_with_facebook">تسجيل الدخول باستخدام فيس بوك</string>
@@ -160,7 +163,7 @@
     <string name="invalid_input">ادخال خاطئ</string>
     <string name="age_less_than13">العمر أقل من 13 سنة</string>
     <string name="select_valid_city">يرجى اختيار منطقة صحيحة</string>
-    <string name="user_created">تم انشاء المستخدم بنجاح!</string>
+    <string name="profile_updated">تم تحديث الملف الشخصي بنجاح!</string>
     <string name="error_updating_account">حدث خطأ اثناء تحديث الحساب</string>
     <string name="tutorial">تمرين</string>
     <string name="qualifier">مؤهل</string>
@@ -184,7 +187,7 @@
     <string name="awaiting_verification">قيد المراجعة</string>
     <string name="verified_contact_method">مؤكد</string>
     <string name="not_verified_contact_method">غير مؤكد</string>
-    <string name="jobs">مهام</string>
+    <string name="assignments">مهام</string>
     <string name="loading_tasks">جاري تنزيل المهام…</string>
     <string name="error_while_loading_image">حدث خطأ اثناء تحميل الصورة!\nاضغط علامة الصح للتخطي</string>
     <string name="job_activity_title">مهمة %d/%d</string>

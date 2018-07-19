@@ -1,13 +1,12 @@
 package com.recoded.taqadam;
 
-import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
 
 import com.recoded.taqadam.models.Answer;
-import com.recoded.taqadam.models.Image;
-import com.recoded.taqadam.models.Job;
+import com.recoded.taqadam.models.Assignment;
+import com.recoded.taqadam.models.Service;
+import com.recoded.taqadam.models.Task;
 
 import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 
@@ -18,38 +17,46 @@ import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 public class TaskFragment extends Fragment {
     private static final String TAG = TaskFragment.class.getSimpleName();
 
-    protected Image mImage;
+    protected Task task;
     protected ImageViewTouch taskImageView;
-    protected String jobId;
+    protected Assignment assignment;
     protected Answer answer;
+    protected Service.Services type;
     protected boolean imageLoaded = false;
 
-    public static TaskFragment newTask(Image img, String type, String jobId) {
-        if (type.equals(Job.BBOX)) {
+    public static TaskFragment newTask(Task task, Service.Services type, Assignment assignment) {
+        if (type == Service.Services.BBOX) {
             TaskFragment frag = new BoundingBoxFragment();
-            frag.setImage(img);
-            frag.setJobId(jobId);
+            frag.setTask(task);
+            frag.setAssignment(assignment);
+            frag.type = type;
+            return frag;
+        } else if (type == Service.Services.CLASSIFICATION || type == Service.Services.CATEGORIZATION) {
+            TaskFragment frag = new CategorizationFragment();
+            frag.setTask(task);
+            frag.setAssignment(assignment);
+            frag.type = type;
+            return frag;
+        } else if (type == Service.Services.SEGMENTATION) {
+            TaskFragment frag = new SegmentationFragment();
+            frag.setTask(task);
+            frag.setAssignment(assignment);
+            frag.type = type;
             return frag;
         } else {
-            TaskFragment frag = new CategorizationFragment();
-            frag.setImage(img);
-            frag.setJobId(jobId);
-            return frag;
+            return null;
         }
     }
 
     public TaskFragment() {
     }
 
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putParcelable("image", mImage);
-        outState.putString("job_id", jobId);
-        super.onSaveInstanceState(outState);
+    public void setTask(Task task) {
+        this.task = task;
     }
 
-    public void setImage(Image img) {
-        mImage = img;
+    public void setAssignment(Assignment assignment) {
+        this.assignment = assignment;
     }
 
     protected int pxToDp(int px) {
@@ -64,9 +71,5 @@ public class TaskFragment extends Fragment {
 
     public Answer getAnswer() {
         return null;
-    }
-
-    public void setJobId(String jobId) {
-        this.jobId = jobId;
     }
 }

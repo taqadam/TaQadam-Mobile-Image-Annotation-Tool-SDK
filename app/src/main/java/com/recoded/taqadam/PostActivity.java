@@ -9,9 +9,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.recoded.taqadam.models.Api.Api;
 import com.recoded.taqadam.models.Post;
-import com.recoded.taqadam.models.db.PostDbHandler;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PostActivity extends BaseActivity {
 
@@ -30,7 +33,7 @@ public class PostActivity extends BaseActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        if (getIntent().getStringExtra("post_id") != null) {
+        if (getIntent().getLongExtra("post_id", -1) != -1) {
             editMode = true;
             loadPostData();
         }
@@ -54,7 +57,7 @@ public class PostActivity extends BaseActivity {
                 if (editMode && editPost != null) {
                     editPost.setTitle(title);
                     editPost.setBody(body);
-                    PostDbHandler.getInstance().updatePost(editPost);
+                    Api.updatePost(editPost);
                     Intent i = new Intent(PostActivity.this, PostViewerActivity.class);
                     i.putExtra("post_id", editPost.getId());
                     startActivity(i);
@@ -63,7 +66,7 @@ public class PostActivity extends BaseActivity {
                     Post post = new Post();
                     post.setTitle(title);
                     post.setBody(body);
-                    PostDbHandler.getInstance().writePost(post);
+                    Api.postPost(post);
                     finish();
                 }
             }
@@ -73,16 +76,23 @@ public class PostActivity extends BaseActivity {
     private void loadPostData() {
         final View v = findViewById(R.id.progress_bar);
         v.setVisibility(View.VISIBLE);
-        PostDbHandler.getInstance().getPost(getIntent().getStringExtra("post_id"))
-                .addOnSuccessListener(this, new OnSuccessListener<Post>() {
-                    @Override
-                    public void onSuccess(Post post) {
-                        editPost = post;
-                        editName.setText(post.getTitle());
-                        editDescription.setText(post.getBody());
-                        v.setVisibility(View.GONE);
-                    }
-                });
+        Long post_id = getIntent().getLongExtra("post_id", -1);
+        Call<Post> call = Api.getInstance().endpoints.getPost(post_id);
+        call.enqueue(new Callback<Post>() {
+            @Override
+            public void onResponse(Call<Post> call, Response<Post> response) {
+                editPost = response.body();
+                editName.setText(editPost.getTitle());
+                editDescription.setText(editPost.getBody());
+                v.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onFailure(Call<Post> call, Throwable t) {
+                Toast.makeText(PostActivity.this, getString(R.string.error), Toast.LENGTH_LONG).show();
+                finish();
+            }
+        });
     }
 
     @Override

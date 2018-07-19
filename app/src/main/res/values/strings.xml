@@ -34,7 +34,7 @@
     <string name="settings">settings</string>
 
 
-    <string name="app_name">TAQADAM</string>
+    <string name="app_name">TaQadam</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="hello_tasks_fragment">Hello tasks fragment</string>
@@ -113,6 +113,7 @@
     <string name="taqadam">Taqadam!</string>
     <string name="email_content_desc">E-Mail Field</string>
     <string name="input_email">E-Mail Address</string>
+    <string name="input_name">Username</string>
     <string name="input_password">Password</string>
     <string name="password_strength">Password Strength:</string>
     <string name="sign_up">Sign Up</string>
@@ -140,9 +141,11 @@
     <string name="submit">Submit</string>
     <string name="creatingAccount">Creating Account</string>
     <string name="short_email_errorm">E-Mail is too short!</string>
+    <string name="short_name_errorm">Please write a name</string>
+    <string name="long_name_errom">Name is too long!</string>
     <string name="email_format_errorm">E-Mail address is invalid. Should be in the format: john@example.com</string>
-    <string name="short_pass_errorm">Password is too short! Should be more than 5 characters</string>
-    <string name="pass_instruction_errorm">Password Must be 6 characters long and should contain at least one letter and one number</string>
+    <string name="short_pass_errorm">Password is too short! Should be at least 8 characters</string>
+    <string name="pass_instruction_errorm">Password Must be 8 characters long and should contain at least one letter and one number</string>
     <string name="write_email_errorm">Write your E-Mail address!</string>
     <string name="allready_registed_email_errorm">This email is already registered and connected to a Facebook account.</string>
     <string name="sign_in_with_facebook">Sign in with Facebook</string>
@@ -167,7 +170,7 @@
     <string name="invalid_input">Invalid input</string>
     <string name="age_less_than13">You\'re younger than 13</string>
     <string name="select_valid_city">Please select a valid city</string>
-    <string name="user_created">User Created Successfully!</string>
+    <string name="profile_updated">Profile updated Successfully!</string>
     <string name="error_updating_account">Error updating account</string>
     <string name="tutorial">Tutorial</string>
     <string name="qualifier">Qualifier</string>
@@ -189,7 +192,7 @@
     <string name="awaiting_verification">Awaiting Verification</string>
     <string name="verified_contact_method">Verified</string>
     <string name="not_verified_contact_method">Not Verified</string>
-    <string name="jobs">Jobs</string>
+    <string name="assignments">Assignments</string>
     <string name="loading_tasks">Loading Tasks..</string>
     <string name="error_while_loading_image">Error while loading image!\nPress check mark to skip for now</string>
     <string name="job_activity_title">Task %d/%d</string>

@@ -1,33 +1,26 @@
 package com.recoded.taqadam.models.auth;
 
-import android.os.Bundle;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.facebook.AccessToken;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.facebook.login.LoginManager;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.EmailAuthProvider;
-import com.google.firebase.auth.FacebookAuthProvider;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.ProviderQueryResult;
-import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.DataSnapshot;
-import com.recoded.taqadam.models.FacebookUser;
+import com.recoded.taqadam.models.Api.Api;
+import com.recoded.taqadam.models.Api.ApiError;
+import com.recoded.taqadam.models.Auth;
+import com.recoded.taqadam.models.Responses.SuccessResponse;
 import com.recoded.taqadam.models.User;
-import com.recoded.taqadam.models.db.UserDbHandler;
 
-import java.util.HashMap;
+import java.io.IOException;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by wisam on Dec 21 17.
@@ -37,298 +30,206 @@ public class UserAuthHandler {
     private static final String TAG = UserAuthHandler.class.getSimpleName();
     private static UserAuthHandler instance;
 
-    private FirebaseAuth mAuth;
-    private String mUid;
-    private User currentUser;
+    private Auth auth;
     private Task<User> initTask;
+    private SharedPreferences sharedPreferences;
 
     public static UserAuthHandler getInstance() {
-        if (instance == null) {
-            instance = new UserAuthHandler();
-            instance.initializeAuth();
-        }
         return instance;
     }
 
-    private UserAuthHandler() {
-        mAuth = FirebaseAuth.getInstance();
+    public static void init(Context ctx) {
+        instance = new UserAuthHandler(ctx);
     }
 
-    public String getUid() {
-        return mUid;
+    private UserAuthHandler(Context ctx) {
+        final TaskCompletionSource<User> initTask = new TaskCompletionSource<>();
+        //try to get token from shared preference
+        this.sharedPreferences = ctx.getSharedPreferences("auth", Context.MODE_PRIVATE);
+        this.getToken();
+        if (this.auth != null) {
+            Api.initiate(auth);
+            refresh().addOnSuccessListener(new OnSuccessListener<Auth>() {
+                @Override
+                public void onSuccess(Auth auth) {
+                    UserAuthHandler.this.auth = auth;
+                    Api.initiate(auth);
+                    UserAuthHandler.this.saveToken(auth);
+                    initTask.setResult(auth.getUser());
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    if (((ApiError) e).getStatusCode() == 401) {
+                        destroyToken();
+                        auth = null;
+                        Api.initiate(null);
+                        initTask.setResult(null);
+                    } else {
+                        Crashlytics.log(4, "ApiError", e.getMessage());
+                        initTask.setException(e);
+                    }
+                }
+            });
+        } else {
+            Api.initiate(null);
+            initTask.setResult(null);
+        }
+        this.initTask = initTask.getTask();
+    }
+
+    public Task<User> login(String email, String password) {
+        final TaskCompletionSource<User> task = new TaskCompletionSource<>();
+
+        Call<Auth> call = Api.getInstance().endpoints.login(new Login(email, password));
+        call.enqueue(new Callback<Auth>() {
+            @Override
+            public void onResponse(@NonNull Call<Auth> call, @NonNull retrofit2.Response<Auth> response) {
+                Auth auth = response.body();
+                UserAuthHandler.this.auth = auth;
+                Api.initiate(auth);
+                UserAuthHandler.this.saveToken(auth);
+                task.setResult(auth.getUser());
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Auth> call, @NonNull Throwable t) {
+                task.setException((IOException) t);
+            }
+        });
+
+        return task.getTask();
+    }
+
+    public Task<User> login(AccessToken token) {
+        /*final TaskCompletionSource<User> task = new TaskCompletionSource<>();
+
+        Call<Auth> call = Api.getInstance().endpoints.login("","");
+        call.enqueue(new Callback<Auth>() {
+            @Override
+            public void onResponse(@NonNull Call<Auth> call, @NonNull retrofit2.Response<Auth> response) {
+                Auth auth = response.body();
+                UserAuthHandler.this.auth = auth;
+                Api.initiate(auth);
+                UserAuthHandler.this.saveToken(auth);
+                task.setResult(auth.getUser());
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Auth> call, @NonNull Throwable t) {
+                task.setException((IOException) t);
+            }
+        });
+
+        return task.getTask();*/
+        return null;
+    }
+
+    public Task<Auth> refresh() {
+        final TaskCompletionSource<Auth> task = new TaskCompletionSource<>();
+
+        Call<Auth> call = Api.getInstance().endpoints.refresh();
+        call.enqueue(new Callback<Auth>() {
+            @Override
+            public void onResponse(@NonNull Call<Auth> call, @NonNull Response<Auth> response) {
+                UserAuthHandler.this.auth = response.body();
+                task.setResult(response.body());
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Auth> call, @NonNull Throwable t) {
+                task.setException((IOException) t);
+            }
+        });
+
+        return task.getTask();
+    }
+
+    public Task<User> register(String name, String email, String password) {
+        final TaskCompletionSource<User> task = new TaskCompletionSource<>();
+
+        Call<Auth> call = Api.getInstance().endpoints.register(new Register(name, email, password));
+        call.enqueue(new Callback<Auth>() {
+            @Override
+            public void onResponse(@NonNull Call<Auth> call, @NonNull retrofit2.Response<Auth> response) {
+                Auth auth = response.body();
+                UserAuthHandler.this.auth = auth;
+                Api.initiate(auth);
+                UserAuthHandler.this.saveToken(auth);
+                task.setResult(auth.getUser());
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Auth> call, @NonNull Throwable t) {
+                task.setException((IOException) t);
+            }
+        });
+
+        return task.getTask();
+    }
+
+    public Task<SuccessResponse> logout() {
+        final TaskCompletionSource<SuccessResponse> task = new TaskCompletionSource<>();
+
+        Call<SuccessResponse> call = Api.getInstance().endpoints.logout();
+        call.enqueue(new Callback<SuccessResponse>() {
+            @Override
+            public void onResponse(Call<SuccessResponse> call, Response<SuccessResponse> response) {
+                auth = null;
+                destroyToken();
+                task.setResult(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<SuccessResponse> call, Throwable t) {
+                task.setException((IOException) t);
+            }
+        });
+
+        return task.getTask();
     }
 
     public User getCurrentUser() {
-        return currentUser;
+        return this.auth == null
+                ? null
+                : this.auth.getUser();
+    }
+
+    private void getToken() {
+        if (this.sharedPreferences != null && this.sharedPreferences.contains("token")) {
+            this.auth = new Auth();
+            auth.setToken(this.sharedPreferences.getString("token", null));
+            auth.setType(this.sharedPreferences.getString("token_type", null));
+        }
+    }
+
+    private void saveToken(Auth auth) {
+        if (this.sharedPreferences != null) {
+            SharedPreferences.Editor editor = this.sharedPreferences.edit();
+            editor.putString("token", auth.getToken());
+            editor.putString("token_type", auth.getType());
+            editor.commit();
+        }
+    }
+
+    private void destroyToken() {
+        if (this.sharedPreferences != null) {
+            SharedPreferences.Editor editor = this.sharedPreferences.edit();
+            editor.remove("token");
+            editor.remove("token_type");
+            editor.commit();
+        }
     }
 
     public Task<User> getInitTask() {
         return initTask;
     }
 
-    private void initializeAuth() {
-        final TaskCompletionSource<User> initTask = new TaskCompletionSource<>();
-        if (mAuth.getCurrentUser() == null) {
-            initTask.setResult(null);
-        } else {
-            mUid = mAuth.getUid();
-            UserDbHandler.getInstance().fetchUserNode().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
-                @Override
-                public void onSuccess(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.exists() && dataSnapshot.getChildrenCount() > 1) {
-                        currentUser = User.fromMap((HashMap) dataSnapshot.getValue());
-                        if (!currentUser.isEmailVerified() && mAuth.getCurrentUser().isEmailVerified()) {
-                            currentUser.setEmailVerified(mAuth.getCurrentUser().isEmailVerified());
-                        }
-                        currentUser.setCompleteProfile(true);
-                        initTask.setResult(currentUser);
-                    } else {
-                        currentUser = new User(mAuth.getCurrentUser());
-                        initTask.setResult(currentUser);
-                    }
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    initTask.setException(e);
-                    Log.d(TAG, "Error initializing auth - fetchUserNode Failed: " + e.getMessage());
-                }
-            });
-        }
-        this.initTask = initTask.getTask();
+    public boolean shouldLogin() {
+        return auth == null;
     }
 
-    public Task<User> signIn(String userName, String pw) {
-        final TaskCompletionSource<User> signInTask = new TaskCompletionSource<>();
-        if (currentUser != null) {
-            signInTask.setResult(currentUser);
-        } else {
-            mAuth.signInWithEmailAndPassword(userName, pw).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                @Override
-                public void onSuccess(final AuthResult authResult) {
-                    mUid = mAuth.getUid();
-                    UserDbHandler.getInstance().fetchUserNode().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
-                        @Override
-                        public void onSuccess(DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.exists()) {
-                                currentUser = User.fromMap((HashMap) dataSnapshot.getValue());
-                                currentUser.setCompleteProfile(true);
-                                signInTask.setResult(currentUser);
-                            } else {
-                                currentUser = new User(authResult.getUser());
-                                signInTask.setResult(currentUser);
-                            }
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            signInTask.setException(e);
-                            Log.d(TAG, "Error signing in user with pw - fetchUserNode Failed: " + e.getMessage());
-                        }
-                    });
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    signInTask.setException(e);
-                    Log.d(TAG, "Error signing in user with pw: " + e.getMessage());
-                }
-            });
-        }
-
-        return signInTask.getTask();
-    }
-
-    public Task<User> signIn(final AccessToken accessToken) {
-        final TaskCompletionSource<User> signInTask = new TaskCompletionSource<>();
-        if (currentUser != null) {
-            signInTask.setResult(currentUser);
-        } else {
-            AuthCredential creds = FacebookAuthProvider.getCredential(accessToken.getToken());
-            mAuth.signInWithCredential(creds).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                @Override
-                public void onSuccess(final AuthResult authResult) {
-                    mUid = mAuth.getUid();
-                    UserDbHandler.getInstance().fetchUserNode().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
-                        @Override
-                        public void onSuccess(DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.exists()) {
-                                currentUser = User.fromMap((HashMap) dataSnapshot.getValue());
-                                currentUser.setCompleteProfile(true);
-                                signInTask.setResult(currentUser);
-                            } else {
-                                fetchFbData(accessToken).addOnSuccessListener(new OnSuccessListener<User>() {
-                                    @Override
-                                    public void onSuccess(User user) {
-                                        currentUser = user;
-                                        signInTask.setResult(currentUser);
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        currentUser = new User(authResult.getUser());
-                                        signInTask.setResult(currentUser);
-                                        Log.d(TAG, "Error signing in user with fb - fetchFbData Failed: " + e.getMessage());
-                                    }
-                                });
-                            }
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            signInTask.setException(e);
-                            Log.d(TAG, "Error signing in user with fb - fetchUserNode Failed: " + e.getMessage());
-                        }
-                    });
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    signInTask.setException(e);
-                    Log.d(TAG, "Error signing in user with fb: " + e.getMessage());
-                }
-            });
-        }
-        return signInTask.getTask();
-    }
-
-    public Task<User> signUp(final String userName, String pw) {
-        final TaskCompletionSource<User> signUpTask = new TaskCompletionSource<>();
-        mAuth.createUserWithEmailAndPassword(userName, pw).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-            @Override
-            public void onSuccess(AuthResult authResult) {
-                mUid = mAuth.getUid();
-                currentUser = new User(authResult.getUser());
-                authResult.getUser().sendEmailVerification();
-                signUpTask.setResult(currentUser);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                mAuth.fetchProvidersForEmail(userName).addOnSuccessListener(new OnSuccessListener<ProviderQueryResult>() {
-                    @Override
-                    public void onSuccess(ProviderQueryResult res) {
-                        if (res.getProviders() != null && !res.getProviders().isEmpty()) {
-                            if (res.getProviders().contains(FacebookAuthProvider.PROVIDER_ID)
-                                    && res.getProviders().contains(EmailAuthProvider.PROVIDER_ID)) {
-                                signUpTask.setException(new AuthSignUpException(AuthSignUpException.EMAIL_ASSOC_FB_PW_WRONG));
-                            } else if (res.getProviders().contains(EmailAuthProvider.PROVIDER_ID)) {
-                                signUpTask.setException(new AuthSignUpException(AuthSignUpException.PW_WRONG));
-                            } else if (res.getProviders().contains(FacebookAuthProvider.PROVIDER_ID)) {
-                                signUpTask.setException(new AuthSignUpException(AuthSignUpException.EMAIL_ASSOC_FB));
-                            }
-                        }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        signUpTask.setException(e);
-                        Log.d(TAG, "Error signing up user user with pw - fetchProvidersForEmail Failed: " + e.getMessage());
-                    }
-                });
-            }
-        });
-        return signUpTask.getTask();
-    }
-
-    @NonNull
-    private Task<User> fetchFbData(AccessToken token) {
-        final TaskCompletionSource<User> fbTask = new TaskCompletionSource<>();
-        GraphRequest request = GraphRequest.newGraphPathRequest(
-                token,
-                "/me/",
-                new GraphRequest.Callback() {
-                    @Override
-                    public void onCompleted(GraphResponse response) {
-                        if (response.getError() == null && response.getJSONObject() != null) {
-                            User user = User.fromFacebookUser(new FacebookUser(response.getJSONObject()));
-                            fbTask.setResult(user);
-                        } else {
-                            fbTask.setException(response.getError().getException());
-                        }
-                    }
-                });
-
-        Bundle parameters = new Bundle();
-        parameters.putString("fields", "first_name,last_name,name,gender,picture.width(2000).height(2000){width,height,url,is_silhouette},verified,birthday,email,id");
-        request.setParameters(parameters);
-        request.executeAsync();
-
-        return fbTask.getTask();
-    }
-
-    public void signOut() {
-        UserDbHandler.getInstance().release();
-        currentUser = null;
-        mUid = null;
-        if (AccessToken.getCurrentAccessToken() != null) {
-            LoginManager.getInstance().logOut();
-        }
-        mAuth.signOut();
-    }
-
-    public void sendEmailVerification(final String email) {
-        final FirebaseUser u = mAuth.getCurrentUser();
-        if (u != null && u.getProviders() != null && u.getProviders().contains(FacebookAuthProvider.PROVIDER_ID)) {
-            if (u.getEmail() == null || u.getEmail().isEmpty()) {
-                u.updateEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        sendEmailVerification(email);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Crashlytics.log(Log.ERROR, TAG, "Error updating FirebaseUser " + email + ": " + e);
-                    }
-                });
-            } else if (!u.isEmailVerified()) {
-                u.sendEmailVerification().addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        if (e instanceof FirebaseAuthRecentLoginRequiredException) {
-                            AuthCredential a = FacebookAuthProvider.getCredential(AccessToken.getCurrentAccessToken().getToken());
-                            u.reauthenticate(a).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    u.sendEmailVerification();
-                                }
-                            });
-                        }
-                    }
-                });
-            }
-        }
-    }
-
-    public void updateUserProfile(User user) {
-        if (mAuth.getCurrentUser() != null) {
-            UserProfileChangeRequest b = new UserProfileChangeRequest.Builder()
-                    .setDisplayName(user.getDisplayName())
-                    .build();
-            mAuth.getCurrentUser().updateProfile(b);
-        }
-    }
-
-    public static class AuthSignUpException extends Exception {
-        public static final int PW_WRONG = 2001;
-        public static final int EMAIL_ASSOC_FB = 2000;
-        public static final int EMAIL_ASSOC_FB_PW_WRONG = 2002;
-        private int errorCode;
-
-        public AuthSignUpException(int errorCode) {
-            this.errorCode = errorCode;
-        }
-
-        public int getErrorCode() {
-            return errorCode;
-        }
-
-    }
-
-    public void updateCurrentUser(User user) {
-        if (user.isCompleteProfile()) {
-            currentUser = user;
-        }
+    public void updateUser(User user) {
+        this.auth.setUser(user);
     }
 }

@@ -49,10 +49,10 @@ public class ProfileActivity extends BaseActivity {
             }
         });
 
-        Picasso.with(this).load(user.getPicturePath()).into(binding.ivDisplayImage);
+        Picasso.with(this).load(user.getProfile().getAvatar()).into(binding.ivDisplayImage);
 
         binding.agreementCard.setWebViewClient(new WebViewClient());
-        binding.agreementCard.loadUrl("http://www.taqadam.io/docs/docs.php?doc=trainer_agreement");
+        binding.agreementCard.loadUrl("https://www.taqadam.io/docs/TrainerAgreement");
 
         setImageViewClickListener();
         setPagerTabs();
@@ -100,22 +100,22 @@ public class ProfileActivity extends BaseActivity {
     }
 
     private void indicateVerificationStatus() {
-        if (user.isAccountApproved()) {
+        if (user.getIsApproved()) {
             binding.tvVerifiedIndicator.setText(R.string.verified);
             binding.tvVerifiedIndicator.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_verified_user_green, 0);
         }
-        if (user.isEmailVerified()) {
+        if (user.getIsEmailVerified()) {
             binding.ivEmailVerified.setImageResource(R.drawable.ic_check_green);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 binding.ivEmailVerified.setTooltipText(getString(R.string.verified_contact_method));
             }
         }
-        if (user.isPhoneNumberVerified()) {
+        /*if (user.isPhoneNumberVerified()) {
             binding.ivPhoneVerified.setImageResource(R.drawable.ic_check_green);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 binding.ivPhoneVerified.setTooltipText(getString(R.string.verified_contact_method));
             }
-        }
+        }*/
     }
 
     @Override
@@ -158,7 +158,7 @@ public class ProfileActivity extends BaseActivity {
         @Override
         public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
             ImageView iv = view.findViewById(R.id.iv_image);
-            Picasso.with(getActivity()).load(UserAuthHandler.getInstance().getCurrentUser().getPicturePath()).into(iv);
+            Picasso.with(getActivity()).load(UserAuthHandler.getInstance().getCurrentUser().getProfile().getAvatar()).into(iv);
         }
     }
 }

@@ -1,38 +1,11 @@
 package com.recoded.taqadam.models.db;
 
-import android.support.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.TaskCompletionSource;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.MutableData;
-import com.google.firebase.database.Transaction;
-import com.google.firebase.database.ValueEventListener;
-import com.recoded.taqadam.models.Comment;
-import com.recoded.taqadam.models.Post;
-import com.recoded.taqadam.models.auth.UserAuthHandler;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-
 /**
  * Created by wisam on Dec 25 17.
  */
 
 public class PostDbHandler {
+    /*
     public static final String
             TITLE = "title",
             BODY = "body",
@@ -406,4 +379,5 @@ public class PostDbHandler {
     public interface OnPostsChangedListener {
         void onPostsChanged(List<Post> posts);
     }
+    */
 }

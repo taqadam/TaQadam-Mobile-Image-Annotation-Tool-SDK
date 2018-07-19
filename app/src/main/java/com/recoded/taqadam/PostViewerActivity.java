@@ -15,20 +15,24 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.recoded.taqadam.databinding.ActivityPostViewerBinding;
 import com.recoded.taqadam.databinding.CommentItemBinding;
+import com.recoded.taqadam.models.Api.Api;
 import com.recoded.taqadam.models.Comment;
 import com.recoded.taqadam.models.Post;
 import com.recoded.taqadam.models.auth.UserAuthHandler;
-import com.recoded.taqadam.models.db.PostDbHandler;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PostViewerActivity extends BaseActivity {
 
@@ -50,19 +54,22 @@ public class PostViewerActivity extends BaseActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        String postId = getIntent().getStringExtra("post_id");
-        if (postId == null) finish();
+        Long postId = getIntent().getLongExtra("post_id", -1);
+        if (postId == -1) finish();
 
-        PostDbHandler.getInstance().getPost(postId).addOnSuccessListener(this, new OnSuccessListener<Post>() {
+        Call<Post> call = Api.getInstance().endpoints.getPost(postId);
+        call.enqueue(new Callback<Post>() {
             @Override
-            public void onSuccess(Post postItem) {
-                if (postItem == null) {
-                    finish();
-                    return;
-                }
-                post = postItem;
+            public void onResponse(Call<Post> call, Response<Post> response) {
+                post = response.body();
                 setupViews();
                 setupCommentsViewer();
+            }
+
+            @Override
+            public void onFailure(Call<Post> call, Throwable t) {
+                Toast.makeText(PostViewerActivity.this, getString(R.string.error), Toast.LENGTH_LONG).show();
+                finish();
             }
         });
 
@@ -73,7 +80,8 @@ public class PostViewerActivity extends BaseActivity {
                     Comment comm = new Comment();
                     comm.setPostId(post.getId());
                     comm.setBody(binding.etComment.getText().toString().trim());
-                    adapter.addComment(PostDbHandler.getInstance().writeComment(comm));
+                    adapter.addComment(comm);
+                    Api.postComment(comm);
                     binding.etComment.setText("");
                 }
             }
@@ -90,7 +98,7 @@ public class PostViewerActivity extends BaseActivity {
                 .placeholder(R.drawable.no_image)
                 .into(binding.ivUser);
 
-        binding.tvTimestamp.setText(getTimestamp(post.getPostTime()));
+        binding.tvTimestamp.setText(getTimestamp(post.getCreatedAt().getTime()));
         binding.progressBar.setVisibility(View.GONE);
 
         menuClickListener = new PopupMenu.OnMenuItemClickListener() {
@@ -116,7 +124,7 @@ public class PostViewerActivity extends BaseActivity {
                         ab.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                PostDbHandler.getInstance().deletePost(post);
+                                Api.deletePost(post);
                                 dialog.dismiss();
                                 finish();
                             }
@@ -152,7 +160,8 @@ public class PostViewerActivity extends BaseActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 int pos = clickedViewHolder.getAdapterPosition();
-                                PostDbHandler.getInstance().deleteComment(adapter.comments.get(pos));
+                                Comment comment = adapter.comments.get(pos);
+                                Api.deleteComment(comment);
                                 adapter.comments.remove(pos);
                                 adapter.notifyDataSetChanged();
                                 dialog.dismiss();
@@ -174,12 +183,18 @@ public class PostViewerActivity extends BaseActivity {
         adapter = new CommentsAdapter(new ArrayList<Comment>());
         adapter.setHasStableIds(true);
         binding.rvComments.setAdapter(adapter);
-        PostDbHandler.getInstance().getComments(post.getId()).addOnSuccessListener(this, new OnSuccessListener<List<Comment>>() {
+        Call<List<Comment>> call = Api.getInstance().endpoints.getComments(post.getId());
+        call.enqueue(new Callback<List<Comment>>() {
             @Override
-            public void onSuccess(List<Comment> comments) {
-                adapter.comments.addAll(comments);
+            public void onResponse(Call<List<Comment>> call, Response<List<Comment>> response) {
+                adapter.comments.addAll(response.body());
                 Collections.sort(adapter.comments);
                 adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<List<Comment>> call, Throwable t) {
+                Toast.makeText(PostViewerActivity.this, getString(R.string.error), Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -207,7 +222,7 @@ public class PostViewerActivity extends BaseActivity {
             if (postPopup == null) {
                 postPopup = new PopupMenu(this, view);
                 postPopup.inflate(R.menu.posts_actions);
-                if (!post.getUid().equals(UserAuthHandler.getInstance().getUid())) {
+                if (!post.getUser().getId().equals(UserAuthHandler.getInstance().getCurrentUser().getId())) {
                     postPopup.getMenu().findItem(R.id.action_delete).setVisible(false);
                     postPopup.getMenu().findItem(R.id.action_edit).setVisible(false);
                 }
@@ -218,7 +233,7 @@ public class PostViewerActivity extends BaseActivity {
             Comment c = adapter.comments.get(clickedViewHolder.getAdapterPosition());
             PopupMenu commentPopup = new PopupMenu(this, view);
             commentPopup.inflate(R.menu.posts_actions);
-            if (!c.getUid().equals(UserAuthHandler.getInstance().getUid())) {
+            if (!c.getUser().getId().equals(UserAuthHandler.getInstance().getCurrentUser().getId())) {
                 commentPopup.getMenu().findItem(R.id.action_delete).setVisible(false);
                 commentPopup.getMenu().findItem(R.id.action_edit).setVisible(false);
             }
@@ -248,7 +263,7 @@ public class PostViewerActivity extends BaseActivity {
 
         @Override
         public long getItemId(int position) {
-            return comments.get(position).getCommentTime();
+            return comments.get(position).getCreatedAt().getTime();
         }
 
         @Override
@@ -263,7 +278,7 @@ public class PostViewerActivity extends BaseActivity {
                     .placeholder(R.drawable.no_image)
                     .into(holder.binding.ivUser);
 
-            holder.binding.tvTimestamp.setText(getTimestamp(comm.getCommentTime()));
+            holder.binding.tvTimestamp.setText(getTimestamp(comm.getCreatedAt().getTime()));
 
             holder.binding.commentArea.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
@@ -285,7 +300,8 @@ public class PostViewerActivity extends BaseActivity {
                     ViewSwitcher vs = clickedViewHolder.binding.vsCommentEditor;
                     if (body.length() > 0) {
                         comments.get(pos).setBody(body);
-                        PostDbHandler.getInstance().updateComment(comments.get(pos));
+                        Comment comment = comments.get(pos);
+                        Api.updateComment(comment);
                         vs.showPrevious();
                         //clickedViewHolder.binding.commentTools.setVisibility(View.INVISIBLE);
                         disableEdits = false;

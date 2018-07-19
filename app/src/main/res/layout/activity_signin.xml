@@ -31,8 +31,8 @@
 
             <ImageView
                 android:id="@+id/iv_logo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="14dp"
                 android:src="?attr/taqadam_logo"/>
@@ -151,6 +151,7 @@
 
             <com.facebook.login.widget.LoginButton
                 android:id="@+id/b_fb"
+                android:visibility="invisible"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

@@ -10,11 +10,10 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.Window;
@@ -22,18 +21,14 @@ import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.recoded.taqadam.models.Api.ApiError;
 import com.recoded.taqadam.models.AppVersion;
 import com.recoded.taqadam.models.User;
 import com.recoded.taqadam.models.auth.UserAuthHandler;
-
-import java.util.Map;
 
 //import com.google.firebase.crash.FirebaseCrash;
 
@@ -78,7 +73,7 @@ public class SplashActivity extends AppCompatActivity {
     private Runnable mLogoTranslationAnimation = new Runnable() {
         @Override
         public void run() {
-            mLogo.animate().yBy(-450f)
+            mLogo.animate().yBy(-400f)
                     .setDuration(500)
                     .setStartDelay(200)
                     .withEndAction(new Runnable() {
@@ -89,7 +84,8 @@ public class SplashActivity extends AppCompatActivity {
                                     .withEndAction(new Runnable() {
                                         @Override
                                         public void run() {
-                                            checkVersion();
+                                            //checkVersion();
+                                            isConnected();
                                         }
                                     })
                                     .start();
@@ -101,10 +97,13 @@ public class SplashActivity extends AppCompatActivity {
     private View mContentView;
     private ImageView mLogo;
     private ProgressBar mPbMain;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        UserAuthHandler.init(this);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -121,11 +120,12 @@ public class SplashActivity extends AppCompatActivity {
         UserAuthHandler.getInstance().getInitTask().addOnSuccessListener(this, new OnSuccessListener<User>() {
             @Override
             public void onSuccess(User user) {
+                SplashActivity.this.user = user;
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         try {
-                            Thread.sleep(1000);
+                            Thread.sleep(200);
                             if (firstRun()) {
                                 gotoIntro();
                             } else {
@@ -136,6 +136,13 @@ public class SplashActivity extends AppCompatActivity {
                         }
                     }
                 }).start();
+            }
+        }).addOnFailureListener(this, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                ApiError ex = (ApiError) e;
+                Toast.makeText(SplashActivity.this, ex.getStatusCode() + ": " + ex.getMessage(), Toast.LENGTH_LONG).show();
+                finish();
             }
         });
 
@@ -149,6 +156,7 @@ public class SplashActivity extends AppCompatActivity {
         }
     }
 
+    /*
     private void checkVersion() {
         if (!isConnected()) {
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
@@ -218,6 +226,7 @@ public class SplashActivity extends AppCompatActivity {
             });
         }
     }
+    */
 
     private void showUpdateDialog(AppVersion appVersion) {
         if (appVersion.required) {
@@ -272,11 +281,11 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void start() {
-        if (UserAuthHandler.getInstance().getCurrentUser() == null) {
+        if (this.user == null) {
             Intent i = new Intent(this, SigninActivity.class);
             startActivity(i);
             finish();
-        } else if (!UserAuthHandler.getInstance().getCurrentUser().isCompleteProfile()) {
+        } else if (this.user.getProfile() == null) {
             Intent i = new Intent(SplashActivity.this, ConfirmProfileActivity.class);
             startActivity(i);
             finish();
@@ -288,7 +297,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private boolean firstRun() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences preferences = this.getSharedPreferences("config", MODE_PRIVATE);
         boolean isFirstRun = preferences.getBoolean("firstRun", true);
         int themeId = Integer.parseInt(preferences.getString("theme", "1"));
         Lang.setLanguage(preferences.getString("language", ""));
@@ -296,12 +305,32 @@ public class SplashActivity extends AppCompatActivity {
         return isFirstRun;
     }
 
-    private boolean isConnected() {
+    private void isConnected() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         if (connectivityManager != null) {
             NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-            return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+            if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
+                startApp();
+            }
+        } else {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setCancelable(false);
+            dialog.setTitle(R.string.No_internet);
+            dialog.setMessage(R.string.no_internet);
+            dialog.setPositiveButton(R.string.retry, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    isConnected();
+                }
+            });
+            dialog.setNegativeButton(R.string.quit, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            });
+            dialog.create().show();
         }
-        return false;
     }
 }

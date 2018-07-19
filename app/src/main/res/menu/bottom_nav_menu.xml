@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/navigation_jobs"
+        android:id="@+id/navigation_assignments"
         android:icon="?attr/ic_agreement"
-        android:title="@string/jobs"/>
+        android:title="@string/assignments" />
     <item
         android:id="@+id/navigation_qa"
         android:icon="?attr/ic_help"

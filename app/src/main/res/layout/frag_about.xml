@@ -17,7 +17,7 @@
                 android:layout_height="100dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="16dp"
-                android:src="@drawable/taqadam_logo_f_white"/>
+                android:src="@drawable/logo_light_f" />
 
             <View
                 android:layout_width="match_parent"

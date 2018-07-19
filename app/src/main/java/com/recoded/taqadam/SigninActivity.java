@@ -16,10 +16,9 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.AuthResult;
+import com.recoded.taqadam.models.Api.ApiError;
 import com.recoded.taqadam.models.User;
 import com.recoded.taqadam.models.auth.UserAuthHandler;
 
@@ -32,7 +31,6 @@ public class SigninActivity extends BaseActivity {
 
     private UserAuthHandler mAuth;
     private CallbackManager mCallbackManager;
-    private OnCompleteListener<AuthResult> mAuthCompleteListener;
     private ProgressDialog progressDialog;
 
     @Override
@@ -47,12 +45,12 @@ public class SigninActivity extends BaseActivity {
         progressDialog.setCanceledOnTouchOutside(false);
 
         mAuth = UserAuthHandler.getInstance();
-        if (mAuth.getCurrentUser() != null) {
+        if (!mAuth.shouldLogin()) {
             //Already signed in
             exit();
         }
 
-        setupFbAuth();
+        //setupFbAuth();
 
         etEmailLayout = findViewById(R.id.et_email);
         etPwLayout = findViewById(R.id.et_pw);
@@ -86,7 +84,7 @@ public class SigninActivity extends BaseActivity {
         }
         progressDialog.show();
         indicateError("");
-        mAuth.signIn(email, pw)
+        mAuth.login(email, pw)
                 .addOnSuccessListener(this, new OnSuccessListener<User>() {
                     @Override
                     public void onSuccess(User user) {
@@ -98,12 +96,11 @@ public class SigninActivity extends BaseActivity {
             public void onFailure(@NonNull Exception e) {
                 progressDialog.dismiss();
                 String msg = e.getMessage();
-                if (msg.contains("disable")) {
-                    indicateError(getString(R.string.account_disabled));
-                } else if (msg.contains("network")) {
-                    indicateError(getString(R.string.network_error));
+                int status = ((ApiError) e).getStatusCode();
+                if (status == 401) {
+                    indicateError(msg);
                 } else {
-                    indicateError(getString(R.string.invalid_credentials));
+                    indicateError(msg);
                 }
             }
         });
@@ -111,7 +108,7 @@ public class SigninActivity extends BaseActivity {
 
     private void handleFacebookAccessToken(AccessToken token) {
         progressDialog.show();
-        mAuth.signIn(token).addOnSuccessListener(this, new OnSuccessListener<User>() {
+        mAuth.login(token).addOnSuccessListener(this, new OnSuccessListener<User>() {
             @Override
             public void onSuccess(User user) {
                 progressDialog.dismiss();
@@ -130,7 +127,7 @@ public class SigninActivity extends BaseActivity {
     private void setupFbAuth() {
         //Redundant
         if (AccessToken.getCurrentAccessToken() != null && !AccessToken.getCurrentAccessToken().isExpired()) {
-            handleFacebookAccessToken(AccessToken.getCurrentAccessToken());
+            //handleFacebookAccessToken(AccessToken.getCurrentAccessToken());
             return;
         }
         mCallbackManager = CallbackManager.Factory.create();
@@ -171,7 +168,7 @@ public class SigninActivity extends BaseActivity {
     }
 
     private void exit() {
-        if (mAuth.getCurrentUser().isCompleteProfile()) {
+        if (mAuth.getCurrentUser().getProfile() != null) {
             Intent i = new Intent(this, MainActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             startActivity(i);

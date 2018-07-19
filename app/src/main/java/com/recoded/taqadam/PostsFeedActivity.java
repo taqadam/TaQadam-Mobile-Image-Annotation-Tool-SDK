@@ -10,16 +10,20 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.recoded.taqadam.databinding.ActivityPostsFeedBinding;
 import com.recoded.taqadam.databinding.PostItemBinding;
+import com.recoded.taqadam.models.Api.Api;
 import com.recoded.taqadam.models.Post;
-import com.recoded.taqadam.models.db.PostDbHandler;
 import com.squareup.picasso.Picasso;
 
 import java.util.Collections;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PostsFeedActivity extends BaseActivity {
     private ActivityPostsFeedBinding binding;
@@ -36,11 +40,18 @@ public class PostsFeedActivity extends BaseActivity {
 
         binding.postsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        PostDbHandler.getInstance().getRecentPostsTask().addOnSuccessListener(new OnSuccessListener<List<Post>>() {
+        Call<List<Post>> call = Api.getInstance().endpoints.getPosts();
+        call.enqueue(new Callback<List<Post>>() {
             @Override
-            public void onSuccess(List<Post> posts) {
-                PostListAdapter postListAdapter = new PostListAdapter(posts);
+            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
+                PostListAdapter postListAdapter = new PostListAdapter(response.body());
                 binding.postsRecyclerView.setAdapter(postListAdapter);
+            }
+
+            @Override
+            public void onFailure(Call<List<Post>> call, Throwable t) {
+                Toast.makeText(PostsFeedActivity.this, getString(R.string.error), Toast.LENGTH_LONG).show();
+                finish();
             }
         });
 
@@ -70,16 +81,6 @@ public class PostsFeedActivity extends BaseActivity {
         public PostListAdapter(final List<Post> listItems) {
             this.listItems = listItems;
             Collections.sort(listItems);
-
-            PostDbHandler.getInstance().setPostsListener(new PostDbHandler.OnPostsChangedListener() {
-                @Override
-                public void onPostsChanged(List<Post> posts) {
-                    listItems.clear();
-                    listItems.addAll(posts);
-                    Collections.sort(listItems);
-                    notifyDataSetChanged();
-                }
-            });
             setHasStableIds(true);
         }
 
@@ -91,7 +92,7 @@ public class PostsFeedActivity extends BaseActivity {
 
         @Override
         public long getItemId(int position) {
-            return listItems.get(position).getPostTime();
+            return listItems.get(position).getCreatedAt().getTime();
         }
 
         @Override
@@ -105,7 +106,7 @@ public class PostsFeedActivity extends BaseActivity {
                     .centerCrop()
                     .placeholder(R.drawable.no_image)
                     .into(holder.binding.ivUser);
-            holder.binding.tvComments.setText(String.format(getString(R.string.comments_holder), post.getNoOfComments()));
+            holder.binding.tvComments.setText(String.format(getString(R.string.comments_holder), post.getCommentsCount()));
             holder.binding.tvComments.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -115,7 +116,7 @@ public class PostsFeedActivity extends BaseActivity {
                 }
             });
 
-            holder.binding.tvTimestamp.setText(getTimestamp(post.getPostTime()));
+            holder.binding.tvTimestamp.setText(getTimestamp(post.getCreatedAt().getTime()));
 
             if (post.getBody().length() > 150) {
                 holder.binding.bReadMore.setVisibility(View.VISIBLE);

@@ -51,8 +51,8 @@
         <item name="ic_person">@drawable/ic_person_grey</item>
         <item name="ic_settings">@drawable/ic_settings_grey</item>
         <item name="ic_theme">@drawable/ic_theme_grey</item>
-        <item name="taqadam_logo_f">@drawable/taqadam_logo_f</item>
-        <item name="taqadam_logo">@drawable/taqadam_logo</item>
+        <item name="taqadam_logo_f">@drawable/logo_dark_f</item>
+        <item name="taqadam_logo">@drawable/logo_dark</item>
         <item name="ic_person_48">@drawable/ic_person_grey_48dp</item>
         <item name="ic_payment_48">@drawable/ic_payment_grey_48dp</item>
         <item name="ic_agreement_48">@drawable/ic_agreement_grey_48dp</item>
@@ -99,8 +99,8 @@
         <item name="ic_person">@drawable/ic_person_white</item>
         <item name="ic_settings">@drawable/ic_settings_white</item>
         <item name="ic_theme">@drawable/ic_theme_white</item>
-        <item name="taqadam_logo_f">@drawable/taqadam_logo_f_white</item>
-        <item name="taqadam_logo">@drawable/taqadam_logo_white</item>
+        <item name="taqadam_logo_f">@drawable/logo_light_f</item>
+        <item name="taqadam_logo">@drawable/logo_light</item>
         <item name="ic_person_48">@drawable/ic_person_white_48dp</item>
         <item name="ic_payment_48">@drawable/ic_payment_white_48dp</item>
         <item name="ic_agreement_48">@drawable/ic_agreement_white_48dp</item>

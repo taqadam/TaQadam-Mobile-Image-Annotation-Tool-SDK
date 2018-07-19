@@ -7,8 +7,8 @@
     <data>
 
         <variable
-            name="User"
-            type="com.recoded.taqadam.models.User"/>
+            name="Profile"
+            type="com.recoded.taqadam.models.Profile" />
     </data>
 
     <android.support.design.widget.CoordinatorLayout
@@ -88,19 +88,6 @@
                                 app:borderWidth="2dp"
                                 app:fabSize="mini"/>
                         </FrameLayout>
-
-                        <EditText
-                            android:id="@+id/et_display_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:hint="@string/display_name"
-                            android:inputType="textNoSuggestions"
-                            android:minWidth="150dp"
-                            android:text="@{User.displayName}"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
-                            android:textColor="?attr/SigninActivitytextColor"
-                            tools:text="Wisso Mechano"/>
                     </LinearLayout>
 
                     <TextView
@@ -121,26 +108,6 @@
                     android:layout_height="wrap_content">
 
                     <android.support.design.widget.TextInputLayout
-                        android:id="@+id/et_email"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <EditText
-                            android:id="@+id/eti_email"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/input_email"
-                            android:inputType="textEmailAddress"
-                            android:text="@{User.emailAddress}"/>
-                    </android.support.design.widget.TextInputLayout>
-
-                    <android.support.design.widget.TextInputLayout
                         android:id="@+id/et_f_name"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -157,7 +124,7 @@
                             android:layout_height="wrap_content"
                             android:hint="@string/first_name"
                             android:inputType="textNoSuggestions"
-                            android:text="@{User.firstName}"/>
+                            android:text="@{Profile.firstName}" />
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout
@@ -177,7 +144,7 @@
                             android:layout_height="wrap_content"
                             android:hint="@string/last_name"
                             android:inputType="textNoSuggestions"
-                            android:text="@{User.lastName}"/>
+                            android:text="@{Profile.lastName}" />
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout
@@ -197,7 +164,7 @@
                             android:layout_height="wrap_content"
                             android:hint="@string/phone_number"
                             android:inputType="phone"
-                            android:text="@{User.phoneNumber}"/>
+                            android:text="@{Profile.phone}" />
                     </android.support.design.widget.TextInputLayout>
 
                     <Spinner

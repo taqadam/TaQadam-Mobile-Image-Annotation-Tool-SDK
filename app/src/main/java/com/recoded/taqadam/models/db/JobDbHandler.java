@@ -1,26 +1,11 @@
 package com.recoded.taqadam.models.db;
 
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.recoded.taqadam.models.Job;
-import com.recoded.taqadam.models.auth.UserAuthHandler;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-
 /**
  * Created by Ahmad Siafaddin on 1/10/2018.
  */
 
 public class JobDbHandler {
-
+/*
     public static final String
             JOB_NAME = "job_name",
             DESC = "description",
@@ -151,4 +136,5 @@ public class JobDbHandler {
     public interface OnJobsChangedListener {
         void onJobsChanged(List<Job> jobs);
     }
+    */
 }

@@ -10,7 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.recoded.taqadam.databinding.ActivityFeedbackBinding;
-import com.recoded.taqadam.models.db.FeedbackDbHandler;
+import com.recoded.taqadam.models.Api.Api;
 
 public class FeedbackActivity extends BaseActivity implements View.OnClickListener {
 
@@ -44,7 +44,7 @@ public class FeedbackActivity extends BaseActivity implements View.OnClickListen
                         Toast.makeText(FeedbackActivity.this, toastMsg, Toast.LENGTH_SHORT).show();
                     } else {
                         comment = comment.isEmpty() ? "no comment" : comment;
-                        FeedbackDbHandler.getInstance().submitFeedback(feedback, comment);
+                        Api.submitFeedback(feedback, comment);
                         toastMsg = "Thank you for your feedback!";
                         Toast.makeText(FeedbackActivity.this, toastMsg, Toast.LENGTH_SHORT).show();
                         finish();

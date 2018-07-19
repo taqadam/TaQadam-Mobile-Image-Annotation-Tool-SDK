@@ -13,7 +13,7 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
 
     public MainPagerAdapter(FragmentManager fm) {
         super(fm);
-        jobs = new FragmentJobs();
+        jobs = new FragmentAssignments();
         qa = new FragmentQA();
         wallet = new FragmentCashOut();
     }
