@@ -12,10 +12,7 @@ import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.recoded.taqadam.models.Circle;
-import com.recoded.taqadam.models.Ellipse;
 import com.recoded.taqadam.models.Polygon;
-import com.recoded.taqadam.models.Rectangle;
 import com.recoded.taqadam.models.Region;
 
 import java.util.ArrayList;
@@ -42,6 +39,7 @@ public class SegmentationView extends View {
     private Region.Shape mSelectedTool;
     private int mSelectedRegion = -1; //for region manipulation
     private int mSelectedPoint = -1; //point manipulation
+    private boolean hideDrawn = false; //to hide other regions while drawing
     private RectF mBoundingRectangle; //To snap the drawing to this
     private RectF mImageRect;
     private Paint mLinePaint;
@@ -78,11 +76,11 @@ public class SegmentationView extends View {
                 POINT_RADIUS,
                 context.getResources().getDisplayMetrics());
 
-        mColorNormal = context.getResources().getColor(R.color.colorBoundingBox);
-        mColorSelected = context.getResources().getColor(R.color.colorBoundingBoxSelected);
+        mColorNormal = context.getResources().getColor(R.color.colorSegmentation);
+        mColorSelected = context.getResources().getColor(R.color.colorSegmentationSelected);
         mColorNotLabeled = Color.RED;
 
-        mPointPaint = getNewPaint(mPointRadius, mColorNormal);
+        mPointPaint = getNewPaint(mPointRadius / 4, mColorNormal);
 
         mPointPaint.setStyle(Paint.Style.FILL_AND_STROKE);
 
@@ -218,7 +216,7 @@ public class SegmentationView extends View {
                     } else continue;
                 } else continue;
             } else {
-                r = drawnRegions.get(i);
+                r = hideDrawn ? null : drawnRegions.get(i);
                 selected = i == mSelectedRegion;
             }
 
@@ -235,15 +233,6 @@ public class SegmentationView extends View {
             }
 
             switch (r.getShape()) {
-                case RECTANGLE:
-                    drawRect((Rectangle) r, c, selected);
-                    break;
-                case CIRCLE:
-                    drawCircle((Circle) r, c, selected);
-                    break;
-                case ELLIPSE:
-                    drawEllipse((Ellipse) r, c, selected);
-                    break;
                 case POLYGON:
                     drawPolygon((Polygon) r, c, selected);
                     break;
@@ -317,74 +306,6 @@ public class SegmentationView extends View {
         }
     }
 
-    private void drawEllipse(Ellipse r, Canvas c, boolean selected) {
-        float displaceX = 0f, displaceY = 0f;
-        if (mBoundingRectangle != null) {
-            displaceX = mBoundingRectangle.left;
-            displaceY = mBoundingRectangle.top;
-        }
-        RectF drawingRect = new RectF(r.getShapeRect());
-        drawingRect.offset(displaceX, displaceY);
-        c.drawOval(drawingRect, mLinePaint);
-
-        if (selected) {
-            drawCross(new PointF(r.getShapeRect().centerX(), r.getShapeRect().centerY()), c);
-
-            float rx = r.getShapeRect().width() / 2;
-            float ry = r.getShapeRect().height() / 2;
-
-            float left = Math.min(r.getPoint(0).x, r.getPoint(1).x);
-            float top = Math.min(r.getPoint(0).y, r.getPoint(1).y);
-
-            //top
-            c.drawPoint(left + rx + displaceX, top + displaceY, mPointPaint);
-
-            //left
-            //c.drawPoint(left, top + ry, mPointPaint);
-
-            //right
-            c.drawPoint(left + rx + rx + displaceX, top + ry + displaceY, mPointPaint);
-
-            //bottom
-            //c.drawPoint(left + rx, top + ry + ry, mPointPaint);
-        }
-    }
-
-    private void drawCircle(Circle r, Canvas c, boolean selected) {
-        float displaceX = 0f, displaceY = 0f;
-        if (mBoundingRectangle != null) {
-            displaceX = mBoundingRectangle.left;
-            displaceY = mBoundingRectangle.top;
-        }
-
-        PointF center = r.getPoint(0);
-        c.drawCircle(center.x + displaceX, center.y + displaceY, r.getRadius(), mLinePaint);
-
-        if (selected) {
-            drawCross(new PointF(r.getShapeRect().centerX(), r.getShapeRect().centerY()), c);
-            //rad
-            c.drawPoint(r.getPoint(1).x + displaceX, r.getPoint(1).y + displaceY, mPointPaint);
-        }
-    }
-
-    private void drawRect(Rectangle r, Canvas c, boolean selected) {
-        float displaceX = 0f, displaceY = 0f;
-        if (mBoundingRectangle != null) {
-            displaceX = mBoundingRectangle.left;
-            displaceY = mBoundingRectangle.top;
-        }
-        RectF drawingRect = new RectF(r.getShapeRect());
-        drawingRect.offset(displaceX, displaceY);
-
-        c.drawRect(drawingRect, mLinePaint);
-
-        if (selected) {
-            drawCross(new PointF(r.getShapeRect().centerX(), r.getShapeRect().centerY()), c);
-            c.drawPoint(r.getPoint(0).x + displaceX, r.getPoint(0).y + displaceY, mPointPaint);
-            c.drawPoint(r.getPoint(1).x + displaceX, r.getPoint(1).y + displaceY, mPointPaint);
-        }
-    }
-
     /*
         We first need to check if the user is drawing
         if not then check if there is a selected area and the touch is on it's points
@@ -400,7 +321,7 @@ public class SegmentationView extends View {
                 int i = mCurrentDrawingShape.getPointUnder(snapped, mPointRadius);
                 //For closing the polygon
                 if (i == 0) {
-                    if (mCurrentDrawingShape.getPoints().size() >= 3) {
+                    if (mCurrentDrawingShape.getPoints().size() >= 3) { // we don't want to close a polygon on itself
                         endDrawing();
                     } else return false;
                 } else {
@@ -417,6 +338,7 @@ public class SegmentationView extends View {
             }
             return true;
         } else if (isDrawingEnabled && mSelectedTool != null) { //user is starting to draw
+            hideDrawnRegions();
             deselectRegion();
             isDrawing = true;
             mCurrentDrawingShape = Region.newRegion(mSelectedTool);
@@ -512,11 +434,28 @@ public class SegmentationView extends View {
                 return true;
             }
         } else if (isDrawing) {
+            PointF snapped = getSnappedToBoundsPoint(new PointF(x, y), true);
             if (mCurrentDrawingShape.getShape() == Region.Shape.POLYGON) {
-
+                int i = mCurrentDrawingShape.getPointUnder(snapped, mPointRadius);
+                //For closing the polygon
+                if (i == 0) {
+                    if (mCurrentDrawingShape.getPoints().size() >= 3) { // we don't want to close a polygon on itself
+                        endDrawing();
+                        invalidate();
+                        return true;
+                    } else return false;
+                } else {
+                    //check for validity
+                    PointF last = mCurrentDrawingShape.getPoint(mCurrentDrawingShape.getPoints().size() - 1);
+                    float dx = snapped.x - last.x;
+                    float dy = snapped.y - last.y;
+                    if ((float) Math.hypot(dx, dy) >= mPointRadius * 2) {
+                        mCurrentDrawingShape.addPoint(snapped);
+                    }
+                }
+            } else {
+                mCurrentDrawingShape.addPoint(snapped);
             }
-            PointF p = new PointF(x, y);
-            mCurrentDrawingShape.addPoint(getSnappedToBoundsPoint(p, true));
             if (mCurrentDrawingShape.getPoints().size() == 2 || mCurrentDrawingShape.getShape() == Region.Shape.POLYGON)
                 invalidate();
             return true;
@@ -540,6 +479,10 @@ public class SegmentationView extends View {
             invalidate();
         }
         return false;
+    }
+
+    private void hideDrawnRegions() {
+        this.hideDrawn = true;
     }
 
     private void deselectRegion() {
@@ -596,7 +539,7 @@ public class SegmentationView extends View {
         mSelectedTool = null;
 
         isDrawing = false;
-
+        hideDrawn = false;
         if (drawingListener != null)
             drawingListener.onDrawingFinished(
                     drawnRegions.get(drawnRegions.size() - 1),

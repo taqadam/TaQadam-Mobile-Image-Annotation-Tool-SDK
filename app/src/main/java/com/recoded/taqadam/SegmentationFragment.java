@@ -285,7 +285,7 @@ public class SegmentationFragment extends TaskFragment {
         binding.buttonPolygon.setTag(Region.Shape.POLYGON);
 
         //Drawing finished
-        binding.segView.setOnDrawingFinishedListener(new BoundingBoxView.OnDrawingFinished() {
+        binding.segView.setOnDrawingFinishedListener(new SegmentationView.OnDrawingFinished() {
             @Override
             public void onDrawingFinished(Region region, int regionIndex) {
                 if (mSelectedId != -1) {
@@ -298,7 +298,7 @@ public class SegmentationFragment extends TaskFragment {
         });
 
         //Region selection
-        binding.segView.setOnRegionSelectedListener(new BoundingBoxView.OnRegionSelected() {
+        binding.segView.setOnRegionSelectedListener(new SegmentationView.OnRegionSelected() {
             @Override
             public void onRegionSelected(int regionId) {
                 selectedRegion = regionId;
@@ -320,7 +320,7 @@ public class SegmentationFragment extends TaskFragment {
         });
 
         //Region Delete
-        binding.segView.setOnRegionDeleteListener(new BoundingBoxView.OnRegionDelete() {
+        binding.segView.setOnRegionDeleteListener(new SegmentationView.OnRegionDelete() {
             @Override
             public void onRegionDelete(final int regionId) {
                 if (mRegions.get(regionId).getRegionAttributes().containsKey("label")) {
