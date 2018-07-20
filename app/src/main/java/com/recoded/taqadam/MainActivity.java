@@ -1,5 +1,6 @@
 package com.recoded.taqadam;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.recoded.taqadam.models.Responses.SuccessResponse;
 import com.recoded.taqadam.models.User;
@@ -34,10 +36,46 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.mAuth = UserAuthHandler.getInstance();
-        this.user = mAuth.getCurrentUser();
-        checkAuthorized();
         setContentView(R.layout.activity_main);
+
+        if ((mAuth = UserAuthHandler.getInstance()) == null) {
+            final ProgressDialog pd = new ProgressDialog(this);
+            pd.setTitle(R.string.Signingin);
+            pd.setMessage(getString(R.string.Please_wait));
+            pd.setCancelable(false);
+            pd.setCanceledOnTouchOutside(false);
+            pd.show();
+
+            UserAuthHandler.init(this);
+            mAuth = UserAuthHandler.getInstance();
+            mAuth.getInitTask().addOnSuccessListener(this, new OnSuccessListener<User>() {
+                @Override
+                public void onSuccess(User user) {
+                    pd.dismiss();
+                    if (user == null) {
+                        Intent i = new Intent(MainActivity.this, SigninActivity.class);
+                        startActivity(i);
+                        finish();
+                    } else {
+                        MainActivity.this.user = user;
+                        startActivity();
+                    }
+                }
+            }).addOnFailureListener(this, new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(MainActivity.this, "Error occured!", Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            });
+        } else {
+            this.user = mAuth.getCurrentUser();
+            startActivity();
+        }
+    }
+
+    private void startActivity() {
+        checkAuthorized();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -45,7 +83,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         setupBottomNavigation();
 
         setupNavigationDrawer(toolbar);
-
     }
 
     private void setupNavigationDrawer(Toolbar toolbar) {

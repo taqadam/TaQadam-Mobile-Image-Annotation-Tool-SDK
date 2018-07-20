@@ -9,11 +9,11 @@ import android.support.v4.app.FragmentPagerAdapter;
  */
 
 public class MainPagerAdapter extends FragmentPagerAdapter {
-    private Fragment jobs, qa, wallet, discussion;
+    private Fragment assignments, qa, wallet, discussion;
 
     public MainPagerAdapter(FragmentManager fm) {
         super(fm);
-        jobs = new FragmentAssignments();
+        assignments = new FragmentAssignments();
         qa = new FragmentQA();
         wallet = new FragmentCashOut();
     }
@@ -23,13 +23,13 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return jobs;
+                return assignments;
             case 1:
                 return qa;
             case 2:
                 return wallet;
             default:
-                return jobs;
+                return assignments;
         }
     }
 
