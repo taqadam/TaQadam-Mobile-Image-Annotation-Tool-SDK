@@ -632,12 +632,16 @@ public class ConfirmProfileActivity extends BaseActivity {
     }
 
     private void uploadImage(Bitmap bmp) {
-        File img = createImageFile();
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 9, bos);
+        bmp.compress(Bitmap.CompressFormat.JPEG, 80, bos);
         byte[] bytes = bos.toByteArray();
 
+        if (bytes.length > 500 * 1024) {
+            Toast.makeText(this, "This image is too large. Try a smaller one", Toast.LENGTH_LONG).show();
+            return;
+        }
         FileOutputStream fos = null;
+        File img = createImageFile();
         try {
             fos = new FileOutputStream(img);
             fos.write(bytes);
