@@ -110,8 +110,8 @@
     <string name="password_content_desc">Password Field</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="don_t_have_an_account">Don\'t have an account?</string>
-    <string name="taqadam">Taqadam!</string>
-    <string name="email_content_desc">E-Mail Field</string>
+    <string name="taqadam">TaQadam!</string>
+    <string name="email_content_desc">E-Mail</string>
     <string name="input_email">E-Mail Address</string>
     <string name="input_name">Username</string>
     <string name="input_password">Password</string>
@@ -229,9 +229,9 @@
     <string name="feedback_good">It was Very Good</string>
     <string name="feedback_neutral">It was OK</string>
     <string name="feedback_bad">It was Boring</string>
-    <string name="evaluation_msg">How do you evaluate Taqadam android app?</string>
+    <string name="evaluation_msg">How do you evaluate TaQadam android app?</string>
     <string name="send_feedback">Send Feedback</string>
-    <string name="copyright">© 2017–%s Taqadam.\nAll rights reserved.</string>
+    <string name="copyright">© 2017–%s TaQadam.\nAll rights reserved.</string>
     <string name="comments_holder">%d Comments</string>
     <string name="read_more">Read More</string>
     <string name="write_a_comment">Write a comment</string>
