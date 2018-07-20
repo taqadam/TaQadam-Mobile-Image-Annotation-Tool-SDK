@@ -42,6 +42,7 @@ public class BoundingBoxView extends View {
     private Region.Shape mSelectedTool;
     private int mSelectedRegion = -1; //for region manipulation
     private int mSelectedPoint = -1; //point manipulation
+    private boolean hideDrawn = false; //to hide other regions while drawing
     private RectF mBoundingRectangle; //To snap the drawing to this
     private RectF mImageRect;
     private Paint mLinePaint;
@@ -218,7 +219,7 @@ public class BoundingBoxView extends View {
                     } else continue;
                 } else continue;
             } else {
-                r = drawnRegions.get(i);
+                r = hideDrawn ? null : drawnRegions.get(i);
                 selected = i == mSelectedRegion;
             }
 
@@ -417,6 +418,7 @@ public class BoundingBoxView extends View {
             }
             return true;
         } else if (isDrawingEnabled && mSelectedTool != null) { //user is starting to draw
+            hideDrawn = true;
             deselectRegion();
             isDrawing = true;
             mCurrentDrawingShape = Region.newRegion(mSelectedTool);
@@ -593,7 +595,7 @@ public class BoundingBoxView extends View {
         mSelectedTool = null;
 
         isDrawing = false;
-
+        hideDrawn = false;
         if (drawingListener != null)
             drawingListener.onDrawingFinished(
                     drawnRegions.get(drawnRegions.size() - 1),

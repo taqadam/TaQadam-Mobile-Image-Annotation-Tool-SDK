@@ -338,7 +338,7 @@ public class SegmentationView extends View {
             }
             return true;
         } else if (isDrawingEnabled && mSelectedTool != null) { //user is starting to draw
-            hideDrawnRegions();
+            hideDrawn = true;
             deselectRegion();
             isDrawing = true;
             mCurrentDrawingShape = Region.newRegion(mSelectedTool);
@@ -479,10 +479,6 @@ public class SegmentationView extends View {
             invalidate();
         }
         return false;
-    }
-
-    private void hideDrawnRegions() {
-        this.hideDrawn = true;
     }
 
     private void deselectRegion() {
