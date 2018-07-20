@@ -514,10 +514,30 @@ public class BoundingBoxView extends View {
                 return true;
             }
         } else if (isDrawing) {
-            if (mCurrentDrawingShape.getShape() == Region.Shape.POLYGON) return false;
-            PointF p = new PointF(x, y);
-            mCurrentDrawingShape.addPoint(getSnappedToBoundsPoint(p, true));
-            if (mCurrentDrawingShape.getPoints().size() == 2) invalidate();
+            PointF snapped = getSnappedToBoundsPoint(new PointF(x, y), true);
+            if (mCurrentDrawingShape.getShape() == Region.Shape.POLYGON) {
+                int i = mCurrentDrawingShape.getPointUnder(snapped, mPointRadius);
+                //For closing the polygon
+                if (i == 0) {
+                    if (mCurrentDrawingShape.getPoints().size() >= 3) { // we don't want to close a polygon on itself
+                        endDrawing();
+                        invalidate();
+                        return true;
+                    } else return false;
+                } else {
+                    //check for validity
+                    PointF last = mCurrentDrawingShape.getPoint(mCurrentDrawingShape.getPoints().size() - 1);
+                    float dx = snapped.x - last.x;
+                    float dy = snapped.y - last.y;
+                    if ((float) Math.hypot(dx, dy) >= mPointRadius * 2) {
+                        mCurrentDrawingShape.addPoint(snapped);
+                    }
+                }
+            } else {
+                mCurrentDrawingShape.addPoint(snapped);
+            }
+            if (mCurrentDrawingShape.getPoints().size() == 2 || mCurrentDrawingShape.getShape() == Region.Shape.POLYGON)
+                invalidate();
             return true;
         } else {
             return false;
