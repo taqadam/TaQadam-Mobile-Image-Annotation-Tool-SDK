@@ -79,6 +79,8 @@ public class SegmentationFragment extends TaskFragment {
 
         initToolbox();
 
+        binding.buttonLockImage.performClick();
+
         binding.tvLabels.setVisibility(View.GONE);
 
         /*//This library has an issue that it intercepts all touch events so I changed it's touch listener to dispatch other gestures as well

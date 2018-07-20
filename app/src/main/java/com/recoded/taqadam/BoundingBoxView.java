@@ -31,6 +31,7 @@ public class BoundingBoxView extends View {
     //region: Fields and Consts
 
     public static final int POINT_RADIUS = 8; //The radius for point handle in dp
+    private static final float CROSS_RECT_RATIO = 6 / 6;
     private final RectF mCrossRect = new RectF();
     private final PointF mDownTouch = new PointF();
     private List<Region> drawnRegions;
@@ -278,10 +279,10 @@ public class BoundingBoxView extends View {
         center.y += displaceY;
 
         mCrossRect.set(
-                center.x - mPointRadius * 2 / 3,
-                center.y - mPointRadius * 2 / 3,
-                center.x + mPointRadius * 2 / 3,
-                center.y + mPointRadius * 2 / 3
+                center.x - mPointRadius * CROSS_RECT_RATIO,
+                center.y - mPointRadius * CROSS_RECT_RATIO,
+                center.x + mPointRadius * CROSS_RECT_RATIO,
+                center.y + mPointRadius * CROSS_RECT_RATIO
         );
 
         c.drawLine(mCrossRect.left, mCrossRect.top, mCrossRect.right, mCrossRect.bottom, mCrossPaint);
