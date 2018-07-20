@@ -173,6 +173,10 @@ public class SegmentationView extends View {
         for (Region r : drawnRegions) {
             r.transform(mScale);
         }
+        //for zooming while drawing
+        if (mCurrentDrawingShape != null) {
+            mCurrentDrawingShape.transform(mScale);
+        }
         invalidate();
     }
 

@@ -77,15 +77,23 @@ public abstract class Region implements Parcelable {
         Region r;
         try {
             JSONObject shape = json.getJSONObject("shape_attributes");
-            if (shape.getString("name").equals("rect")) {
-                r = Rectangle.makeRegionFromJson(shape);
-            } else if (shape.getString("name").equals("ellipse")) {
-                r = Ellipse.makeRegionFromJson(shape);
-            } else if (shape.getString("name").equals("polygon")) {
-                r = Polygon.makeRegionFromJson(shape);
-            } else if (shape.getString("name").equals("circle")) {
-                r = Circle.makeRegionFromJson(shape);
-            } else r = null;
+            switch (shape.getString("name")) {
+                case "rect":
+                    r = Rectangle.makeRegionFromJson(shape);
+                    break;
+                case "ellipse":
+                    r = Ellipse.makeRegionFromJson(shape);
+                    break;
+                case "polygon":
+                    r = Polygon.makeRegionFromJson(shape);
+                    break;
+                case "circle":
+                    r = Circle.makeRegionFromJson(shape);
+                    break;
+                default:
+                    r = null;
+                    break;
+            }
 
             if (r != null) {
                 JSONObject attribute = json.getJSONObject("region_attributes");
@@ -232,7 +240,7 @@ public abstract class Region implements Parcelable {
         for (int i = 0; i < pts.length; i += 2) {
             points.add(new PointF(pts[i], pts[i + 1]));
         }
-        close();
+        calculateShapeRect();
     }
 
     /*

@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
@@ -78,7 +79,7 @@ public class SegmentationFragment extends TaskFragment {
 
         initToolbox();
 
-        binding.tvInstruction.setVisibility(View.GONE);
+        binding.tvLabels.setVisibility(View.GONE);
 
         /*//This library has an issue that it intercepts all touch events so I changed it's touch listener to dispatch other gestures as well
         binding.ivTaskImage.setOnTouchListener(new View.OnTouchListener() {
@@ -89,11 +90,19 @@ public class SegmentationFragment extends TaskFragment {
                 return true;
             }
         });*/
-
+        binding.segView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (!binding.ivTaskImage.onTouchEvent(event) || imageFrozen) {
+                    v.onTouchEvent(event);
+                }
+                return true;
+            }
+        });
         listener = new AttributesFragment.LabelChangeListener() {
             @Override
             public void onLabelSelected(String label) {
-                binding.tvInstruction.setText(label);
+                binding.tvLabels.setText(label);
             }
         };
 
@@ -304,15 +313,15 @@ public class SegmentationFragment extends TaskFragment {
                 selectedRegion = regionId;
                 if (regionId == -1) {
                     binding.buttonAttributes.setVisibility(View.GONE);
-                    binding.tvInstruction.setVisibility(View.GONE);
+                    binding.tvLabels.setVisibility(View.GONE);
                 } else {
                     if (binding.segView.getRegion(selectedRegion).getRegionAttributes().containsKey("label")) {
                         String label = binding.segView.getRegion(selectedRegion).getRegionAttributes().get("label");
-                        binding.tvInstruction.setText(label);
-                        binding.tvInstruction.setVisibility(View.VISIBLE);
+                        binding.tvLabels.setText(label);
+                        binding.tvLabels.setVisibility(View.VISIBLE);
                     } else {
-                        binding.tvInstruction.setText(R.string.no_label);
-                        binding.tvInstruction.setVisibility(View.VISIBLE);
+                        binding.tvLabels.setText(R.string.no_label);
+                        binding.tvLabels.setVisibility(View.VISIBLE);
                     }
                     binding.buttonAttributes.setVisibility(View.VISIBLE);
                 }
