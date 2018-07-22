@@ -15,16 +15,16 @@ import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.TaskCompletionSource;
 import com.recoded.taqadam.databinding.ActivityAssignmentBinding;
 import com.recoded.taqadam.models.Answer;
 import com.recoded.taqadam.models.Api.Api;
+import com.recoded.taqadam.models.Api.ApiError;
 import com.recoded.taqadam.models.Assignment;
 import com.recoded.taqadam.models.Responses.PaginatedResponse;
 import com.recoded.taqadam.models.Task;
-
-import java.io.IOException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -281,7 +281,12 @@ public class AssignmentActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<PaginatedResponse<Task>> call, Throwable t) {
-                task.setException((IOException) t);
+                if (t instanceof ApiError) {
+                    task.setException((ApiError) t);
+                } else {
+                    Crashlytics.logException(t);
+                    task.setException(new ApiError(500, "Unknown error occurred!"));
+                }
             }
         });
 

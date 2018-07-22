@@ -16,8 +16,6 @@ import com.recoded.taqadam.models.Auth;
 import com.recoded.taqadam.models.Responses.SuccessResponse;
 import com.recoded.taqadam.models.User;
 
-import java.io.IOException;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -94,7 +92,12 @@ public class UserAuthHandler {
 
             @Override
             public void onFailure(@NonNull Call<Auth> call, @NonNull Throwable t) {
-                task.setException((IOException) t);
+                if (t instanceof ApiError) {
+                    task.setException((ApiError) t);
+                } else {
+                    Crashlytics.logException(t);
+                    task.setException(new ApiError(500, "Unknown error occurred!"));
+                }
             }
         });
 
@@ -117,7 +120,7 @@ public class UserAuthHandler {
 
             @Override
             public void onFailure(@NonNull Call<Auth> call, @NonNull Throwable t) {
-                task.setException((IOException) t);
+                if(t instanceof ApiError) {                    task.setException((ApiError) t);                } else {                    Crashlytics.logException(t);                    task.setException(new ApiError(500, "Unknown error occurred!"));                }
             }
         });
 
@@ -138,7 +141,12 @@ public class UserAuthHandler {
 
             @Override
             public void onFailure(@NonNull Call<Auth> call, @NonNull Throwable t) {
-                task.setException((IOException) t);
+                if (t instanceof ApiError) {
+                    task.setException((ApiError) t);
+                } else {
+                    Crashlytics.logException(t);
+                    task.setException(new ApiError(500, "Unknown error occurred!"));
+                }
             }
         });
 
@@ -161,7 +169,12 @@ public class UserAuthHandler {
 
             @Override
             public void onFailure(@NonNull Call<Auth> call, @NonNull Throwable t) {
-                task.setException((IOException) t);
+                if (t instanceof ApiError) {
+                    task.setException((ApiError) t);
+                } else {
+                    Crashlytics.logException(t);
+                    task.setException(new ApiError(500, "Unknown error occurred!"));
+                }
             }
         });
 
@@ -182,7 +195,12 @@ public class UserAuthHandler {
 
             @Override
             public void onFailure(Call<SuccessResponse> call, Throwable t) {
-                task.setException((IOException) t);
+                if (t instanceof ApiError) {
+                    task.setException((ApiError) t);
+                } else {
+                    Crashlytics.logException(t);
+                    task.setException(new ApiError(500, "Unknown error occurred!"));
+                }
             }
         });
 

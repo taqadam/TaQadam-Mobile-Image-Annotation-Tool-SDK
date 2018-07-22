@@ -99,13 +99,13 @@ public class Api {
                         JSONObject res = new JSONObject(responseBody);
                         String msg = res.getString("message");
                         ex.setMessage(msg);
-                        if (msg.contains("invalid parameters")) {
+                        if (msg.toLowerCase().contains("invalid parameters")) {
                             JSONObject errors = (JSONObject) res.get("errors");
                             ex = new InvalidException(responceCode, msg, errors.toString());
-                        } else if (msg.contains("Unauthenticated")) {
+                        } else if (msg.toLowerCase().contains("unauthenticated")) {
                             UserAuthHandler.getInstance().refresh();
                             ex = new UnauthenticatedException(responceCode, msg);
-                        } else if (msg.contains("unauthorized")) {
+                        } else if (msg.toLowerCase().contains("unauthorized")) {
                             ex = new UnauthenticatedException(responceCode, msg);
                         }
                     } catch (JSONException e) {
@@ -193,7 +193,12 @@ public class Api {
 
             @Override
             public void onFailure(Call call, Throwable t) {
-                task.setException((IOException) t);
+                if (t instanceof ApiError) {
+                    task.setException((ApiError) t);
+                } else {
+                    Crashlytics.logException(t);
+                    task.setException(new ApiError(500, "Unknown error occurred!"));
+                }
             }
         });
 
@@ -224,7 +229,12 @@ public class Api {
 
             @Override
             public void onFailure(@NonNull Call<User> call, @NonNull Throwable t) {
-                task.setException((IOException) t);
+                if (t instanceof ApiError) {
+                    task.setException((ApiError) t);
+                } else {
+                    Crashlytics.logException(t);
+                    task.setException(new ApiError(500, "Unknown error occurred!"));
+                }
             }
         });
 
