@@ -41,6 +41,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
@@ -654,21 +655,25 @@ public class ConfirmProfileActivity extends BaseActivity {
         }
 
         Log.d(TAG, "Uploading bitmap display image");
-        Api.uploadImage(img)
-                .addOnCompleteListener(ConfirmProfileActivity.this, new OnCompleteListener<Uri>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Uri> task) {
-                        if (task.isSuccessful()) {
-                            binding.ivDisplayImage.setTag(task.getResult());
-                            //Todo: implement old and new in the future to allow user to revert
-                            //user.getProfile().setAvatar(task.getResult().toString());
-                            loadImage();
-                        } else {
-                            Log.d(TAG, "Display image upload failed. Reason:" + task.getException());
-                            Toast.makeText(ConfirmProfileActivity.this, "ImageOld upload failed", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+        Api.uploadImage(img).addOnSuccessListener(this, new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                binding.ivDisplayImage.setTag(uri);
+                //Todo: implement old and new in the future to allow user to revert
+                //user.getProfile().setAvatar(task.getResult().toString());
+                loadImage();
+            }
+        }).addOnFailureListener(this, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                String msg = "Error uploading image";
+                if (e instanceof InvalidException) {
+                    String extraMsg = ((InvalidException) e).getErrors().get("avatar") == null ? "" : ((InvalidException) e).getErrors().get("avatar").get(0).getMessage();
+                    msg += extraMsg;
+                }
+                Toast.makeText(ConfirmProfileActivity.this, msg, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void postProfile() {
