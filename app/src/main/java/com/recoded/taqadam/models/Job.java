@@ -27,8 +27,6 @@ public class Job extends Model {
     private Service service;
     @Expose
     private String title;
-    @Expose
-    private Type type;
 
     public Dataset getDataset() {
         return dataset;
@@ -92,14 +90,6 @@ public class Job extends Model {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public Type getType() {
-        return type;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
     }
 
 }

@@ -19,6 +19,8 @@ public class Assignment extends Model {
     private Date expires;
     @Expose
     private Job job;
+    @Expose
+    private Type type;
     //@Expose
     //private List<Task> tasks;
 
@@ -52,6 +54,14 @@ public class Assignment extends Model {
 
     public void setJob(Job job) {
         this.job = job;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
     }
 
     /*

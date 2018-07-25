@@ -62,7 +62,7 @@
                     android:layout_alignParentStart="true"
                     android:background="@color/colorPrimary"
                     android:padding="8dp"
-                    android:text="@{Assignment.job.type.name.toUpperCase()}"
+                    android:text="@{Assignment.type.name.toUpperCase()}"
                     android:textColor="@color/colorWhite"
                     tools:text="@string/task_type"/>
 
