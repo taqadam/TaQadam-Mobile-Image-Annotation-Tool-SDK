@@ -250,4 +250,11 @@ public class UserAuthHandler {
     public void updateUser(User user) {
         this.auth.setUser(user);
     }
+
+    public Auth getAuth() {
+        if(auth == null){
+            getToken();
+        }
+        return auth;
+    }
 }

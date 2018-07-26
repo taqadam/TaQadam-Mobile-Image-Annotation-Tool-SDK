@@ -1,7 +1,8 @@
-package com.recoded.taqadam;
+package com.recoded.taqadam.models.Api;
 
 import com.recoded.taqadam.models.Answer;
 import com.recoded.taqadam.models.Api.Api;
+import com.recoded.taqadam.models.AppVersion;
 import com.recoded.taqadam.models.Assignment;
 import com.recoded.taqadam.models.Auth;
 import com.recoded.taqadam.models.Comment;
@@ -113,4 +114,8 @@ public interface ApiEndpoints {
     //update comment
     @PUT(Api.POSTS + "/{postId}/" + Api.COMMENTS + "/{commentId}")
     Call<Comment> updateComment(@Path("postId") Long postId, @Path("commentId") Long commentId, @Body Comment comment);
+
+    //get app versions
+    @GET(Api.VERSIONS)
+    Call<List<AppVersion>> getLatestVersions(@Query("code") Long code);
 }

@@ -9,7 +9,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.GsonBuilder;
-import com.recoded.taqadam.ApiEndpoints;
 import com.recoded.taqadam.BuildConfig;
 import com.recoded.taqadam.models.Auth;
 import com.recoded.taqadam.models.Comment;
@@ -59,10 +58,14 @@ public class Api {
     public static final String DATE_FORMAT = "yyyy-MM-dd";
     public static final String POSTS = "posts";
     public static final String COMMENTS = "comments";
+    public static final String VERSIONS = "app_versions";
 
     private static Api instance = null;
 
     public static Api getInstance() {
+        if(instance == null){
+            initiate(UserAuthHandler.getInstance().getAuth());
+        }
         return instance;
     }
 
@@ -126,12 +129,14 @@ public class Api {
                             res.remove("success");
                             Iterator<String> iterator = res.keys();
                             while (iterator.hasNext()) {
-                                keys.add(iterator.next()); //like login response contains token next to user object
+                                keys.add(iterator.next());
                             }
-                            if (keys.size() == 1 && !keys.get(0).equalsIgnoreCase("message")) { //get the resource object and put it on top
+                            if (keys.size() == 1 && !keys.get(0).equalsIgnoreCase("message")) {
+                                //get the resource object and put it on top
                                 newRes = res.getJSONObject(keys.get(0)).toString();
                             } else {
                                 //rare case would occur only on login and registration calls
+                                //like login response contains token next to user object
                                 newRes = res.toString();
                             }
                         } else if (res.has("data")) { //collection response no success
