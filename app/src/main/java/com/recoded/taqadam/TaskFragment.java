@@ -1,5 +1,8 @@
 package com.recoded.taqadam;
 
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
 
@@ -49,6 +52,25 @@ public class TaskFragment extends Fragment {
     }
 
     public TaskFragment() {
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("assignment", assignment);
+        outState.putSerializable("task", task);
+        outState.putString("type", type.name());
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null && savedInstanceState.containsKey("assignment")) {
+            this.assignment = (Assignment) savedInstanceState.getSerializable("assignment");
+            this.task = (Task) savedInstanceState.getSerializable("task");
+            String type = savedInstanceState.getString("type");
+            this.type = Service.Services.valueOf(type);
+        }
     }
 
     public void setTask(Task task) {

@@ -54,7 +54,12 @@ public class AssignmentActivity extends BaseActivity {
         Intent i = getIntent();
         assignment = (Assignment) i.getSerializableExtra("assignment");
         if (assignment == null) {
-            finish();
+            //try instance state
+            if(savedInstanceState != null && savedInstanceState.containsKey("assignment")){
+                assignment = (Assignment) savedInstanceState.getSerializable("assignment");
+            } else {
+                finish();
+            }
         } else {
             if (savedInstanceState != null) {
                 instructionsSeen = true;
@@ -195,6 +200,12 @@ public class AssignmentActivity extends BaseActivity {
             completedDialog = d.create();
         }
         completedDialog.show();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("assignment", assignment);
     }
 
     @Override
