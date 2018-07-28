@@ -102,6 +102,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 startActivity(new Intent(MainActivity.this, ProfileActivity.class));
             }
         });
+        initHeader();
     }
 
     private void setupBottomNavigation() {
@@ -139,11 +140,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         navigation.setSelectedItemId(0);
     }
 
-    @Override
+    /*@Override
     protected void onStart() {
         super.onStart();
-        initHeader();
-    }
+        initHeader() // moved to setupNavigationDrawer to fix the bug related to null headerView when not signed in.
+    }*/
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
