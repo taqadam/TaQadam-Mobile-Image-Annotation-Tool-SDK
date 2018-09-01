@@ -86,7 +86,8 @@ public class Api {
                 Request request = chain.request();
                 Request.Builder b = request.newBuilder()
                         .addHeader("Accept", "application/json")
-                        .addHeader("Content-Type", "application/json");
+                        .addHeader("Content-Type", "application/json")
+                        .addHeader("User-Agent", "TaQadam4AndroidMobile/" + BuildConfig.VERSION_NAME + " " + System.getProperty("http.agent"));
                 if (token != null) {
                     b.addHeader("Authorization", token_type + " " + token);
                 }
