@@ -40,6 +40,7 @@ public class AssignmentActivity extends BaseActivity {
     private boolean instructionsSeen = false;
 
     private PaginatedResponse<Task> tasks;
+    private int currentImageCounter = 1;
 
 
     @Override
@@ -117,12 +118,14 @@ public class AssignmentActivity extends BaseActivity {
                         toggleProgressFrame(false);
                         AssignmentActivity.this.tasks = tasks;
                         mTasksPagerAdapter.addNewTasks(tasks.data);
+                        currentImageCounter++;
                         binding.viewPager.setCurrentItem(0);
                     }
                 });
             } else
                 showCompletedJobDialog();
         } else {
+            currentImageCounter++;
             binding.viewPager.setCurrentItem(binding.viewPager.getCurrentItem() + 1);
         }
     }
@@ -157,7 +160,7 @@ public class AssignmentActivity extends BaseActivity {
         //this.currentFragment = (TaskFragment) getSupportFragmentManager().findFragmentByTag(tag);
         if (pos == mTasksPagerAdapter.currentPosition)
             currentFragment = mTasksPagerAdapter.mCurrentFrag;
-        setTitle(String.format(getString(R.string.job_activity_title), binding.viewPager.getCurrentItem() + 1, tasks.data.size()));
+        setTitle(String.format(getString(R.string.job_activity_title), currentImageCounter, tasks.meta.total));
     }
 
     private void submitAnswer() {
