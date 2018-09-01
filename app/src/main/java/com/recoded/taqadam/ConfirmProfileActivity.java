@@ -75,12 +75,11 @@ public class ConfirmProfileActivity extends BaseActivity {
     private static final int ACTIVITY_REQUEST_CODE_CAMERA = 1991;
     private static final int ACTIVITY_REQUEST_CODE_GALLERY = 1992;
     private static final int PERMISSION_REQUEST_CODE_STORAGE_READ = 2990;
-    private static final String EMAIL_REGEX = "^[a-zA-Z]+[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.{1}[a-zA-Z0-9-.]{2,}(?<!\\.)$";
+    //private static final String EMAIL_REGEX = "^[a-zA-Z]+[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.{1}[a-zA-Z0-9-.]{2,}(?<!\\.)$";
 
 
     private ActivityConfirmProfileBinding binding;
     private Profile profile;
-    private boolean emailChanged = false;
     private OnCompleteListener<User> mUserCreatedListener;
     private Calendar mCalendar;
     private DatePickerDialog.OnDateSetListener mDatePickedListener;
@@ -684,7 +683,12 @@ public class ConfirmProfileActivity extends BaseActivity {
         p.setBirthDate(binding.etDob.getEditText().getText().toString());
         p.setPhone(binding.etPhoneNumber.getEditText().getText().toString());
         p.setGender(binding.spinnerGender.getSelectedItem().toString());
-        p.setAddress(binding.spinnerCities.getSelectedItem().toString());
+
+        int pos = binding.spinnerCities.getSelectedItemPosition();
+        for (Profile.City c : Profile.City.values()) {
+            if (c.getId() == pos)
+                p.setAddress(c.getName());
+        }
 
         if (profile == null) {
             Log.d(TAG, "Posting profile");
