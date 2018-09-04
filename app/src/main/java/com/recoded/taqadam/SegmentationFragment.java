@@ -179,6 +179,10 @@ public class SegmentationFragment extends TaskFragment {
             return null;
         }
 
+        if(binding.segView.getImageRect().width() == 0 || binding.segView.getImageRect().height() == 0) {
+            return null;
+        }
+
         JSONObject rawAnswer = new JSONObject();
         JSONArray regions = new JSONArray();
         float scaleTo = binding.segView.getImageRect().width() / binding.segView.getBoundingRect().width();

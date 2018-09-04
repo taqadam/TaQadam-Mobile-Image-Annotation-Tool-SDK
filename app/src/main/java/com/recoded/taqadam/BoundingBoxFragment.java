@@ -180,6 +180,10 @@ public class BoundingBoxFragment extends TaskFragment {
             return null;
         }
 
+        if(binding.bboxView.getImageRect().width() == 0 || binding.bboxView.getImageRect().height() == 0) {
+            return null;
+        }
+
         JSONObject rawAnswer = new JSONObject();
         JSONArray regions = new JSONArray();
         float scaleTo = binding.bboxView.getImageRect().width() / binding.bboxView.getBoundingRect().width();
