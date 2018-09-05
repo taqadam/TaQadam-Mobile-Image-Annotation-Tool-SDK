@@ -80,6 +80,7 @@ public class Api {
 
     public Api(final String token, final String token_type) {
         OkHttpClient.Builder client = new OkHttpClient.Builder();
+        client.retryOnConnectionFailure(false);
         client.addInterceptor(new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {
