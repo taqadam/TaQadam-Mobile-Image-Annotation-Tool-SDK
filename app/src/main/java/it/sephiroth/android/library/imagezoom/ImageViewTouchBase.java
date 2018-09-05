@@ -598,7 +598,9 @@ public abstract class ImageViewTouchBase extends ImageView implements IDisposabl
         }
         float fw = mBitmapRect.width() / mViewPort.width();
         float fh = mBitmapRect.height() / mViewPort.height();
-        float scale = Math.max(fw, fh) * 4;
+        float f = Math.max(fw, fh);
+        float factor = f > 2.0f? 8.0f:16.0f;
+        float scale = f * factor;
 
         if (DEBUG) {
             Log.i(TAG, "computeMaxZoom: " + scale);
