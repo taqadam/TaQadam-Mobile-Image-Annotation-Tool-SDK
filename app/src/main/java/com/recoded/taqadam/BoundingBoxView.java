@@ -32,6 +32,7 @@ public class BoundingBoxView extends View {
 
     public static final int POINT_RADIUS = 8; //The radius for point handle in dp
     private static final float CROSS_RECT_RATIO = 6 / 6;
+    private static final float MIN_SHAPE_RECT_SIZE = 5;
     private final RectF mCrossRect = new RectF();
     private final PointF mDownTouch = new PointF();
     private List<Region> drawnRegions;
@@ -614,20 +615,24 @@ public class BoundingBoxView extends View {
 
     private void endDrawing() {
         mCurrentDrawingShape.close();
-        mSelectedRegion = drawnRegions.size();
-        drawnRegions.add(mCurrentDrawingShape);
-        mCurrentDrawingShape = null;
-        mSelectedTool = null;
+        if(mCurrentDrawingShape.getShapeRect().width() > MIN_SHAPE_RECT_SIZE * mPointRadius
+                && mCurrentDrawingShape.getShapeRect().height() > MIN_SHAPE_RECT_SIZE * mPointRadius) {
+            mSelectedRegion = drawnRegions.size();
+            drawnRegions.add(mCurrentDrawingShape);
+            if (drawingListener != null)
+                drawingListener.onDrawingFinished(
+                        drawnRegions.get(drawnRegions.size() - 1),
+                        mSelectedRegion);
 
-        isDrawing = false;
-        hideDrawn = false;
-        if (drawingListener != null)
-            drawingListener.onDrawingFinished(
-                    drawnRegions.get(drawnRegions.size() - 1),
-                    mSelectedRegion);
+            if (selectionListener != null)
+                selectionListener.onRegionSelected(mSelectedRegion);
+        }
+            mCurrentDrawingShape = null;
+            mSelectedTool = null;
 
-        if (selectionListener != null)
-            selectionListener.onRegionSelected(mSelectedRegion);
+            isDrawing = false;
+            hideDrawn = false;
+
     }
 
     //endregion
