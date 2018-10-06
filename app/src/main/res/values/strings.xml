@@ -212,7 +212,7 @@
     <string name="you_completed_tasks">There are no more tasks in this job.</string>
     <string name="ok">OK</string>
     <string name="network_error">Make sure you are connected to the internet</string>
-    <string name="job_item_tasks">%s Tasks</string>
+    <string name="job_item_tasks">%s</string>
     <string name="job_item_reward">$%s</string>
     <string name="worker_display_image">Worker Display Image</string>
     <string name="wallet_amunt">Wallet: $10.66</string>

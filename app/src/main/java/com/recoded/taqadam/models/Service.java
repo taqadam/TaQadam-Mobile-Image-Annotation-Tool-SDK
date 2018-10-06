@@ -2,6 +2,7 @@
 package com.recoded.taqadam.models;
 
 import com.google.gson.annotations.Expose;
+import com.recoded.taqadam.R;
 
 import javax.annotation.Generated;
 
@@ -31,19 +32,25 @@ public class Service extends Model {
     }
 
     public enum Services {
-        BBOX("detection"),
-        CATEGORIZATION("validation,categorization"),
-        CLASSIFICATION("classification"),
-        SEGMENTATION("semantic,segmentation");
+        BBOX(R.drawable.ic_object_detection + "-detection"),
+        CATEGORIZATION(R.drawable.ic_classification + "-validation,categorization"),
+        CLASSIFICATION(R.drawable.ic_tagging + "-classification"),
+        SEGMENTATION(R.drawable.ic_segmentation + "-semantic,segmentation");
 
         private final String[] wildcards;
+        private final int icon;
 
-        Services(String wildcards) {
-            this.wildcards = wildcards.split(",");
+        Services(String args) {
+            String[] splitted = args.split("-");
+            this.icon = Integer.parseInt(splitted[0]);
+            this.wildcards = splitted[1].split(",");
         }
 
         public String[] getWildCards() {
             return wildcards;
+        }
+        public int getDrawable(){
+            return icon;
         }
     }
 }
