@@ -1,6 +1,7 @@
 package com.recoded.taqadam;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +13,7 @@ import android.widget.ProgressBar;
 import com.recoded.taqadam.models.Api.Api;
 import com.recoded.taqadam.models.Assignment;
 
+import java.io.Serializable;
 import java.util.List;
 
 import retrofit2.Call;
@@ -23,6 +25,7 @@ public class FragmentAssignments extends Fragment {
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
     private AssignmentsRecyclerAdapter mAdapter;
+    private List<Assignment> assignments;
 
     public FragmentAssignments() {
         // Required empty public constructor
@@ -39,8 +42,25 @@ public class FragmentAssignments extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new AssignmentsRecyclerAdapter(getActivity());
         mRecyclerView.setAdapter(mAdapter);
-        fetchAssignments();
+        if(savedInstanceState != null && savedInstanceState.containsKey("assignments")){
+            assignments = (List<Assignment>) savedInstanceState.getSerializable("assignments");
+        }
+        if(assignments == null) {
+            fetchAssignments();
+        } else {
+            mAdapter.setDataset(assignments);
+            mRecyclerView.setVisibility(View.VISIBLE);
+            mProgressBar.setVisibility(View.GONE);
+            mRecyclerView.setScrollY(savedInstanceState != null? savedInstanceState.getInt("scroll", 0):0);
+        }
         return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("assignments", (Serializable) assignments);
+        outState.putInt("scroll", mRecyclerView.getScrollY());
     }
 
     public void fetchAssignments() {
@@ -48,7 +68,8 @@ public class FragmentAssignments extends Fragment {
         call.enqueue(new Callback<List<Assignment>>() {
             @Override
             public void onResponse(Call<List<Assignment>> call, Response<List<Assignment>> response) {
-                mAdapter.setDataset(response.body());
+                assignments = response.body();
+                mAdapter.setDataset(assignments);
                 mRecyclerView.setVisibility(View.VISIBLE);
                 mProgressBar.setVisibility(View.GONE);
             }
