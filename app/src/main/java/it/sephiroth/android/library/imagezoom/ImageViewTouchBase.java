@@ -620,7 +620,7 @@ public abstract class ImageViewTouchBase extends ImageView implements IDisposabl
 
         float scale = getScale(mBaseMatrix);
 
-        scale = Math.min(1f, 1f / scale);
+        scale = Math.min(0.9f, 0.9f / scale);
         if (DEBUG) {
             Log.i(TAG, "computeMinZoom: " + scale);
         }
