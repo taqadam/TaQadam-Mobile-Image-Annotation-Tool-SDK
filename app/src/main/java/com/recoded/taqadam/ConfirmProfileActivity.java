@@ -218,7 +218,35 @@ public class ConfirmProfileActivity extends BaseActivity {
     }
 
     private void checkAuthorized() {
-        if (UserAuthHandler.getInstance().shouldLogin()) {
+        if (UserAuthHandler.getInstance() == null) {
+            final ProgressDialog pd = new ProgressDialog(this);
+            pd.setTitle(R.string.Signingin);
+            pd.setMessage(getString(R.string.Please_wait));
+            pd.setCancelable(false);
+            pd.setCanceledOnTouchOutside(false);
+            pd.show();
+
+            UserAuthHandler.init(this);
+            UserAuthHandler.getInstance().getInitTask().addOnSuccessListener(this, new OnSuccessListener<User>() {
+                @Override
+                public void onSuccess(User user) {
+                    pd.dismiss();
+                    if (user == null) {
+                        Intent i = new Intent(ConfirmProfileActivity.this, SigninActivity.class);
+                        startActivity(i);
+                        finish();
+                    } else {
+                        profile = user.getProfile();
+                    }
+                }
+            }).addOnFailureListener(this, new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(ConfirmProfileActivity.this, "Error occured!", Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            });
+        } else if (UserAuthHandler.getInstance().shouldLogin()) {
             profile = new Profile();
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.error);
