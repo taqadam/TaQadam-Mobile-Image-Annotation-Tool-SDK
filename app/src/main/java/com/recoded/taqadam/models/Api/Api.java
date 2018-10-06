@@ -103,6 +103,11 @@ public class Api {
                     try {
                         JSONObject res = new JSONObject(responseBody);
                         String msg = res.getString("message");
+                        if(responceCode == 503) {
+                            //Server is down for maintenance
+                            if(msg.isEmpty())
+                                msg = "We will be right back!";
+                        }
                         ex.setMessage(msg);
                         if (msg.toLowerCase().contains("invalid parameters")) {
                             JSONObject errors = (JSONObject) res.get("errors");

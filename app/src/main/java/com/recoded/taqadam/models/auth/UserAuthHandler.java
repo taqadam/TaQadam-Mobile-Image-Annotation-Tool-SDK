@@ -63,6 +63,8 @@ public class UserAuthHandler {
                         auth = null;
                         Api.initiate(null);
                         initTask.setResult(null);
+                    } else if (((ApiError) e).getStatusCode() == 503) {
+                        initTask.setException(e);
                     } else {
                         Crashlytics.log(4, "ApiError", e.getMessage());
                         initTask.setException(e);
@@ -252,7 +254,7 @@ public class UserAuthHandler {
     }
 
     public Auth getAuth() {
-        if(auth == null){
+        if (auth == null) {
             getToken();
         }
         return auth;
