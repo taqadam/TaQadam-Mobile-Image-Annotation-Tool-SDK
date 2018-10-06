@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.recoded.taqadam.models.Api.Api;
 import com.recoded.taqadam.models.Assignment;
@@ -20,6 +21,7 @@ import retrofit2.Response;
 public class FragmentAssignments extends Fragment {
 
     private RecyclerView mRecyclerView;
+    private ProgressBar mProgressBar;
     private AssignmentsRecyclerAdapter mAdapter;
 
     public FragmentAssignments() {
@@ -32,6 +34,8 @@ public class FragmentAssignments extends Fragment {
         View view = inflater.inflate(R.layout.frag_jobs, container, false);
 
         mRecyclerView = view.findViewById(R.id.jobs_recycler_view);
+        mProgressBar = view.findViewById(R.id.progress_bar);
+
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new AssignmentsRecyclerAdapter(getActivity());
         mRecyclerView.setAdapter(mAdapter);
@@ -45,6 +49,8 @@ public class FragmentAssignments extends Fragment {
             @Override
             public void onResponse(Call<List<Assignment>> call, Response<List<Assignment>> response) {
                 mAdapter.setDataset(response.body());
+                mRecyclerView.setVisibility(View.VISIBLE);
+                mProgressBar.setVisibility(View.GONE);
             }
 
             @Override
