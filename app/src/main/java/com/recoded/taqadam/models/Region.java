@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by wisam on Jan 18 18.
@@ -27,6 +28,7 @@ public abstract class Region implements Parcelable {
     protected HashMap<String, String> regionAttributes;
     protected boolean closed;
     private final Matrix mTransformMatrix = new Matrix();
+    private final String id = UUID.randomUUID().toString();
     //private float scale = 1f;
     //protected RectF imageRect;
 
@@ -36,6 +38,7 @@ public abstract class Region implements Parcelable {
         this.shape = shape;
         points = new ArrayList<>();
         regionAttributes = new HashMap<>();
+        regionAttributes.put("uid", id);
         closed = false;
     }
 
@@ -241,6 +244,10 @@ public abstract class Region implements Parcelable {
             points.add(new PointF(pts[i], pts[i + 1]));
         }
         calculateShapeRect();
+    }
+
+    public String getId() {
+        return id;
     }
 
     /*
