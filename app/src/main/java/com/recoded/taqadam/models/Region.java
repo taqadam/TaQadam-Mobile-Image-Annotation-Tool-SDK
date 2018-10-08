@@ -21,14 +21,13 @@ import java.util.UUID;
  */
 
 public abstract class Region implements Parcelable {
-
+    public static final String ID_KEY = "ID";
     protected final RectF shapeRect = new RectF(); //will be used for drawing
     protected Shape shape;
     protected List<PointF> points;
     protected HashMap<String, String> regionAttributes;
     protected boolean closed;
     private final Matrix mTransformMatrix = new Matrix();
-    private final String id = UUID.randomUUID().toString();
     //private float scale = 1f;
     //protected RectF imageRect;
 
@@ -38,7 +37,6 @@ public abstract class Region implements Parcelable {
         this.shape = shape;
         points = new ArrayList<>();
         regionAttributes = new HashMap<>();
-        regionAttributes.put("uid", id);
         closed = false;
     }
 
@@ -247,7 +245,11 @@ public abstract class Region implements Parcelable {
     }
 
     public String getId() {
-        return id;
+        return regionAttributes.get(ID_KEY);
+    }
+
+    public void setId(String id) {
+        regionAttributes.put(ID_KEY, id);
     }
 
     /*

@@ -22,6 +22,8 @@ import com.recoded.taqadam.models.Region;
 
 import java.util.List;
 
+import static com.recoded.taqadam.models.Region.ID_KEY;
+
 /**
  * Created by wisam on Jan 20 18.
  */
@@ -107,7 +109,9 @@ public class AttributesFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 //For the label
+                String id = region.getRegionAttributes().get(ID_KEY);
                 region.getRegionAttributes().clear();
+                if(id != null) region.addRegionAttribute(ID_KEY, id);
                 if (binding.spinnerOptions.getSelectedItemPosition() != 0) {
                     binding.tvError.setVisibility(View.INVISIBLE);
                     region.addRegionAttribute("label", binding.spinnerOptions.getSelectedItem().toString());
@@ -121,8 +125,10 @@ public class AttributesFragment extends DialogFragment {
                 //other attributes
                 for (int i = 0; i < binding.tableAttributes.getChildCount(); i++) {
                     TableRow row = (TableRow) binding.tableAttributes.getChildAt(i);
-                    String key = ((EditText) row.getChildAt(0)).getText().toString();
-                    String val = ((EditText) row.getChildAt(1)).getText().toString();
+                    String key = ((EditText) row.getChildAt(0)).getText().toString().trim();
+                    String val = ((EditText) row.getChildAt(1)).getText().toString().trim();
+
+                    if(key.equalsIgnoreCase(ID_KEY)) continue;
 
                     if (!key.isEmpty() && !val.isEmpty() && (noLabel || !key.equals("label"))) {
                         region.addRegionAttribute(key, val);

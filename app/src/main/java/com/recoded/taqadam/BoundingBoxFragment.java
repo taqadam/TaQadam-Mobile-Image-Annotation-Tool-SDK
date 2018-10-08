@@ -31,6 +31,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import it.sephiroth.android.library.imagezoom.ImageViewTouchBase;
 
@@ -315,6 +316,7 @@ public class BoundingBoxFragment extends TaskFragment {
                 }
                 mSelectedId = -1;
                 mRegions.add(region);
+                region.setId(UUID.randomUUID().toString().split("-")[2]);
                 dispatchAttributesDialog(region);
             }
         });
