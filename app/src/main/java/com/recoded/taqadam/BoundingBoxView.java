@@ -32,7 +32,7 @@ public class BoundingBoxView extends View {
 
     public static final int POINT_RADIUS = 8; //The radius for point handle in dp
     private static final float CROSS_RECT_RATIO = 6 / 6;
-    private static final float MIN_SHAPE_RECT_SIZE = 5;
+    private static final float MIN_SHAPE_RECT_SIZE = 3;
     private final RectF mCrossRect = new RectF();
     private final PointF mDownTouch = new PointF();
     private List<Region> drawnRegions;
