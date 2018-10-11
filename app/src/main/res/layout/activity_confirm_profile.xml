@@ -11,7 +11,7 @@
             type="com.recoded.taqadam.models.Profile" />
     </data>
 
-    <android.support.design.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?attr/SigninActivityBG">
@@ -78,7 +78,7 @@
                                 android:layout_marginTop="11dp"
                                 android:layout_gravity="center"/>
 
-                            <android.support.design.widget.FloatingActionButton
+                            <com.google.android.material.floatingactionbutton.FloatingActionButton
                                 android:id="@+id/b_change_picture"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -102,12 +102,12 @@
                         android:textSize="19sp"/>
                 </LinearLayout>
 
-                <android.support.constraint.ConstraintLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/form"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/et_f_name"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -125,9 +125,9 @@
                             android:hint="@string/first_name"
                             android:inputType="textNoSuggestions"
                             android:text="@{Profile.firstName}" />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/et_l_name"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -145,9 +145,9 @@
                             android:hint="@string/last_name"
                             android:inputType="textNoSuggestions"
                             android:text="@{Profile.lastName}" />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/et_phone_number"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -165,7 +165,7 @@
                             android:hint="@string/phone_number"
                             android:inputType="phone"
                             android:text="@{Profile.phone}" />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <Spinner
                         android:id="@+id/spinner_gender"
@@ -182,7 +182,7 @@
                         app:layout_constraintStart_toEndOf="@id/et_phone_number"
                         app:layout_constraintTop_toTopOf="@id/et_phone_number"/>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/et_dob"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -204,7 +204,7 @@
                             android:focusable="false"
                             android:hint="@string/date_of_birth"
                             android:inputType="none"/>
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <LinearLayout
                         android:id="@+id/spinner_cities_container"
@@ -250,7 +250,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/et_dob"/>
-                </android.support.constraint.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
 
         </ScrollView>
@@ -306,5 +306,5 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead.Inverse"
                 android:text="@string/files"/>
         </LinearLayout>
-    </android.support.design.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

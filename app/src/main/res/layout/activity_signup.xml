@@ -70,7 +70,7 @@
                         android:contentDescription="@string/email_content_desc"
                         android:src="?attr/ic_person" />
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/et_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -78,12 +78,12 @@
                         app:hintTextAppearance="@style/signup_form_hint_appearance"
                         app:errorTextAppearance="@style/AppTheme.ErrorTextAppearance">
 
-                        <android.support.design.widget.TextInputEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/eti_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/input_name" />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
                 <LinearLayout
@@ -101,7 +101,7 @@
                         android:contentDescription="@string/email_content_desc"
                         android:src="?attr/ic_email"/>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/et_email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -109,13 +109,13 @@
                         app:hintTextAppearance="@style/signup_form_hint_appearance"
                         app:errorTextAppearance="@style/AppTheme.ErrorTextAppearance">
 
-                        <android.support.design.widget.TextInputEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/eti_email"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/input_email"
                             android:inputType="textEmailAddress"/>
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
             </LinearLayout>
 
@@ -144,7 +144,7 @@
                         android:contentDescription="@string/password_content_desc"
                         android:src="?attr/ic_password"/>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/et_pw"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -153,13 +153,13 @@
                         app:errorTextAppearance="@style/AppTheme.ErrorTextAppearance"
                         app:passwordToggleEnabled="true">
 
-                        <android.support.design.widget.TextInputEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/eti_pw"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/input_password"
                             android:inputType="textPassword"/>
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
                 <LinearLayout

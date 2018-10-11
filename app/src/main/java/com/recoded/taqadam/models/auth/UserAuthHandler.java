@@ -2,7 +2,7 @@ package com.recoded.taqadam.models.auth;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.crashlytics.android.Crashlytics;
 import com.facebook.AccessToken;

@@ -1,6 +1,6 @@
 package com.recoded.taqadam;
 
-import android.databinding.DataBindingUtil;
+import androidx.databinding.DataBindingUtil;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
