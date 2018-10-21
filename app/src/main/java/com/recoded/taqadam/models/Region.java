@@ -229,15 +229,13 @@ public abstract class Region implements Parcelable {
     }
 
     public int getPointIn(RectF rect) {
-        int index = -1;
-        final RectF pointRect = new RectF();
         for (int i = 0; i < points.size(); i++) {
             PointF p = points.get(i);
             if (rect.contains(p.x, p.y))
-                index = i;
+                return i;
         }
 
-        return index;
+        return -1;
     }
 
     public RectF getShapeRect() {
