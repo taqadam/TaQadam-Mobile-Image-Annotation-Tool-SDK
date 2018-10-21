@@ -42,7 +42,7 @@ public class AssignmentsRecyclerAdapter extends RecyclerView.Adapter<Assignments
         holder.binding.getRoot().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ctx, AssignmentActivity.class);
+                Intent intent = new Intent(ctx, WorkActivity.class);
                 intent.putExtra("assignment", assignment);
                 ctx.startActivity(intent);
             }

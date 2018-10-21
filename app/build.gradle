@@ -11,8 +11,8 @@ android {
         applicationId "com.recoded.taqadam"
         minSdkVersion 17
         targetSdkVersion 28
-        versionCode 19
-        versionName "2.0.2.1"
+        versionCode 21
+        versionName "2.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -40,6 +40,7 @@ dependencies {
     implementation 'com.google.android:flexbox:0.3.2'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.github.chrisbanes:PhotoView:2.2.0'
     implementation 'com.github.apl-devs:appintro:v4.2.2'
     implementation 'androidx.preference:preference:1.0.0'
     implementation 'com.google.firebase:firebase-core:16.0.4'
@@ -58,6 +59,11 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation "android.arch.persistence.room:runtime:1.1.1"
+    implementation "android.arch.lifecycle:extensions:1.1.1"
+    implementation 'com.ramotion.directselect:direct-select:0.1.0'
+    annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
+    annotationProcessor "android.arch.lifecycle:compiler:1.1.1"
 
     implementation 'org.glassfish:javax.annotation:10.0-b28'
 

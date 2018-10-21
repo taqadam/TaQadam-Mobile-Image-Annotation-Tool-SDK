@@ -26,6 +26,8 @@ import com.recoded.taqadam.models.Assignment;
 import com.recoded.taqadam.models.Responses.PaginatedResponse;
 import com.recoded.taqadam.models.Task;
 
+import java.util.Date;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -265,7 +267,7 @@ public class AssignmentActivity extends BaseActivity {
         if (answer.getData() != null && !answer.getData().isEmpty()) {
             final Long assignmentId = answer.getAssignmentId();
 
-            answer.setSubmittedAt();
+            answer.setSubmittedAt(new Date().getTime());
             Call<Answer> call = Api.getInstance().endpoints.postAnswer(assignmentId, answer);
             call.enqueue(new Callback<Answer>() {
                 @Override

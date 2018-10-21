@@ -1,7 +1,11 @@
 package com.recoded.taqadam.models;
 
+import com.google.gson.annotations.Expose;
+
 public class Error {
+    @Expose
     private String key;
+    @Expose
     private String message;
 
     public Error(String key, String message) {

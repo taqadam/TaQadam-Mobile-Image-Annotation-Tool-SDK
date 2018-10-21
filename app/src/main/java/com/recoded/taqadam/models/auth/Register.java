@@ -1,7 +1,14 @@
 package com.recoded.taqadam.models.auth;
 
+import com.google.gson.annotations.Expose;
+
 public class Register {
-    public String name, email, password;
+    @Expose
+    public String name;
+    @Expose
+    public String email;
+    @Expose
+    public String password;
 
     public Register(String name, String email, String password) {
         this.name = name;

@@ -262,4 +262,5 @@
     <string name="deposit">Deposit</string>
     <string name="withdrawal">Withdrawal</string>
     <string name="redeem">Redeem</string>
+    <string name="task_image">Task Image</string>
 </resources>

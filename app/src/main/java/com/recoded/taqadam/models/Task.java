@@ -21,6 +21,8 @@ public class Task extends Model {
     private Long size;
     @Expose
     private String url;
+    @Expose
+    private Answer answer;
 
     public String getEtag() {
         return etag;
@@ -60,5 +62,13 @@ public class Task extends Model {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public void setAnswer(Answer answer) {
+        this.answer = answer;
+    }
+
+    public Answer getAnswer() {
+        return answer;
     }
 }

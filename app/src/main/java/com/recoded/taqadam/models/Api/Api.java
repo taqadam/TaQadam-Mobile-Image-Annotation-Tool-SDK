@@ -183,6 +183,7 @@ public class Api {
                         new GsonBuilder()
                                 .setDateFormat("yyyy-MM-dd")
                                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                                .excludeFieldsWithoutExposeAnnotation()
                                 .create()))
                 .client(client.build())
                 .build();

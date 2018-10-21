@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <item
+        android:id="@+id/tools_zoom"
+        android:icon="@drawable/ic_coord"
+        android:title="Zoom Enabled"
+        app:actionLayout="@layout/tools_drawer_zoom_switch" />
+    <item
+        android:id="@+id/tools_send"
+        android:icon="@drawable/ic_send_white"
+        android:title="Send Answer" />
+    <item
+        android:id="@+id/tools_skip"
+        android:icon="@drawable/ic_skip"
+        android:title="Skip Answer" />
+    <item
+        android:id="@+id/tools_hide"
+        android:icon="@drawable/ic_expand_white"
+        android:title="Tools">
+        <menu>
+            <group
+                android:id="@+id/tools_group"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/tools_rect"
+                    android:icon="@drawable/ic_rect_new"
+                    android:title="Rectangle" />
+                <item
+                    android:id="@+id/tools_ellipse"
+                    android:icon="@drawable/ic_ellipse_new"
+                    android:title="Ellipse" />
+                <item
+                    android:id="@+id/tools_polygon"
+                    android:icon="@drawable/ic_polygon_new"
+                    android:title="Polygon" />
+                <!--<item
+                    android:id="@+id/tools_line"
+                    android:icon="@drawable/ic_line"
+                    android:title="Open Polygon" />
+
+                <item
+                    android:id="@+id/tools_arc"
+                    android:icon="@drawable/ic_arc"
+                    android:title="Arc" />
+
+                <item
+                    android:id="@+id/tools_spline"
+                    android:icon="@drawable/ic_spline"
+                    android:title="Spline" />-->
+
+                <item
+                    android:id="@+id/tools_point"
+                    android:icon="@drawable/ic_point"
+                    android:title="Point" />
+            </group>
+        </menu>
+    </item>
+    <item android:title="Misc">
+        <menu>
+            <item
+                android:id="@+id/tools_cont_drawing"
+                android:icon="@drawable/ic_endless_drawing"
+                android:title="Continues Drawing"
+                app:actionLayout="@layout/tools_drawer_zoom_switch" />
+            <item
+                android:id="@+id/tools_flag"
+                android:icon="@drawable/ic_flag"
+                android:title="Flag Image" />
+            <item
+                android:id="@+id/tools_clear"
+                android:icon="@drawable/ic_close"
+                android:title="Clear Drawings" />
+            <item
+                android:id="@+id/tools_delete_from_db"
+                android:icon="@drawable/ic_delete_forever"
+                android:title="Delete Answer" />
+            <item
+                android:id="@+id/tools_back"
+                android:icon="@drawable/ic_exit"
+                android:title="Exit" />
+        </menu>
+    </item>
+
+</menu>

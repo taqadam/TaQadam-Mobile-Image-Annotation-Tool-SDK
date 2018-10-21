@@ -1,7 +1,12 @@
 package com.recoded.taqadam.models.auth;
 
+import com.google.gson.annotations.Expose;
+
 public class Login {
-    public String email, password;
+    @Expose
+    public String email;
+    @Expose
+    public String password;
 
     public Login(String email, String password) {
         this.email = email;
