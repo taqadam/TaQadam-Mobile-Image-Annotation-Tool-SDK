@@ -128,6 +128,7 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
     private boolean isRefreshingImage = false;
     private boolean continuesDrawing = true;
     private long mTotalSessionTime;
+	private boolean isLoadingImage = false;
 
     //region buttons
     private ToggleButton regionLock;
@@ -172,10 +173,15 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
     }
 
     private void parseAnswer() {
+        this.mCurrentAnswer.setTaskId(mCurrentTask.getId());
+        this.mCurrentAnswer.setAssignmentId(assignment.getId());
         //Answer Data;
         if (mCurrentAnswer.getData() != null && !mCurrentAnswer.getData().isEmpty()) {
             try {
-                JSONObject data = new JSONObject(mCurrentAnswer.getData());
+                String dataString = mCurrentAnswer.getData();
+                dataString = dataString.replace("\\", "");
+                dataString = dataString.substring(1, dataString.length()-1);
+                JSONObject data = new JSONObject(dataString);
 
                 JSONArray regionsJson = data.optJSONArray("regions");
                 JSONArray flagsJson = data.optJSONArray("image_flags");
@@ -574,6 +580,7 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
     }
 
     private void toggleLoader(boolean show) {
+		isLoadingImage = show;
         if (show) {
             mLoadingIndicator.setVisibility(View.VISIBLE);
             mDrawingView.setActive(false);
@@ -658,7 +665,7 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
     private void loadTask(int taskIndex) {
         toggleLoader(true);
 
-        if (taskIndex < mTasks.data.size()) {
+        if (mTasks != null && taskIndex < mTasks.data.size()) {
             Task t = mTasks.data.get(taskIndex);
             if (skippedTasks.contains(t.getId())) {
                 mTaskIndex = taskIndex;
@@ -862,13 +869,14 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
     }
 
     private void refreshImage() {
+		if(isLoadingImage) return;
         isRefreshingImage = true;
         loadTask(mTaskIndex);
     }
 
     @Override
     public void onDrawingFinished(Region drawnRegion, int index) {
-
+		if(!continuesDrawing) openRegions();
     }
 
     @Override
@@ -1191,7 +1199,7 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
         return new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser) {
+                if (fromUser && !isLoadingImage) {
                     // todo fix this
                     float range = MAX_SCALE - MIN_SCALE;
                     float scale = MIN_SCALE + (progress * range / 100);
