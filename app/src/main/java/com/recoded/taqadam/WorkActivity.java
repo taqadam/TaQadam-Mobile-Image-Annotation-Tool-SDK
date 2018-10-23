@@ -236,6 +236,7 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
 
     private Answer getAnswer() {
         if (mCurrentAnswer == null) return null;
+        if (mCurrentAnswer.getAssignmentId() == null || mCurrentAnswer.getTaskId() == null) return null;
         mCurrentAnswer.setStartedAt(startedAt);
         mCurrentAnswer.setTimeTaken(mTimeTaken);
         List<Region> regions = mDrawingView.getNormalizedRegions();
@@ -796,6 +797,7 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
 
     private void saveAnswer(final Answer a) {
         if (a == null) return;
+        if (a.getTaskId() == null || a.getAssignmentId() == null) return;
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
