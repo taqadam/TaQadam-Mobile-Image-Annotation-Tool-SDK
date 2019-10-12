@@ -57,7 +57,7 @@ public class SegmentationFragment extends TaskFragment {
     private boolean mToolboxVisible = true;
     //private GestureDetectorCompat mDetector;
     private int selectedRegion;
-    private List<Region> mRegions = new ArrayList<>();
+    private static List<Region> mRegions = new ArrayList<>();
 
     protected boolean imageFrozen = false;
     private AttributesFragment attributesFragment;
@@ -183,6 +183,7 @@ public class SegmentationFragment extends TaskFragment {
             return null;
         }
 
+        mRegions.clear();
         JSONObject rawAnswer = new JSONObject();
         JSONArray regions = new JSONArray();
         float scaleTo = binding.segView.getImageRect().width() / binding.segView.getBoundingRect().width();
@@ -190,6 +191,7 @@ public class SegmentationFragment extends TaskFragment {
             Region newRegion = Region.copyRegion(r);
             newRegion.transform(scaleTo);
             regions.put(newRegion.toJSONObject());
+            mRegions.add(newRegion);
         }
         try {
             rawAnswer.put("image_width", binding.segView.getImageRect().width());
@@ -380,6 +382,12 @@ public class SegmentationFragment extends TaskFragment {
         } else {
             mToolboxShower.run();
         }
+    }
+
+    @Override
+    public void setAnswer(Answer answer) {
+        Log.d(TAG, "Set previous answer");
+        binding.segView.addRegions(mRegions);
     }
 
     private void toggleImageFreeze() {

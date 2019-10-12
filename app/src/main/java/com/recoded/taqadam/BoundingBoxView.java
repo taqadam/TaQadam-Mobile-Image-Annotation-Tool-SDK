@@ -63,6 +63,7 @@ public class BoundingBoxView extends View {
     private OnRegionSelected selectionListener;
     private OnRegionDelete removingListener;
 
+    private int count = 0;
 
     //endregion
 
@@ -173,11 +174,15 @@ public class BoundingBoxView extends View {
     }
 
     public void transformRegions(RectF newRect) {
-        mScale = newRect.width() / mBoundingRectangle.width();
-        mBoundingRectangle.set(newRect);
-        for (Region r : drawnRegions) {
-            r.transform(mScale);
+        count += 1;
+        if (count > 2) {
+            mScale = newRect.width() / mBoundingRectangle.width();
+            mBoundingRectangle.set(newRect);
+            for (Region r : drawnRegions) {
+                r.transform(mScale);
+            }
         }
+
         //for zooming while drawing
         if (mCurrentDrawingShape != null) {
             mCurrentDrawingShape.transform(mScale);

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,8 +24,11 @@ import com.recoded.taqadam.models.Answer;
 import com.recoded.taqadam.models.Api.Api;
 import com.recoded.taqadam.models.Api.ApiError;
 import com.recoded.taqadam.models.Assignment;
+import com.recoded.taqadam.models.Region;
 import com.recoded.taqadam.models.Responses.PaginatedResponse;
 import com.recoded.taqadam.models.Task;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -42,6 +46,7 @@ public class AssignmentActivity extends BaseActivity {
     private PaginatedResponse<Task> tasks;
     private int currentImageCounter = 1;
 
+    private Answer previousAnswer = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +125,7 @@ public class AssignmentActivity extends BaseActivity {
                         mTasksPagerAdapter.addNewTasks(tasks.data);
                         currentImageCounter++;
                         binding.viewPager.setCurrentItem(0);
+                        setPreviousAnswer();
                     }
                 });
             } else
@@ -127,11 +133,20 @@ public class AssignmentActivity extends BaseActivity {
         } else {
             currentImageCounter++;
             binding.viewPager.setCurrentItem(binding.viewPager.getCurrentItem() + 1);
+            setPreviousAnswer();
+        }
+    }
+
+    private void setPreviousAnswer() {
+        if (previousAnswer != null) {
+            Log.d(TAG, "CurrentFragment" + currentFragment.getClass());
+            currentFragment.setAnswer(previousAnswer);
         }
     }
 
     private void showInstructionsDialog() {
-        if (!assignment.getJob().getInstructions().isEmpty()) {
+        String instruction = assignment.getJob().getInstructions();
+        if (instruction != null && !instruction.isEmpty()) {
             if (instructions == null) {
                 LinearLayout root = new LinearLayout(this);
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -168,6 +183,7 @@ public class AssignmentActivity extends BaseActivity {
             gotoNextImage();
         } else {
             Answer answer = currentFragment.getAnswer();
+            previousAnswer = answer;
             if (answer != null) {
                 if (postAnswer(answer)) {
                     gotoNextImage();
@@ -264,6 +280,7 @@ public class AssignmentActivity extends BaseActivity {
     public boolean postAnswer(Answer answer) {
         if (answer.getData() != null && !answer.getData().isEmpty()) {
             final Long assignmentId = answer.getAssignmentId();
+            Log.d(TAG, "Posting answer:" + answer.getData());
 
             answer.setSubmittedAt();
             Call<Answer> call = Api.getInstance().endpoints.postAnswer(assignmentId, answer);

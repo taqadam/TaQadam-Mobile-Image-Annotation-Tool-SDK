@@ -8,8 +8,11 @@ import android.util.DisplayMetrics;
 
 import com.recoded.taqadam.models.Answer;
 import com.recoded.taqadam.models.Assignment;
+import com.recoded.taqadam.models.Region;
 import com.recoded.taqadam.models.Service;
 import com.recoded.taqadam.models.Task;
+
+import java.util.List;
 
 import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 
@@ -93,5 +96,13 @@ public class TaskFragment extends Fragment {
 
     public Answer getAnswer() {
         return null;
+    }
+    
+    public List<Region> getRegions() {
+        return null;
+    }
+
+    public void setAnswer(Answer answer) {
+        this.answer = answer;
     }
 }

@@ -58,8 +58,7 @@ public class BoundingBoxFragment extends TaskFragment {
     private boolean mToolboxVisible = true;
     //private GestureDetectorCompat mDetector;
     private int selectedRegion;
-    private List<Region> mRegions = new ArrayList<>();
-
+    private static List<Region> mRegions = new ArrayList<>();
     protected boolean imageFrozen = false;
     private AttributesFragment attributesFragment;
 
@@ -188,10 +187,12 @@ public class BoundingBoxFragment extends TaskFragment {
         JSONObject rawAnswer = new JSONObject();
         JSONArray regions = new JSONArray();
         float scaleTo = binding.bboxView.getImageRect().width() / binding.bboxView.getBoundingRect().width();
+        mRegions.clear();
         for (Region r : binding.bboxView.getDrawnRegions()) {
             Region newRegion = Region.copyRegion(r);
             newRegion.transform(scaleTo);
             regions.put(newRegion.toJSONObject());
+            mRegions.add(newRegion);
         }
         try {
             rawAnswer.put("image_width", binding.bboxView.getImageRect().width());
@@ -203,6 +204,12 @@ public class BoundingBoxFragment extends TaskFragment {
         }
         answer.setData(rawAnswer.toString());
         return answer;
+    }
+
+    @Override
+    public void setAnswer(Answer answer) {
+        Log.d(TAG, "Set previous answer");
+        binding.bboxView.addRegions(mRegions);
     }
 
     private void initToolbox() {

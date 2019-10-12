@@ -52,6 +52,8 @@ public class SegmentationView extends View {
 
     private int mColorNormal, mColorSelected, mColorNotLabeled;
 
+    private int count;
+
     /**
      * The radius of the touch zone (in pixels) around a given Handle.
      */
@@ -169,11 +171,15 @@ public class SegmentationView extends View {
     }
 
     public void transformRegions(RectF newRect) {
-        mScale = newRect.width() / mBoundingRectangle.width();
-        mBoundingRectangle.set(newRect);
-        for (Region r : drawnRegions) {
-            r.transform(mScale);
+        count += 1;
+        if (count > 2) {
+            mScale = newRect.width() / mBoundingRectangle.width();
+            mBoundingRectangle.set(newRect);
+            for (Region r : drawnRegions) {
+                r.transform(mScale);
+            }
         }
+
         //for zooming while drawing
         if (mCurrentDrawingShape != null) {
             mCurrentDrawingShape.transform(mScale);
