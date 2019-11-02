@@ -21,8 +21,6 @@ public class Assignment extends Model {
     private Job job;
     @Expose
     private Type type;
-    //@Expose
-    //private List<Task> tasks;
 
     public String getDetails() {
         return details;
@@ -63,14 +61,4 @@ public class Assignment extends Model {
     public void setType(Type type) {
         this.type = type;
     }
-
-    /*
-    public List<Task> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(List<Task> tasks){
-        this.tasks = tasks;
-    }
-    */
 }

@@ -4,7 +4,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/colorWhite"
-                tools:context="com.recoded.taqadam.AppAboutActivity">
+                tools:context="com.recoded.taqadam.activities.AppAboutActivity">
 
     <include
         android:id="@+id/appbar_layout"

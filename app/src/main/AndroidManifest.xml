@@ -26,14 +26,14 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <service android:name=".NotificationsService">
+        <service android:name=".services.NotificationsService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
         <activity
-            android:name=".SplashActivity"
+            android:name=".activities.SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -42,19 +42,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".IntroActivity"
+            android:name=".activities.IntroActivity"
             android:theme="@style/AppTheme.IntroDialog"></activity>
         <activity
-            android:name=".RegisterActivity"
+            android:name=".activities.RegisterActivity"
             android:windowSoftInputMode="adjustResize"></activity>
         <activity
-            android:name=".ConfirmProfileActivity"
+            android:name=".activities.ConfirmProfileActivity"
             android:windowSoftInputMode="stateHidden|adjustResize"></activity>
         <activity
-            android:name=".SigninActivity"
+            android:name=".activities.SigninActivity"
             android:windowSoftInputMode="stateHidden|adjustResize"></activity>
-        <activity android:name=".MainActivity"></activity>
-        <activity android:name=".ProfileActivity"></activity>
+        <activity android:name=".activities.MainActivity"></activity>
+        <activity android:name=".activities.ProfileActivity"></activity>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -76,17 +76,17 @@
                 <data android:scheme="@string/facebook_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".AssignmentActivity"></activity>
-        <activity android:name=".SettingsActivity" />
-        <activity android:name=".BaseActivity"></activity>
-        <activity android:name=".PostActivity"></activity>
-        <activity android:name=".FeedbackActivity" />
-        <activity android:name=".AboutActivity" />
-        <activity android:name=".AppAboutActivity" />
-        <activity android:name=".HelpActivity" />
-        <activity android:name=".PostsFeedActivity" />
-        <activity android:name=".PostViewerActivity" />
-        <activity android:name=".WorkActivity"/>
+        <activity android:name=".activities.AssignmentActivity"></activity>
+        <activity android:name=".activities.SettingsActivity" />
+        <activity android:name=".activities.BaseActivity"></activity>
+        <activity android:name=".activities.PostActivity"></activity>
+        <activity android:name=".activities.FeedbackActivity" />
+        <activity android:name=".activities.AboutActivity" />
+        <activity android:name=".activities.AppAboutActivity" />
+        <activity android:name=".activities.HelpActivity" />
+        <activity android:name=".activities.PostsFeedActivity" />
+        <activity android:name=".activities.PostViewerActivity" />
+        <activity android:name=".activities.WorkActivity"/>
     </application>
 
 </manifest>

@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.recoded.taqadam.MainActivity">
+    tools:context="com.recoded.taqadam.activities.MainActivity">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <com.recoded.taqadam.LockableViewPager
+            <com.recoded.taqadam.views.LockableViewPager
                 android:id="@+id/main_pager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

@@ -12,11 +12,8 @@ public class Auth {
     @Expose
     private User user;
     @Expose
-    private Long expiresIn;
-    @Expose
     private String token;
-    @Expose
-    private String type; //token_type
+
 
     public User getUser() {
         return user;
@@ -26,14 +23,6 @@ public class Auth {
         this.user = user;
     }
 
-    public Long getExpiresIn() {
-        return expiresIn;
-    }
-
-    public void setExpiresIn(Long expiresIn) {
-        this.expiresIn = expiresIn;
-    }
-
     public String getToken() {
         return token;
     }
@@ -41,13 +30,4 @@ public class Auth {
     public void setToken(String token) {
         this.token = token;
     }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
 }

@@ -2,6 +2,7 @@
 package com.recoded.taqadam.models;
 
 import android.net.Uri;
+import android.view.ViewDebug;
 
 import com.google.gson.annotations.Expose;
 
@@ -17,6 +18,8 @@ import javax.annotation.Generated;
 @SuppressWarnings("unused")
 public class Profile extends Model {
 
+    @Expose
+    private String fullname;
     @Expose
     private String address;
     @Expose

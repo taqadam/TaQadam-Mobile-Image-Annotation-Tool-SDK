@@ -44,10 +44,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Api {
     public static final String TAG = Api.class.getSimpleName();
-    public static final String BASE = "https://taqadam.io/api/";
-    public static final String LOGIN = "login";
+    public static final String BASE = "http://192.168.0.101:8000/api/";
+    public static final String LOGIN = "user/login";
+
     public static final String REGISTER = "register";
-    public static final String REFRESH = "refresh";
+    public static final String REFRESH = "user/refresh";
     public static final String AVATARS = "avatars";
     public static final String LOGOUT = "logout";
     public static final String USERS = "users";
@@ -71,39 +72,38 @@ public class Api {
 
     public static void initiate(Auth auth) {
         if (auth != null)
-            instance = new Api(auth.getToken(), auth.getType());
-        else instance = new Api(null, null);
+            instance = new Api(auth.getToken());
+        else instance = new Api(null);
     }
 
     private Retrofit api = null;
     public ApiEndpoints endpoints;
 
-    public Api(final String token, final String token_type) {
+    public Api(final String token) {
         OkHttpClient.Builder client = new OkHttpClient.Builder();
-        //client.retryOnConnectionFailure(false);
+
         client.addInterceptor(new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {
                 Request request = chain.request();
                 Request.Builder b = request.newBuilder()
                         .addHeader("Accept", "application/json")
-                        .addHeader("Content-Type", "application/json")
-                        .addHeader("User-Agent", "TaQadam4AndroidMobile/" + BuildConfig.VERSION_NAME + " " + System.getProperty("http.agent"));
+                        .addHeader("Content-Type", "application/json");
                 if (token != null) {
-                    b.addHeader("Authorization", token_type + " " + token);
+                    b.addHeader("Authorization", "Token " + token);
                 }
 
                 Response response = chain.proceed(b.build());
 
 
-                int responceCode = response.code();
-                if (responceCode >= 400) {
+                int responseCode = response.code();
+                if (responseCode >= 400) {
                     String responseBody = response.body().string();
-                    ApiError ex = new ApiError(responceCode, responseBody);
+                    ApiError ex = new ApiError(responseCode, responseBody);
                     try {
                         JSONObject res = new JSONObject(responseBody);
                         String msg = res.getString("message");
-                        if(responceCode == 503) {
+                        if(responseCode == 503) {
                             //Server is down for maintenance
                             if(msg.isEmpty())
                                 msg = "We will be right back!";
@@ -111,23 +111,23 @@ public class Api {
                         ex.setMessage(msg);
                         if (msg.toLowerCase().contains("invalid parameters")) {
                             JSONObject errors = (JSONObject) res.get("errors");
-                            ex = new InvalidException(responceCode, msg, errors.toString());
+                            ex = new InvalidException(responseCode, msg, errors.toString());
                         } else if (msg.toLowerCase().contains("unauthenticated")) {
                             UserAuthHandler.getInstance().refresh();
-                            ex = new UnauthenticatedException(responceCode, msg);
+                            ex = new UnauthenticatedException(responseCode, msg);
                         } else if (msg.toLowerCase().contains("unauthorized")) {
-                            ex = new UnauthenticatedException(responceCode, msg);
+                            ex = new UnauthenticatedException(responseCode, msg);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
                     throw ex;
-                } else if (responceCode >= 200) {
+                } else if (responseCode >= 200) {
                     //We want to modify the response object and bring the resource to main level for GSON to deserialize properly
                     MediaType contentType = response.body().contentType();
                     String responseBody = response.body().string();
-                    String newRes = "";
+                    String newRes;
                     List<String> requestPath = request.url().pathSegments();
                     try {
                         JSONObject res = new JSONObject(responseBody);

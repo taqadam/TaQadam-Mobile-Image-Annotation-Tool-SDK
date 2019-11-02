@@ -219,7 +219,6 @@ public class UserAuthHandler {
         if (this.sharedPreferences != null && this.sharedPreferences.contains("token")) {
             this.auth = new Auth();
             auth.setToken(this.sharedPreferences.getString("token", null));
-            auth.setType(this.sharedPreferences.getString("token_type", null));
         }
     }
 
@@ -227,7 +226,6 @@ public class UserAuthHandler {
         if (this.sharedPreferences != null) {
             SharedPreferences.Editor editor = this.sharedPreferences.edit();
             editor.putString("token", auth.getToken());
-            editor.putString("token_type", auth.getType());
             editor.commit();
         }
     }

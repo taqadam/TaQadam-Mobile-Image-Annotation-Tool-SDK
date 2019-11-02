@@ -7,7 +7,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.recoded.taqadam.R;
-import com.recoded.taqadam.Utils;
+import com.recoded.taqadam.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * Created by wisam on Jan 18 18.

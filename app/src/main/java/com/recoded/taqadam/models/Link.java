@@ -3,10 +3,9 @@ package com.recoded.taqadam.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.recoded.taqadam.Utils;
+import com.recoded.taqadam.utils.Utils;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;

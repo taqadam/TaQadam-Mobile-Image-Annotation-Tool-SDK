@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/SigninActivityBG"
-    tools:context="com.recoded.taqadam.SigninActivity">
+    tools:context="com.recoded.taqadam.activities.SigninActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"

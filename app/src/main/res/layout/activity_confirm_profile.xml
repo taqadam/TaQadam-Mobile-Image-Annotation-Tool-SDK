@@ -20,7 +20,7 @@
             android:id="@+id/main_layout_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context="com.recoded.taqadam.ConfirmProfileActivity">
+            tools:context="com.recoded.taqadam.activities.ConfirmProfileActivity">
 
             <LinearLayout
                 android:layout_width="match_parent"

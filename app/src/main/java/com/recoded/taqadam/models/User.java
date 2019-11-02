@@ -29,7 +29,7 @@ public class User extends Model {
     @Expose
     private Boolean isEmailVerified = true;
     @Expose
-    private String name;
+    private String username;
     @Expose
     private List<Team> teams;
     @Expose
@@ -62,7 +62,7 @@ public class User extends Model {
     }
 
     public String getName() {
-        return name;
+        return username;
     }
 
     public List<Team> getTeams() {
@@ -90,7 +90,7 @@ public class User extends Model {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.username = name;
     }
 
     public void setTeams(List<Team> teams) {
@@ -105,7 +105,7 @@ public class User extends Model {
         User u = new User();
 
         u.email = fbUser.getEmail();
-        u.name = fbUser.getName();
+        u.username = fbUser.getName();
 
         Profile p = new Profile();
         p.setFirstName(fbUser.getFirstName());
