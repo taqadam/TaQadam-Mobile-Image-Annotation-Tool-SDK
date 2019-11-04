@@ -293,6 +293,8 @@ public class RegisterActivity extends BaseActivity {
                     }
                     */
 
+                } else if (e instanceof ApiError){
+                    Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
                 } else if (e instanceof HttpException) {
                     Toast.makeText(RegisterActivity.this, R.string.network_error, Toast.LENGTH_LONG).show();
                 } else {

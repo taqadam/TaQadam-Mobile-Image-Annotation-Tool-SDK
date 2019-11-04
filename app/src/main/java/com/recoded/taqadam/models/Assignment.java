@@ -2,49 +2,22 @@
 package com.recoded.taqadam.models;
 
 import com.google.gson.annotations.Expose;
-
-import java.util.Date;
+import com.google.gson.annotations.SerializedName;
 
 import javax.annotation.Generated;
 
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
 public class Assignment extends Model {
-
     @Expose
-    private String details;
+    private String name;
     @Expose
-    private String difficulty;
-    @Expose
-    private Date expires;
+    private String desc;
     @Expose
     private Job job;
+    @SerializedName("task_type")
     @Expose
     private Type type;
-
-    public String getDetails() {
-        return details;
-    }
-
-    public void setDetails(String details) {
-        this.details = details;
-    }
-
-    public Double getDifficulty() {
-        return Double.parseDouble(difficulty);
-    }
-
-    public void setDifficulty(String difficulty) {
-        this.difficulty = difficulty;
-    }
-
-    public Date getExpires() {
-        return expires;
-    }
-
-    public void setExpires(Date expires) {
-        this.expires = expires;
-    }
 
     public Job getJob() {
         return job;

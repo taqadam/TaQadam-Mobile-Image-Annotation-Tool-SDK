@@ -172,7 +172,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             UserAuthHandler.getInstance().logout().addOnSuccessListener(this, new OnSuccessListener<SuccessResponse>() {
                 @Override
                 public void onSuccess(SuccessResponse successResponse) {
-                    Toast.makeText(MainActivity.this, successResponse.getMessage(), Toast.LENGTH_LONG).show();
+                    if (successResponse != null) {
+                        Toast.makeText(MainActivity.this, successResponse.getMessage(), Toast.LENGTH_LONG).show();
+                    }
                     startActivity(new Intent(MainActivity.this, SigninActivity.class));
                     finish();
                 }

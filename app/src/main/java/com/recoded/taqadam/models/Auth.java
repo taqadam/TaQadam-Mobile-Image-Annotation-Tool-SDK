@@ -8,7 +8,8 @@ import javax.annotation.Generated;
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
 public class Auth {
-
+    @Expose
+    private String error;
     @Expose
     private User user;
     @Expose
@@ -29,5 +30,13 @@ public class Auth {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
     }
 }

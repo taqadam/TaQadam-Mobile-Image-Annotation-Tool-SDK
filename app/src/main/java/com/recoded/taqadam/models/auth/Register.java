@@ -4,14 +4,14 @@ import com.google.gson.annotations.Expose;
 
 public class Register {
     @Expose
-    public String name;
+    public String username;
     @Expose
     public String email;
     @Expose
     public String password;
 
-    public Register(String name, String email, String password) {
-        this.name = name;
+    public Register(String username, String email, String password) {
+        this.username = username;
         this.email = email;
         this.password = password;
     }

@@ -71,6 +71,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -136,7 +137,7 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
     private boolean isRefreshingImage = false;
     private boolean continuesDrawing = true;
     private long mTotalSessionTime;
-	private boolean isLoadingImage = false;
+    private boolean isLoadingImage = false;
 
     //region buttons
     private ToggleButton regionLock;
@@ -188,7 +189,7 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
             try {
                 String dataString = mCurrentAnswer.getData();
                 dataString = dataString.replace("\\", "");
-                dataString = dataString.substring(1, dataString.length()-1);
+                dataString = dataString.substring(1, dataString.length() - 1);
                 JSONObject data = new JSONObject(dataString);
 
                 JSONArray regionsJson = data.optJSONArray("regions");
@@ -244,7 +245,8 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
 
     private Answer getAnswer() {
         if (mCurrentAnswer == null) return null;
-        if (mCurrentAnswer.getAssignmentId() == null || mCurrentAnswer.getTaskId() == null) return null;
+        if (mCurrentAnswer.getAssignmentId() == null || mCurrentAnswer.getTaskId() == null)
+            return null;
         mCurrentAnswer.setStartedAt(startedAt);
         mCurrentAnswer.setTimeTaken(mTimeTaken);
         List<Region> regions = mDrawingView.getNormalizedRegions();
@@ -589,7 +591,7 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
     }
 
     private void toggleLoader(boolean show) {
-		isLoadingImage = show;
+        isLoadingImage = show;
         if (show) {
             mLoadingIndicator.setVisibility(View.VISIBLE);
             mDrawingView.setActive(false);
@@ -879,14 +881,14 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
     }
 
     private void refreshImage() {
-		if(isLoadingImage) return;
+        if (isLoadingImage) return;
         isRefreshingImage = true;
         loadTask(mTaskIndex);
     }
 
     @Override
     public void onDrawingFinished(Region drawnRegion, int index) {
-		if(!continuesDrawing) openRegions();
+        if (!continuesDrawing) openRegions();
     }
 
     @Override

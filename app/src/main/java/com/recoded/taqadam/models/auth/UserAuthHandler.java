@@ -86,10 +86,14 @@ public class UserAuthHandler {
             @Override
             public void onResponse(@NonNull Call<Auth> call, @NonNull retrofit2.Response<Auth> response) {
                 Auth auth = response.body();
-                UserAuthHandler.this.auth = auth;
-                Api.initiate(auth);
-                UserAuthHandler.this.saveToken(auth);
-                task.setResult(auth.getUser());
+                if (auth != null) {
+                    UserAuthHandler.this.auth = auth;
+                    Api.initiate(auth);
+                    UserAuthHandler.this.saveToken(auth);
+                    task.setResult(auth.getUser());
+                } else {
+                    task.setException(new ApiError(response.code(), "Unable to log in with provided credentials"));
+                }
             }
 
             @Override
@@ -107,26 +111,6 @@ public class UserAuthHandler {
     }
 
     public Task<User> login(AccessToken token) {
-        /*final TaskCompletionSource<User> task = new TaskCompletionSource<>();
-
-        Call<Auth> call = Api.getInstance().endpoints.login("","");
-        call.enqueue(new Callback<Auth>() {
-            @Override
-            public void onResponse(@NonNull Call<Auth> call, @NonNull retrofit2.Response<Auth> response) {
-                Auth auth = response.body();
-                UserAuthHandler.this.auth = auth;
-                Api.initiate(auth);
-                UserAuthHandler.this.saveToken(auth);
-                task.setResult(auth.getUser());
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<Auth> call, @NonNull Throwable t) {
-                if(t instanceof ApiError) {                    task.setException((ApiError) t);                } else {                    Crashlytics.logException(t);                    task.setException(new ApiError(500, "Unknown error occurred!"));                }
-            }
-        });
-
-        return task.getTask();*/
         return null;
     }
 
@@ -137,8 +121,11 @@ public class UserAuthHandler {
         call.enqueue(new Callback<Auth>() {
             @Override
             public void onResponse(@NonNull Call<Auth> call, @NonNull Response<Auth> response) {
-                UserAuthHandler.this.auth = response.body();
-                task.setResult(response.body());
+                Auth auth = response.body();
+                if (auth != null) {
+                    UserAuthHandler.this.auth = auth;
+                    task.setResult(auth);
+                }
             }
 
             @Override
@@ -162,11 +149,16 @@ public class UserAuthHandler {
         call.enqueue(new Callback<Auth>() {
             @Override
             public void onResponse(@NonNull Call<Auth> call, @NonNull retrofit2.Response<Auth> response) {
-                Auth auth = response.body();
-                UserAuthHandler.this.auth = auth;
-                Api.initiate(auth);
-                UserAuthHandler.this.saveToken(auth);
-                task.setResult(auth.getUser());
+                int code = response.code();
+                if (code == 200) {
+                    Auth auth = response.body();
+                    UserAuthHandler.this.auth = auth;
+                    Api.initiate(auth);
+                    UserAuthHandler.this.saveToken(auth);
+                    task.setResult(auth.getUser());
+                } else {
+                    task.setException(new ApiError(code, "Email or username exist"));
+                }
             }
 
             @Override
@@ -234,7 +226,6 @@ public class UserAuthHandler {
         if (this.sharedPreferences != null) {
             SharedPreferences.Editor editor = this.sharedPreferences.edit();
             editor.remove("token");
-            editor.remove("token_type");
             editor.commit();
         }
     }

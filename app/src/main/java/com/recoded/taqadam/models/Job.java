@@ -20,10 +20,6 @@ public class Job extends Model {
     @Expose
     private List<String> options;
     @Expose
-    private User owner;
-    @Expose
-    private String requiredBefore;
-    @Expose
     private Service service;
     @Expose
     private String title;
@@ -58,22 +54,6 @@ public class Job extends Model {
 
     public void setOptions(List<String> options) {
         this.options = options;
-    }
-
-    public User getOwner() {
-        return owner;
-    }
-
-    public void setOwner(User owner) {
-        this.owner = owner;
-    }
-
-    public String getRequiredBefore() {
-        return requiredBefore;
-    }
-
-    public void setRequiredBefore(String requiredBefore) {
-        this.requiredBefore = requiredBefore;
     }
 
     public Service getService() {

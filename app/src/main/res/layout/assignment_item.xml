@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -8,9 +10,7 @@
             type="com.recoded.taqadam.models.Assignment" />
     </data>
 
-    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
@@ -69,13 +69,12 @@
                 <TextView
                     android:id="@+id/images_count"
                     android:layout_width="wrap_content"
-                    android:visibility="invisible"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:background="@color/colorPwStrong"
                     android:padding="8dp"
-                    android:text="@{String.format(@string/job_item_tasks, String.valueOf(safeUnbox(Assignment.job.dataset.size)))}"
                     android:textColor="@color/colorWhite"
+                    android:visibility="invisible"
                     tools:text="8000" />
 
                 <ImageView

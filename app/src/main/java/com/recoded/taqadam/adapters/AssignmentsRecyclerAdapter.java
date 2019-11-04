@@ -40,6 +40,7 @@ public class AssignmentsRecyclerAdapter extends RecyclerView.Adapter<Assignments
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Assignment assignment = dataset.get(position);
         holder.binding.setAssignment(assignment);
+        holder.binding.imagesCount.setText(assignment.getJob().getDataset().getSize().toString());
         holder.binding.jobReward.setImageResource(assignment.getJob().getService().getTypeOfService().getDrawable());
         holder.binding.getRoot().setOnClickListener(new View.OnClickListener() {
             @Override
