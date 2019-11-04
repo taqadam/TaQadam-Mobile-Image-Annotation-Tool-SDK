@@ -86,7 +86,7 @@
         <activity android:name=".activities.HelpActivity" />
         <activity android:name=".activities.PostsFeedActivity" />
         <activity android:name=".activities.PostViewerActivity" />
-        <activity android:name=".activities.WorkActivity"/>
+        <activity android:name=".activities.workActivity.WorkActivity"/>
     </application>
 
 </manifest>

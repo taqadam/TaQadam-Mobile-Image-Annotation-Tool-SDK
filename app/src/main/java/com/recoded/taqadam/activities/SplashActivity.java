@@ -34,7 +34,7 @@ import com.recoded.taqadam.utils.Theme;
 import com.recoded.taqadam.models.Api.Api;
 import com.recoded.taqadam.models.Api.ApiError;
 import com.recoded.taqadam.models.AppVersion;
-import com.recoded.taqadam.models.User;
+import com.recoded.taqadam.objects.User;
 import com.recoded.taqadam.models.auth.UserAuthHandler;
 
 import java.util.List;

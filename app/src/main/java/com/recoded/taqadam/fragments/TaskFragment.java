@@ -7,9 +7,9 @@ import androidx.fragment.app.Fragment;
 import android.util.DisplayMetrics;
 
 import com.recoded.taqadam.models.Answer;
-import com.recoded.taqadam.models.Assignment;
+import com.recoded.taqadam.objects.Assignment;
 import com.recoded.taqadam.models.Service;
-import com.recoded.taqadam.models.Task;
+import com.recoded.taqadam.objects.Task;
 
 import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 

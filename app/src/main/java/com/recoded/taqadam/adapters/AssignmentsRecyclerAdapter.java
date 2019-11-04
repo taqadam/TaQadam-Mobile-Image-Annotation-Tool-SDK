@@ -9,9 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.recoded.taqadam.R;
-import com.recoded.taqadam.activities.WorkActivity;
+import com.recoded.taqadam.activities.workActivity.WorkActivity;
 import com.recoded.taqadam.databinding.AssignmentItemBinding;
-import com.recoded.taqadam.models.Assignment;
+import com.recoded.taqadam.objects.Assignment;
 
 import java.util.ArrayList;
 import java.util.List;

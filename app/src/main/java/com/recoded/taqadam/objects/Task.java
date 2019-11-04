@@ -1,36 +1,24 @@
 
-package com.recoded.taqadam.models;
+package com.recoded.taqadam.objects;
 
 import android.net.Uri;
 
 import com.google.gson.annotations.Expose;
+import com.recoded.taqadam.models.Answer;
+import com.recoded.taqadam.models.Api.Api;
+import com.recoded.taqadam.models.Model;
 
 import javax.annotation.Generated;
 
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
 public class Task extends Model {
-
-    @Expose
-    private String etag;
     @Expose
     private String fileName;
-    @Expose
-    private String key;
-    @Expose
-    private Long size;
     @Expose
     private String url;
     @Expose
     private Answer answer;
-
-    public String getEtag() {
-        return etag;
-    }
-
-    public void setEtag(String etag) {
-        this.etag = etag;
-    }
 
     public String getFileName() {
         return fileName;
@@ -40,24 +28,8 @@ public class Task extends Model {
         this.fileName = fileName;
     }
 
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public Long getSize() {
-        return size;
-    }
-
-    public void setSize(Long size) {
-        this.size = size;
-    }
-
     public Uri getUrl() {
-        return Uri.parse(url);
+        return Uri.parse(Api.MEDIA_ROOT + url);
     }
 
     public void setUrl(String url) {

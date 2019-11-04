@@ -25,7 +25,7 @@ import com.recoded.taqadam.views.LockableViewPager;
 import com.recoded.taqadam.adapters.MainPagerAdapter;
 import com.recoded.taqadam.R;
 import com.recoded.taqadam.models.Responses.SuccessResponse;
-import com.recoded.taqadam.models.User;
+import com.recoded.taqadam.objects.User;
 import com.recoded.taqadam.models.auth.UserAuthHandler;
 import com.squareup.picasso.Picasso;
 

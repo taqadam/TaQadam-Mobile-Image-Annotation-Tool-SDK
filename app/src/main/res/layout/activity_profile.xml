@@ -8,7 +8,7 @@
 
         <variable
             name="User"
-            type="com.recoded.taqadam.models.User"/>
+            type="com.recoded.taqadam.objects.User"/>
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

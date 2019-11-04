@@ -20,7 +20,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.recoded.taqadam.R;
 import com.recoded.taqadam.models.Api.ApiError;
-import com.recoded.taqadam.models.User;
+import com.recoded.taqadam.objects.User;
 import com.recoded.taqadam.models.auth.UserAuthHandler;
 
 public class SigninActivity extends BaseActivity {

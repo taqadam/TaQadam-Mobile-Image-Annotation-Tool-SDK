@@ -25,9 +25,9 @@ import com.recoded.taqadam.databinding.ActivityAssignmentBinding;
 import com.recoded.taqadam.models.Answer;
 import com.recoded.taqadam.models.Api.Api;
 import com.recoded.taqadam.models.Api.ApiError;
-import com.recoded.taqadam.models.Assignment;
+import com.recoded.taqadam.objects.Assignment;
 import com.recoded.taqadam.models.Responses.PaginatedResponse;
-import com.recoded.taqadam.models.Task;
+import com.recoded.taqadam.objects.Task;
 
 import java.util.Date;
 

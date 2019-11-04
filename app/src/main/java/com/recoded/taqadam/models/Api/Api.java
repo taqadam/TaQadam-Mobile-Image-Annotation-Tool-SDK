@@ -2,7 +2,6 @@ package com.recoded.taqadam.models.Api;
 
 import android.net.Uri;
 import androidx.annotation.NonNull;
-import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.tasks.Task;
@@ -10,23 +9,17 @@ import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.GsonBuilder;
 import com.recoded.taqadam.BuildConfig;
-import com.recoded.taqadam.models.Auth;
+import com.recoded.taqadam.objects.Auth;
 import com.recoded.taqadam.models.Comment;
 import com.recoded.taqadam.models.Post;
 import com.recoded.taqadam.models.Profile;
 import com.recoded.taqadam.models.Responses.AvatarResponse;
-import com.recoded.taqadam.models.User;
+import com.recoded.taqadam.objects.User;
 import com.recoded.taqadam.models.auth.UserAuthHandler;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import okhttp3.Interceptor;
@@ -36,7 +29,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
@@ -44,16 +36,19 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Api {
     public static final String TAG = Api.class.getSimpleName();
+
+    public static final String MEDIA_ROOT = "http://192.168.0.101:8000/media/";
+
     public static final String BASE = "http://192.168.0.101:8000/api/";
     public static final String LOGIN = "user/login";
     public static final String REGISTER = "user/mobile/register";
     public static final String REFRESH = "user/refresh";
+    public static final String ASSIGNMENTS = "user/assignments";
 
     public static final String AVATARS = "avatars";
     public static final String LOGOUT = "user/logout";
     public static final String USERS = "users";
     public static final String ME = "me";
-    public static final String ASSIGNMENTS = "user/assignments";
     public static final String TASKS = "tasks";
     public static final String ANSWERS = "answers";
     public static final String DATE_FORMAT = "yyyy-MM-dd";

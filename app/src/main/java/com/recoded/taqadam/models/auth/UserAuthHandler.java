@@ -12,9 +12,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
 import com.recoded.taqadam.models.Api.Api;
 import com.recoded.taqadam.models.Api.ApiError;
-import com.recoded.taqadam.models.Auth;
+import com.recoded.taqadam.objects.Auth;
 import com.recoded.taqadam.models.Responses.SuccessResponse;
-import com.recoded.taqadam.models.User;
+import com.recoded.taqadam.objects.User;
 
 import retrofit2.Call;
 import retrofit2.Callback;

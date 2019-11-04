@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import com.recoded.taqadam.R;
 import com.recoded.taqadam.databinding.ActivityProfileBinding;
-import com.recoded.taqadam.models.User;
+import com.recoded.taqadam.objects.User;
 import com.recoded.taqadam.models.auth.UserAuthHandler;
 import com.squareup.picasso.Picasso;
 

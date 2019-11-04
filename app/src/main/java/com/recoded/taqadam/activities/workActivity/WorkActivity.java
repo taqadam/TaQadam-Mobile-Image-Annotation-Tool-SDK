@@ -1,4 +1,4 @@
-package com.recoded.taqadam.activities;
+package com.recoded.taqadam.activities.workActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,14 +38,14 @@ import com.recoded.taqadam.fragments.RegionAttributesFragment;
 import com.recoded.taqadam.models.Answer;
 import com.recoded.taqadam.models.Api.Api;
 import com.recoded.taqadam.models.Api.ApiError;
-import com.recoded.taqadam.models.Assignment;
+import com.recoded.taqadam.objects.Assignment;
 import com.recoded.taqadam.models.ImageFlag;
 import com.recoded.taqadam.models.Label;
 import com.recoded.taqadam.models.Link;
 import com.recoded.taqadam.models.ProgressDetails;
 import com.recoded.taqadam.models.Region;
 import com.recoded.taqadam.models.Responses.PaginatedResponse;
-import com.recoded.taqadam.models.Task;
+import com.recoded.taqadam.objects.Task;
 import com.recoded.taqadam.models.db.AnswersDatabase;
 import com.recoded.taqadam.views.DrawingView;
 import com.squareup.picasso.Picasso;
@@ -396,15 +397,15 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
                 mDrawingView.setImageRect(new RectF(0, 0, currentImageWidth, currentImageHeight));
                 mPhotoView.setImageBitmap(bitmap);
                 toggleLoader(false);
-                setTitle(String.format(getString(R.string.job_activity_title), mTaskCounter, mTasks.meta.total));
-                if (!isRefreshingImage) {
-                    prepareForNewTask();
-                    if (toBeAddedRegions != null)
-                        mDrawingView.addRegions(toBeAddedRegions);
-                    toBeAddedRegions = null;
-                } else {
-                    isRefreshingImage = false;
-                }
+//                setTitle(String.format(getString(R.string.job_activity_title), mTaskCounter, mTasks.meta.total));
+//                if (!isRefreshingImage) {
+//                    prepareForNewTask();
+//                    if (toBeAddedRegions != null)
+//                        mDrawingView.addRegions(toBeAddedRegions);
+//                    toBeAddedRegions = null;
+//                } else {
+//                    isRefreshingImage = false;
+//                }
             }
 
             @Override
@@ -453,8 +454,8 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
 
         restoreState(savedInstanceState);
 
-        loadTasks();
-
+//        loadTasks();
+        loadTaskWithProjectId(assignment.getId());
     }
 
     private void initDatabase() {
@@ -690,6 +691,28 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
         }
     }
 
+    private void loadTaskWithProjectId(long projectId) {
+        Call<Task> call = Api.getInstance().endpoints.getTask(projectId);
+        call.enqueue(new Callback<Task>() {
+            @Override
+            public void onResponse(Call<Task> call, Response<Task> response) {
+                Task task = response.body();
+                if (task != null) {
+                    loadImageToView(task.getUrl());
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Task> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void loadImageToView(Uri url) {
+        Picasso.with(this).load(url).into((Target) mPhotoView.getTag());
+    }
 
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {

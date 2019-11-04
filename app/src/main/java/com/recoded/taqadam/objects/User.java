@@ -1,9 +1,14 @@
 
-package com.recoded.taqadam.models;
+package com.recoded.taqadam.objects;
 
 import android.util.Log;
 
 import com.google.gson.annotations.Expose;
+import com.recoded.taqadam.models.Channel;
+import com.recoded.taqadam.models.FacebookUser;
+import com.recoded.taqadam.models.Model;
+import com.recoded.taqadam.models.Profile;
+import com.recoded.taqadam.models.Team;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

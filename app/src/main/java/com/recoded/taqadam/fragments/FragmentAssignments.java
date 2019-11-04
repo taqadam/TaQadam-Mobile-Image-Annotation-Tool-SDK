@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,7 @@ import android.widget.ProgressBar;
 import com.recoded.taqadam.adapters.AssignmentsRecyclerAdapter;
 import com.recoded.taqadam.R;
 import com.recoded.taqadam.models.Api.Api;
-import com.recoded.taqadam.models.Assignment;
+import com.recoded.taqadam.objects.Assignment;
 
 import java.io.Serializable;
 import java.util.List;

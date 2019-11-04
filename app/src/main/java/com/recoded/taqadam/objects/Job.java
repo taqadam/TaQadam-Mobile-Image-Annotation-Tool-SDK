@@ -1,7 +1,10 @@
 
-package com.recoded.taqadam.models;
+package com.recoded.taqadam.objects;
 
 import com.google.gson.annotations.Expose;
+import com.recoded.taqadam.models.Dataset;
+import com.recoded.taqadam.models.Model;
+import com.recoded.taqadam.models.Service;
 
 import java.util.List;
 

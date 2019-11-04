@@ -52,7 +52,7 @@ import com.recoded.taqadam.models.Api.ApiError;
 import com.recoded.taqadam.models.Api.InvalidException;
 import com.recoded.taqadam.models.Error;
 import com.recoded.taqadam.models.Profile;
-import com.recoded.taqadam.models.User;
+import com.recoded.taqadam.objects.User;
 import com.recoded.taqadam.models.auth.UserAuthHandler;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;

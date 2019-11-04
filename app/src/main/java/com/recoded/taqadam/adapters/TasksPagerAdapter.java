@@ -5,9 +5,9 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import android.view.ViewGroup;
 
 import com.recoded.taqadam.fragments.TaskFragment;
-import com.recoded.taqadam.models.Assignment;
+import com.recoded.taqadam.objects.Assignment;
 import com.recoded.taqadam.models.Service;
-import com.recoded.taqadam.models.Task;
+import com.recoded.taqadam.objects.Task;
 
 import java.util.ArrayList;
 import java.util.List;

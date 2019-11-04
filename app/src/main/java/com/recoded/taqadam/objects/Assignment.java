@@ -1,8 +1,9 @@
 
-package com.recoded.taqadam.models;
+package com.recoded.taqadam.objects;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.recoded.taqadam.models.Model;
 
 import javax.annotation.Generated;
 

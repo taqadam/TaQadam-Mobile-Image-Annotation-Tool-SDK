@@ -1,18 +1,17 @@
 package com.recoded.taqadam.models.Api;
 
 import com.recoded.taqadam.models.Answer;
-import com.recoded.taqadam.models.Api.Api;
 import com.recoded.taqadam.models.AppVersion;
-import com.recoded.taqadam.models.Assignment;
-import com.recoded.taqadam.models.Auth;
+import com.recoded.taqadam.objects.Assignment;
+import com.recoded.taqadam.objects.Auth;
 import com.recoded.taqadam.models.Comment;
 import com.recoded.taqadam.models.Post;
 import com.recoded.taqadam.models.Profile;
 import com.recoded.taqadam.models.Responses.AvatarResponse;
 import com.recoded.taqadam.models.Responses.PaginatedResponse;
 import com.recoded.taqadam.models.Responses.SuccessResponse;
-import com.recoded.taqadam.models.Task;
-import com.recoded.taqadam.models.User;
+import com.recoded.taqadam.objects.Task;
+import com.recoded.taqadam.objects.User;
 import com.recoded.taqadam.models.auth.Login;
 import com.recoded.taqadam.models.auth.Register;
 
@@ -44,6 +43,17 @@ public interface ApiEndpoints {
     @POST(Api.REFRESH)
     Call<Auth> refresh();
 
+    //Logout
+    @POST(Api.LOGOUT)
+    Call<SuccessResponse> logout();
+
+    //assignments
+    @GET(Api.ASSIGNMENTS)
+    Call<List<Assignment>> getAssignments();
+
+    @POST(Api.ASSIGNMENTS + "/{assignmentId}/task")
+    Call<Task> getTask(@Path("assignmentId") Long assignmentId);
+
     //Post photo
     @Multipart
     @POST(Api.AVATARS)
@@ -57,13 +67,7 @@ public interface ApiEndpoints {
     @PUT(Api.ME)
     Call<User> putProfile(@Body Profile profile);
 
-    //Logout
-    @POST(Api.LOGOUT)
-    Call<SuccessResponse> logout();
 
-    //assignments
-    @GET(Api.ASSIGNMENTS)
-    Call<List<Assignment>> getAssignments();
 
     //one assignment
     @GET(Api.ASSIGNMENTS + "/{assignmentId}")

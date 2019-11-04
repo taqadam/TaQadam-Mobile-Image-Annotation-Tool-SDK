@@ -7,7 +7,7 @@
 
         <variable
             name="Assignment"
-            type="com.recoded.taqadam.models.Assignment" />
+            type="com.recoded.taqadam.objects.Assignment" />
     </data>
 
     <androidx.cardview.widget.CardView
