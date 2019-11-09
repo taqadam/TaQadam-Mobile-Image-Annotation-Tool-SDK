@@ -72,13 +72,9 @@ public class RegisterActivity extends BaseActivity {
         mAuth = UserAuthHandler.getInstance();
         //TODO-wisam: add a reloader for user on applictaion start
         if (mAuth.getCurrentUser() != null) {
-            if (mAuth.getCurrentUser().getProfile() == null) {
-                startActivity(new Intent(this, ConfirmProfileActivity.class));
-            } else {
-                Intent i = new Intent(this, MainActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                startActivity(i);
-            }
+            Intent i = new Intent(this, MainActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            startActivity(i);
             finish();
         }
 
@@ -164,13 +160,9 @@ public class RegisterActivity extends BaseActivity {
             public void onSuccess(User user) {
                 mCreatingAccountProgressDialog.dismiss();
                 // Sign up success, update UI with the signed-in user's information
-                if (user.getProfile() == null) {
-                    startActivity(new Intent(RegisterActivity.this, ConfirmProfileActivity.class));
-                } else {
-                    Intent i = new Intent(RegisterActivity.this, MainActivity.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                    startActivity(i);
-                }
+                Intent i = new Intent(RegisterActivity.this, MainActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(i);
                 finish();
             }
         }).addOnFailureListener(this, new OnFailureListener() {
@@ -216,82 +208,6 @@ public class RegisterActivity extends BaseActivity {
                     }
 
                     indicateErrors((ApiError) e);
-                    /*
-                    if (ex.getErrors() == AuthSignUpException.EMAIL_ASSOC_FB_PW_WRONG) {
-                        //if this email is associated with both password and fb, he can sign in with fb or reset password
-                        db.setMessage(R.string.allready_registed_email_errorm);
-                        db.setPositiveButton(R.string.sign_in_with_facebook, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                bFbLogin.performClick();
-                            }
-                        });
-                        db.setNeutralButton(R.string.forgot_password_action, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                //TODO: implement the intent to pw reset activity
-                                dialog.dismiss();
-                                resetPassword(email);
-                            }
-                        });
-                        db.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-
-                        db.create().show();
-
-                    } else if (ex.getErrorCode() == AuthSignUpException.PW_WRONG) {
-                        //else if associated with only password means he already signed up. show him only reset pw
-                        db.setMessage(R.string.already_registed_signin_errorm);
-                        db.setPositiveButton(R.string.sign_in, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                bSignin.performClick();
-                            }
-                        });
-                        db.setNeutralButton(R.string.forgot_password_action, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                //TODO: implement the intent to pw reset activity
-                                dialog.dismiss();
-                                resetPassword(email);
-                            }
-                        });
-                        db.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-
-                        db.create().show();
-
-                    } else if (ex.getErrorCode() == AuthSignUpException.EMAIL_ASSOC_FB) {
-                        //else if associated with fb only, offer him to signin with fb
-                        db.setMessage(R.string.signin_facebook_instead_errorm);
-                        db.setPositiveButton(R.string.signin_facebook, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                bFbLogin.performClick();
-                            }
-                        });
-
-                        db.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-
-                        db.create().show();
-                    }
-                    */
 
                 } else if (e instanceof ApiError){
                     Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
@@ -319,13 +235,9 @@ public class RegisterActivity extends BaseActivity {
             public void onSuccess(User user) {
                 mCreatingAccountProgressDialog.dismiss();
                 // Sign up success, update UI with the signed-in user's information
-                if (user.getProfile() == null) {
-                    startActivity(new Intent(RegisterActivity.this, ConfirmProfileActivity.class));
-                } else {
-                    Intent i = new Intent(RegisterActivity.this, MainActivity.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                    startActivity(i);
-                }
+                Intent i = new Intent(RegisterActivity.this, MainActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(i);
                 finish();
             }
         }).addOnFailureListener(this, new OnFailureListener() {

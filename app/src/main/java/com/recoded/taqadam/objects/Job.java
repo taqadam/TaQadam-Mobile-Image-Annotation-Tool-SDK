@@ -2,6 +2,7 @@
 package com.recoded.taqadam.objects;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import com.recoded.taqadam.models.Dataset;
 import com.recoded.taqadam.models.Model;
 import com.recoded.taqadam.models.Service;
@@ -26,6 +27,18 @@ public class Job extends Model {
     private Service service;
     @Expose
     private String title;
+    @Expose
+    @SerializedName("total_image")
+    private int totalImage;
+    @Expose
+    @SerializedName("total_annotated_image")
+    private int totalAnnotatedImage;
+    @Expose
+    @SerializedName("total_locked_image")
+    private int totalLockedImage;
+    @Expose
+    @SerializedName("total_validated_image")
+    private int totalValidatedimage;
 
     public Dataset getDataset() {
         return dataset;
@@ -75,4 +88,35 @@ public class Job extends Model {
         this.title = title;
     }
 
+    public int getTotalImage() {
+        return totalImage;
+    }
+
+    public void setTotalImage(int totalImage) {
+        this.totalImage = totalImage;
+    }
+
+    public int getTotalAnnotatedImage() {
+        return totalAnnotatedImage;
+    }
+
+    public void setTotalAnnotatedImage(int totalAnnotatedImage) {
+        this.totalAnnotatedImage = totalAnnotatedImage;
+    }
+
+    public int getTotalLockedImage() {
+        return totalLockedImage;
+    }
+
+    public void setTotalLockedImage(int totalLockedImage) {
+        this.totalLockedImage = totalLockedImage;
+    }
+
+    public int getTotalValidatedimage() {
+        return totalValidatedimage;
+    }
+
+    public void setTotalValidatedimage(int totalValidatedimage) {
+        this.totalValidatedimage = totalValidatedimage;
+    }
 }

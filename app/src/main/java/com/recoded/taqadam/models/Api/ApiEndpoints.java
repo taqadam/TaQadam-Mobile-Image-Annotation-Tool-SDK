@@ -51,8 +51,22 @@ public interface ApiEndpoints {
     @GET(Api.ASSIGNMENTS)
     Call<List<Assignment>> getAssignments();
 
-    @POST(Api.ASSIGNMENTS + "/{assignmentId}/task")
+    @GET(Api.ASSIGNMENTS + "/{assignmentId}/task")
     Call<Task> getTask(@Path("assignmentId") Long assignmentId);
+
+    //post answer
+    @POST(Api.ASSIGNMENTS + "/{assignmentId}/answer")
+    Call<SuccessResponse> postAnswer(@Path("assignmentId") Long assignmentId, @Body Answer answer);
+
+    @GET("user/skip/{taskId}")
+    Call<SuccessResponse> skipTask(@Path("taskId") Long taskId);
+
+    @GET("user/validate/{taskId}")
+    Call<SuccessResponse> validateTask(@Path("taskId") Long taskId);
+
+    @GET("user/reject/{taskId}")
+    Call<SuccessResponse> rejectTask(@Path("taskId") Long taskId);
+
 
     //Post photo
     @Multipart
@@ -79,9 +93,7 @@ public interface ApiEndpoints {
     @GET(Api.ASSIGNMENTS + "/{assignmentId}/" + Api.TASKS)
     Call<PaginatedResponse<Task>> getTasksPaginated(@Path("assignmentId") Long assignmentId, @Query("page") Long page);
 
-    //post answer
-    @POST(Api.ASSIGNMENTS + "/{assignmentId}/" + Api.ANSWERS)
-    Call<Answer> postAnswer(@Path("assignmentId") Long assignmentId, @Body Answer answer);
+
 
     //get all posts
     @GET(Api.POSTS)

@@ -10,6 +10,9 @@ import javax.annotation.Generated;
 @Generated("net.hexar.json2pojo")
 @SuppressWarnings("unused")
 public class Assignment extends Model {
+    private static final int ROLE_ANNOTATOR = 0;
+    private static final int ROLE_QA = 1;
+
     @Expose
     private String name;
     @Expose
@@ -19,6 +22,9 @@ public class Assignment extends Model {
     @SerializedName("task_type")
     @Expose
     private Type type;
+    @SerializedName("member_role")
+    @Expose
+    private int memberRole;
 
     public Job getJob() {
         return job;
@@ -34,5 +40,13 @@ public class Assignment extends Model {
 
     public void setType(Type type) {
         this.type = type;
+    }
+
+    public boolean forAnnotator() {
+        return memberRole == ROLE_ANNOTATOR;
+    }
+
+    public boolean forValidator() {
+        return memberRole == ROLE_QA;
     }
 }

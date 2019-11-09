@@ -25,6 +25,7 @@ import com.recoded.taqadam.databinding.ActivityAssignmentBinding;
 import com.recoded.taqadam.models.Answer;
 import com.recoded.taqadam.models.Api.Api;
 import com.recoded.taqadam.models.Api.ApiError;
+import com.recoded.taqadam.models.Responses.SuccessResponse;
 import com.recoded.taqadam.objects.Assignment;
 import com.recoded.taqadam.models.Responses.PaginatedResponse;
 import com.recoded.taqadam.objects.Task;
@@ -269,17 +270,15 @@ public class AssignmentActivity extends BaseActivity {
     public boolean postAnswer(Answer answer) {
         if (answer.getData() != null && !answer.getData().isEmpty()) {
             final Long assignmentId = answer.getAssignmentId();
-
-            answer.setSubmittedAt(new Date().getTime());
-            Call<Answer> call = Api.getInstance().endpoints.postAnswer(assignmentId, answer);
-            call.enqueue(new Callback<Answer>() {
+            Call<SuccessResponse> call = Api.getInstance().endpoints.postAnswer(assignmentId, answer);
+            call.enqueue(new Callback<SuccessResponse>() {
                 @Override
-                public void onResponse(Call<Answer> call, Response<Answer> response) {
+                public void onResponse(Call<SuccessResponse> call, Response<SuccessResponse> response) {
 
                 }
 
                 @Override
-                public void onFailure(Call<Answer> call, Throwable t) {
+                public void onFailure(Call<SuccessResponse> call, Throwable t) {
 
                 }
             });

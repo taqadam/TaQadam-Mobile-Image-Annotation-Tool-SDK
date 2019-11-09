@@ -4,6 +4,7 @@ package com.recoded.taqadam.objects;
 import android.net.Uri;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import com.recoded.taqadam.models.Answer;
 import com.recoded.taqadam.models.Api.Api;
 import com.recoded.taqadam.models.Model;
@@ -42,5 +43,9 @@ public class Task extends Model {
 
     public Answer getAnswer() {
         return answer;
+    }
+
+    public String getRealUrl() {
+        return url;
     }
 }

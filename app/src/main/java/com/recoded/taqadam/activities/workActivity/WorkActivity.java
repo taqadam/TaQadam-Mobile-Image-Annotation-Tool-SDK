@@ -1,5 +1,6 @@
 package com.recoded.taqadam.activities.workActivity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -8,6 +9,7 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,29 +26,25 @@ import android.widget.ToggleButton;
 import com.crashlytics.android.Crashlytics;
 import com.github.chrisbanes.photoview.OnMatrixChangedListener;
 import com.github.chrisbanes.photoview.PhotoView;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.android.material.navigation.NavigationView;
 import com.recoded.taqadam.fragments.DetailsFragmentBottomSheet;
 import com.recoded.taqadam.dialogs.FlagImageDialog;
 import com.recoded.taqadam.R;
+import com.recoded.taqadam.models.Responses.SuccessResponse;
+import com.recoded.taqadam.utils.Preference;
 import com.recoded.taqadam.utils.Utils;
 import com.recoded.taqadam.adapters.FlagsAdapter;
 import com.recoded.taqadam.adapters.LabelsAdapter;
 import com.recoded.taqadam.fragments.RegionAttributesFragment;
 import com.recoded.taqadam.models.Answer;
 import com.recoded.taqadam.models.Api.Api;
-import com.recoded.taqadam.models.Api.ApiError;
 import com.recoded.taqadam.objects.Assignment;
 import com.recoded.taqadam.models.ImageFlag;
 import com.recoded.taqadam.models.Label;
 import com.recoded.taqadam.models.Link;
 import com.recoded.taqadam.models.ProgressDetails;
 import com.recoded.taqadam.models.Region;
-import com.recoded.taqadam.models.Responses.PaginatedResponse;
 import com.recoded.taqadam.objects.Task;
-import com.recoded.taqadam.models.db.AnswersDatabase;
 import com.recoded.taqadam.views.DrawingView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -56,11 +54,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -70,14 +64,13 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class WorkActivity extends AppCompatActivity implements DrawingView.OnDrawingFinished, DrawingView.OnRegionSelected {
+    private String TAG = WorkActivity.class.getSimpleName();
 
     static final float MAX_SCALE = 16f;
     static final float MIN_SCALE = 0.95f;
@@ -87,28 +80,15 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
     private static final String REGIONS_LINKS = "links";
     private static final String IMAGE_FLAGS = "flags";
     private static final String TOOL = "drawing_tool";
-    private static final String TIME_TAKEN = "time_taken";
     private static final String TOTAL_TIME = "total_time";
-    private static final String STARTED_AT = "started_at";
     private static final String ENDLESS_DRAWING = "endless_drawing";
-    private static final String SKIPPED_TASKS = "skipped_tasks";
 
     //Per assignment
     private Assignment assignment;
-    private PaginatedResponse<Task> mTasks;
-    private PaginatedResponse<Task> mMoreTasks;
-    private long mTaskCounter = 1;
-    private Long mCurrentPage = 1L;
-    private List<Long> skippedTasks = new ArrayList<>();
 
     //per task
-    private int mTaskIndex = 0; //currentTaskIndex
     private List<Region> toBeAddedRegions;
     private int currentImageWidth, currentImageHeight;
-    private long mTimeTaken = 0;
-    private long startedAt = new Date().getTime();
-    private final Timer mTimer = new Timer();
-    private TimerTask mTimerTask;
     private Answer mCurrentAnswer;
     private Task mCurrentTask;
     private List<String> currentImageFlags = new ArrayList<>();
@@ -117,13 +97,12 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
     //General
     private LabelsAdapter labelsAdapter;
     private DrawerLayout mDrawer;
-    private NavigationView mToolsDrawer;
+    private NavigationView mNavigation;
     private Toolbar mToolbar;
     private PhotoView mPhotoView;
     private View mLoadingIndicator;
     private DrawingView mDrawingView;
     private SeekBar mZoomSeeker;
-    private SeekBar mPanYSeeker;
     private SeekBar mPanXSeeker;
     private boolean mZoomEnabled = true;
     private SwitchCompat mZoomToggle;
@@ -134,11 +113,12 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
     private DetailsFragmentBottomSheet detailsDialog;
     private FlagImageDialog flagsDialog;
     private RegionAttributesFragment attributesFragment;
-    private AnswersDatabase db;
-    private boolean isRefreshingImage = false;
     private boolean continuesDrawing = true;
     private long mTotalSessionTime;
     private boolean isLoadingImage = false;
+
+    private Button validate;
+    private Button reject;
 
     //region buttons
     private ToggleButton regionLock;
@@ -146,187 +126,22 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
     private Button regionAttribute;
     private ToggleButton regionLink;
 
-
-    //private RegionsAdapter mRegionsPickerAdapter;
-    //private DSListView<Region> mRegionsPicker;
-    private void prepareForNewTask() {
-        //reset all task related fields
-        mDrawingView.clearAll();
-        currentImageFlags.clear();
-        mCurrentAnswer = new Answer(assignment.getId(), mCurrentTask.getId());
-        loadAnswer();
-        startedAt = new Date().getTime();
-        resetTimer();
-        if (regionLink.isChecked()) regionLink.setChecked(false);
-        if (regionLock.isChecked()) regionLock.setChecked(false);
-    }
-
-    private void loadAnswer() {
-        if (mCurrentTask.getAnswer() != null) {
-            this.mCurrentAnswer = mCurrentTask.getAnswer();
-            parseAnswer();
-        } else {
-            loadAnswerFromDb(mCurrentTask).observe(this, new Observer<List<Answer>>() {
-                @Override
-                public void onChanged(List<Answer> answers) {
-                    if (answers.size() == 0) {
-                        mCurrentAnswer = new Answer(assignment.getId(), mCurrentTask.getId());
-                    } else if (answers.size() == 1) {
-                        mCurrentAnswer = answers.get(0);
-                    } else {
-                        mCurrentAnswer = answers.get(answers.size() - 1);
-                    }
-                    parseAnswer();
-                }
-            });
-        }
-    }
-
-    private void parseAnswer() {
-        this.mCurrentAnswer.setTaskId(mCurrentTask.getId());
-        this.mCurrentAnswer.setAssignmentId(assignment.getId());
-        //Answer Data;
-        if (mCurrentAnswer.getData() != null && !mCurrentAnswer.getData().isEmpty()) {
-            try {
-                String dataString = mCurrentAnswer.getData();
-                dataString = dataString.replace("\\", "");
-                dataString = dataString.substring(1, dataString.length() - 1);
-                JSONObject data = new JSONObject(dataString);
-
-                JSONArray regionsJson = data.optJSONArray("regions");
-                JSONArray flagsJson = data.optJSONArray("image_flags");
-                JSONObject linksJson = data.optJSONObject("links");
-
-                if (linksJson != null) {
-                    Iterator<String> iterator = linksJson.keys();
-                    List<Link> linksArray = new ArrayList<>();
-                    while (iterator.hasNext()) {
-                        Link link = new Link();
-                        String linkId = iterator.next();
-                        JSONArray regionIds = linksJson.getJSONArray(linkId);
-                        for (int i = 0; i < regionIds.length(); i++) {
-                            String regionId = regionIds.getString(i);
-                            link.regionIds.add(regionId);
-                        }
-                        link.id = linkId;
-                        linksArray.add(link);
-                    }
-                    mDrawingView.setLinks(linksArray.toArray(new Link[0]));
-                }
-                if (regionsJson != null) {
-                    List<Region> regionsArray = new ArrayList<>();
-                    for (int i = 0; i < regionsJson.length(); i++) {
-                        Region r = Region.fromJSONObject(regionsJson.getJSONObject(i));
-                        regionsArray.add(r);
-                    }
-
-                    if (mDrawingView.getRegionsCount() == 0)
-                        mDrawingView.addRegions(regionsArray);
-                }
-
-                if (flagsJson != null) {
-                    for (int i = 0; i < flagsJson.length(); i++) {
-                        String flag = flagsJson.getString(i);
-                        currentImageFlags.add(flag);
-                    }
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-                Crashlytics.logException(e);
-            }
-        }
-
-        //Answer Time
-        if (mCurrentAnswer.getTimeTaken() != null)
-            this.mTimeTaken = mCurrentAnswer.getTimeTaken();
-        if (mCurrentAnswer.getStartedAt() != null)
-            this.startedAt = mCurrentAnswer.getStartedAt();
-
-    }
-
-    private Answer getAnswer() {
-        if (mCurrentAnswer == null) return null;
-        if (mCurrentAnswer.getAssignmentId() == null || mCurrentAnswer.getTaskId() == null)
-            return null;
-        mCurrentAnswer.setStartedAt(startedAt);
-        mCurrentAnswer.setTimeTaken(mTimeTaken);
-        List<Region> regions = mDrawingView.getNormalizedRegions();
-        Link[] links = mDrawingView.getLinks();
-
-        JSONArray annotations = new JSONArray();
-        JSONArray flagsJson = new JSONArray(currentImageFlags);
-        for (Region r : regions) {
-            annotations.put(r.toJSONObject());
-        }
-        if (regions.size() == 0 && currentImageFlags.size() == 0) {
-            Toast.makeText(this, "Empty Answer", Toast.LENGTH_SHORT).show();
-            return null;
-        }
-
-        JSONObject jsonLinks = new JSONObject();
-        JSONObject data = new JSONObject();
-        try {
-            for (Link l : links) {
-                jsonLinks.put(l.id, l.toJsonArray());
-            }
-            data.put("image_width", currentImageWidth);
-            data.put("image_height", currentImageHeight);
-            data.put("image_name", mTasks.data.get(mTaskIndex).getFileName());
-            if (currentImageFlags.size() > 0)
-                data.put("image_flags", flagsJson);
-            if (regions.size() > 0) {
-                data.put("regions", annotations);
-                data.put("links", jsonLinks);
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        mCurrentAnswer.setData(data.toString());
-        return mCurrentAnswer;
-    }
+    private Context mContext;
+    Preference mPreference;
 
     @Override
     protected void onResume() {
         super.onResume();
-        resumeTimer();
-    }
-
-    private void resetTimer() {
-        pauseTimer();
-        mTimeTaken = 0;
-        resumeTimer();
-    }
-
-    private void resumeTimer() {
-        mTimerTask = new TimerTask() {
-            @Override
-            public void run() {
-                mTimeTaken++;
-                mTotalSessionTime++;
-            }
-        };
-        mTimer.scheduleAtFixedRate(mTimerTask, 0, 1000);
-    }
-
-    private void pauseTimer() {
-        mTimerTask.cancel();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        pauseTimer();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        pauseTimer();
-        mTimer.cancel();
-
-        saveAnswer(getAnswer());
-
         if (clearAllAlert != null && clearAllAlert.isShowing()) clearAllAlert.dismiss();
         if (deleteAnswerAlert != null && deleteAnswerAlert.isShowing()) deleteAnswerAlert.dismiss();
         if (completedDialog != null && completedDialog.isShowing()) completedDialog.dismiss();
@@ -352,8 +167,6 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
             finish();
         }
 
-        initDatabase();
-
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -363,7 +176,7 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
 
         mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
-        mToolsDrawer = findViewById(R.id.tools_drawer);
+        mNavigation = findViewById(R.id.tools_drawer);
         NavigationView mRegionsDrawer = findViewById(R.id.regions_drawer);
 
         mPhotoView = findViewById(R.id.task_photo_view);
@@ -376,17 +189,6 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
                 float range = MAX_SCALE - MIN_SCALE;
                 int progress = Math.round((mPhotoView.getScale() - MIN_SCALE) * 100 / range);
                 mZoomSeeker.setProgress(progress);
-                /*RectF rS = new RectF();
-                RectF rD = new RectF();
-                Matrix d = new Matrix();
-                Matrix s = new Matrix();
-                mPhotoView.getSuppMatrix(s);
-                s.mapRect(rS);
-                Log.d("ORIG", rect.toString());
-                Log.d("SUP", rS.toString());
-                mPhotoView.getDisplayMatrix(d);
-                d.mapRect(rD);
-                Log.d("DIS", rD.toString());*/
             }
         });
         mPhotoView.setTag(new Target() {
@@ -397,15 +199,6 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
                 mDrawingView.setImageRect(new RectF(0, 0, currentImageWidth, currentImageHeight));
                 mPhotoView.setImageBitmap(bitmap);
                 toggleLoader(false);
-//                setTitle(String.format(getString(R.string.job_activity_title), mTaskCounter, mTasks.meta.total));
-//                if (!isRefreshingImage) {
-//                    prepareForNewTask();
-//                    if (toBeAddedRegions != null)
-//                        mDrawingView.addRegions(toBeAddedRegions);
-//                    toBeAddedRegions = null;
-//                } else {
-//                    isRefreshingImage = false;
-//                }
             }
 
             @Override
@@ -430,17 +223,25 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
         mDrawingView.setOnDrawingFinishedListener(this);
 
 
-        mToolsDrawer.setNavigationItemSelectedListener(getToolsDrawerListener());
+        mNavigation.setNavigationItemSelectedListener(getToolsDrawerListener());
         mRegionsDrawer.setNavigationItemSelectedListener(getRegionsDrawerListener());
 
         mZoomSeeker = findViewById(R.id.zoom_seeker);
         mPanXSeeker = findViewById(R.id.pan_x_seeker);
         mPanXSeeker.setVisibility(View.GONE); //todo later
 
+        validate = findViewById(R.id.validate);
+        reject = findViewById(R.id.reject);
+
         regionLink = findViewById(R.id.switch_link_region);
         regionAttribute = findViewById(R.id.btn_add_region_attr);
         regionDelete = findViewById(R.id.btn_delete_region);
         regionLock = findViewById(R.id.switch_region_lock);
+        if (assignment.forValidator()) {
+            removeViewWhenMemberIsValidator();
+        } else {
+            removeViewWhenMemberIsAnnotator();
+        }
 
         setRegionButtonsClickListeners();
 
@@ -448,44 +249,74 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
 
         //disable continues drawing
         continuesDrawing = false;
-        SwitchCompat s = (SwitchCompat) mToolsDrawer.getMenu().findItem(R.id.tools_cont_drawing).getActionView();
+        SwitchCompat s = (SwitchCompat) mNavigation.getMenu().findItem(R.id.tools_cont_drawing).getActionView();
         s.setChecked(continuesDrawing);
         mDrawingView.setContinuesDrawing(continuesDrawing);
 
         restoreState(savedInstanceState);
 
-//        loadTasks();
-        loadTaskWithProjectId(assignment.getId());
+        mContext = this;
+        mPreference = new Preference(this);
+
+        setListener();
+
+        loadTask();
     }
 
-    private void initDatabase() {
-        db = AnswersDatabase.getInstance(this);
+    private void removeViewWhenMemberIsValidator(){
+        regionLink.setVisibility(View.GONE);
+        regionAttribute.setVisibility(View.GONE);
+        regionDelete.setVisibility(View.GONE);
+        regionLock.setVisibility(View.GONE);
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (mDrawingView.getRegionsCount() != 0)
-            outState.putParcelableArrayList(REGIONS, (ArrayList<Region>) mDrawingView.getNormalizedRegions());
-        outState.putSerializable(ASSIGNMENT, assignment);
-        outState.putBoolean(ZOOM_ENABLED, mZoomEnabled);
-        outState.putParcelableArray(REGIONS_LINKS, mDrawingView.getLinks());
-        if (mDrawingView.getTool() != null)
-            outState.putString(TOOL, mDrawingView.getTool().toString());
+    private void removeViewWhenMemberIsAnnotator() {
+        validate.setVisibility(View.GONE);
+        reject.setVisibility(View.GONE);
+    }
 
-        outState.putLong(TIME_TAKEN, mTimeTaken);
-        outState.putLong(STARTED_AT, startedAt);
-        outState.putLong(TOTAL_TIME, mTotalSessionTime);
-        outState.putBoolean(ENDLESS_DRAWING, continuesDrawing);
-        if (skippedTasks.size() > 0) {
-            long[] list = new long[skippedTasks.size()];
-            for (int i = 0; i < skippedTasks.size(); i++) {
-                list[i] = skippedTasks.get(i);
+    private void setListener() {
+        validate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Call<SuccessResponse> call = Api.getInstance().endpoints.validateTask(mCurrentTask.getId());
+                call.enqueue(new Callback<SuccessResponse>() {
+                    @Override
+                    public void onResponse(Call<SuccessResponse> call, Response<SuccessResponse> response) {
+                        SuccessResponse successResponse = response.body();
+                        Toast.makeText(mContext, successResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                        deleteTaskUrl(assignment.getId());
+                        loadTask();
+                    }
+
+                    @Override
+                    public void onFailure(Call<SuccessResponse> call, Throwable t) {
+
+                    }
+                });
             }
-            outState.putLongArray(SKIPPED_TASKS, list);
-        }
-        if (currentImageFlags.size() > 0)
-            outState.putStringArrayList(IMAGE_FLAGS, (ArrayList<String>) currentImageFlags);
+        });
+
+        reject.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Call<SuccessResponse> call = Api.getInstance().endpoints.rejectTask(mCurrentTask.getId());
+                call.enqueue(new Callback<SuccessResponse>() {
+                    @Override
+                    public void onResponse(Call<SuccessResponse> call, Response<SuccessResponse> response) {
+                        SuccessResponse successResponse = response.body();
+                        Toast.makeText(mContext, successResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                        deleteTaskUrl(assignment.getId());
+                        loadTask();
+                    }
+
+                    @Override
+                    public void onFailure(Call<SuccessResponse> call, Throwable t) {
+
+                    }
+                });
+            }
+        });
     }
 
     private void restoreState(Bundle state) {
@@ -505,26 +336,14 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
             if (state.containsKey(TOOL)) {
                 mDrawingView.setTool(Region.Shape.valueOf(state.getString(TOOL)));
             }
-            if (state.containsKey(TIME_TAKEN)) {
-                mTimeTaken = state.getLong(TIME_TAKEN);
-            }
-            if (state.containsKey(STARTED_AT)) {
-                startedAt = state.getLong(STARTED_AT);
-            }
             if (state.containsKey(TOTAL_TIME)) {
                 mTotalSessionTime = state.getLong(TOTAL_TIME);
             }
             if (state.containsKey(ENDLESS_DRAWING)) {
                 continuesDrawing = state.getBoolean(ENDLESS_DRAWING);
-                SwitchCompat s = (SwitchCompat) mToolsDrawer.getMenu().findItem(R.id.tools_cont_drawing).getActionView();
+                SwitchCompat s = (SwitchCompat) mNavigation.getMenu().findItem(R.id.tools_cont_drawing).getActionView();
                 s.setChecked(continuesDrawing);
                 mDrawingView.setContinuesDrawing(continuesDrawing);
-            }
-            if (state.containsKey(SKIPPED_TASKS)) {
-                long list[] = state.getLongArray(SKIPPED_TASKS);
-                for (long id : list) {
-                    skippedTasks.add(id);
-                }
             }
             if (state.containsKey(IMAGE_FLAGS)) {
                 currentImageFlags = state.getStringArrayList(IMAGE_FLAGS);
@@ -591,6 +410,24 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
         });
     }
 
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mDrawingView.getRegionsCount() != 0)
+            outState.putParcelableArrayList(REGIONS, (ArrayList<Region>) mDrawingView.getNormalizedRegions());
+        outState.putSerializable(ASSIGNMENT, assignment);
+        outState.putBoolean(ZOOM_ENABLED, mZoomEnabled);
+        outState.putParcelableArray(REGIONS_LINKS, mDrawingView.getLinks());
+        if (mDrawingView.getTool() != null)
+            outState.putString(TOOL, mDrawingView.getTool().toString());
+
+        outState.putLong(TOTAL_TIME, mTotalSessionTime);
+        outState.putBoolean(ENDLESS_DRAWING, continuesDrawing);
+        if (currentImageFlags.size() > 0)
+            outState.putStringArrayList(IMAGE_FLAGS, (ArrayList<String>) currentImageFlags);
+    }
+
     private void toggleLoader(boolean show) {
         isLoadingImage = show;
         if (show) {
@@ -602,58 +439,92 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
         }
     }
 
-    private void loadTasks() {
-        toggleLoader(true);
-        getTasks(assignment.getId(), 1L).addOnSuccessListener(this, new OnSuccessListener<PaginatedResponse<Task>>() {
+    private void loadTask() {
+        if (tryToGetLastTask()) {
+            return;
+        }
+
+        Call<Task> call = Api.getInstance().endpoints.getTask(assignment.getId());
+        call.enqueue(new Callback<Task>() {
             @Override
-            public void onSuccess(PaginatedResponse<Task> taskPaginatedResponse) {
-                mTasks = taskPaginatedResponse;
-                if (mTasks.data.size() > 0) {
-                    loadTask(0);
+            public void onFailure(Call<Task> call, Throwable t) {
+                Log.d(TAG, "onFail get task");
+            }
+
+            @Override
+            public void onResponse(Call<Task> call, Response<Task> response) {
+                Task task = response.body();
+                if (task != null) {
+                    mCurrentTask = task;
+                    loadImageToView(task.getUrl());
+                    mCurrentAnswer = new Answer(assignment.getId(), task.getId());
+                    if (assignment.forValidator()) {
+                        String dataOfAnswer = task.getAnswer().getData();
+                        parseAnswer(dataOfAnswer);
+                        saveAnswer(dataOfAnswer);
+                    }
+                    saveTaskUrl(assignment.getId(), task.getRealUrl(), task.getId());
+                } else {
+                    noMoreTasks();
                 }
+
             }
         });
     }
 
-    private void loadMoreTasks() {
-        Long total = mTasks.meta.lastPage;
-        if (mCurrentPage.equals(total)) return; //No need to load more
-
-        getTasks(assignment.getId(), mCurrentPage + 1).addOnSuccessListener(this, new OnSuccessListener<PaginatedResponse<Task>>() {
-            @Override
-            public void onSuccess(PaginatedResponse<Task> taskPaginatedResponse) {
-                mMoreTasks = taskPaginatedResponse;
-            }
-        }).addOnFailureListener(this, new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                loadMoreTasks();
-            }
-        });
-    }
-
-    private void nextImage() {
-        //Check if the current task index == tasks size then load from more tasks
-        //Check if there is no more tasks
-        if (mTaskIndex == mTasks.data.size() - 3) {
-            loadMoreTasks();
-        }
-
-        if (mTaskIndex == mTasks.data.size() - 1) {
-            if (mMoreTasks != null) {
-                mTasks = mMoreTasks;
-                mMoreTasks = null;
-                mCurrentPage++;
-                mTaskIndex = 0;
-                mTaskCounter++;
-                loadTask(mTaskIndex);
-            } else {
-                noMoreTasks();
-            }
+    private boolean tryToGetLastTask() {
+        String keyGetLastUrl;
+        String keyGetLastTaskId;
+        if (assignment.forAnnotator()) {
+            keyGetLastUrl = Preference.LAST_URL_OF_ANNOTATOR;
+            keyGetLastTaskId = Preference.LAST_TASK_ID_OF_ANNOTATOR;
         } else {
-            loadTask(mTaskIndex + 1);
-            mTaskCounter++;
+            keyGetLastUrl = Preference.LAST_URL_OF_VALIDATOR;
+            keyGetLastTaskId = Preference.LAST_TASK_ID_OF_VALIDATOR;
         }
+        String lastUrl = mPreference.getString(keyGetLastUrl + assignment.getId());
+        if (lastUrl != null) {
+            Task task = new Task();
+            task.setUrl(lastUrl);
+            task.setId(mPreference.getLong(keyGetLastTaskId + assignment.getId()));
+            mCurrentTask = task;
+            mCurrentAnswer = new Answer(assignment.getId(), task.getId());
+            loadImageToView(task.getUrl());
+            if (assignment.forValidator()) {
+                String dataOfAnswer = mPreference.getString(Preference.LAST_ANSWER_FOR_VALIDATOR + assignment.getId());
+                parseAnswer(dataOfAnswer);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private void saveAnswer(String dataOfAnswer){
+        mPreference.putString(Preference.LAST_ANSWER_FOR_VALIDATOR + assignment.getId(), dataOfAnswer);
+    }
+
+    private void saveTaskUrl(long projectId, String url, long taskId) {
+        if (assignment.forAnnotator()) {
+            mPreference.putString(Preference.LAST_URL_OF_ANNOTATOR + projectId, url);
+            mPreference.putLong(Preference.LAST_TASK_ID_OF_ANNOTATOR + projectId, taskId);
+        } else {
+            mPreference.putString(Preference.LAST_URL_OF_VALIDATOR + projectId, url);
+            mPreference.putLong(Preference.LAST_TASK_ID_OF_VALIDATOR + projectId, taskId);
+        }
+
+    }
+
+    private void deleteTaskUrl(long projectId) {
+        if (assignment.forAnnotator()) {
+            mPreference.putString(Preference.LAST_URL_OF_ANNOTATOR + projectId, null);
+        } else {
+            mPreference.putString(Preference.LAST_URL_OF_VALIDATOR + projectId, null);
+        }
+
+    }
+
+    private void loadImageToView(Uri url) {
+        Picasso.with(this).load(url).into((Target) mPhotoView.getTag());
     }
 
     private void noMoreTasks() {
@@ -674,50 +545,9 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
         completedDialog.show();
     }
 
-    private void loadTask(int taskIndex) {
-        toggleLoader(true);
-
-        if (mTasks != null && taskIndex < mTasks.data.size()) {
-            Task t = mTasks.data.get(taskIndex);
-            if (skippedTasks.contains(t.getId())) {
-                mTaskIndex = taskIndex;
-                mCurrentTask = t;
-                nextImage();
-                return;
-            }
-            Picasso.with(this).load(t.getUrl()).into((Target) mPhotoView.getTag());
-            mTaskIndex = taskIndex;
-            mCurrentTask = t;
-        }
-    }
-
-    private void loadTaskWithProjectId(long projectId) {
-        Call<Task> call = Api.getInstance().endpoints.getTask(projectId);
-        call.enqueue(new Callback<Task>() {
-            @Override
-            public void onResponse(Call<Task> call, Response<Task> response) {
-                Task task = response.body();
-                if (task != null) {
-                    loadImageToView(task.getUrl());
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<Task> call, Throwable t) {
-
-            }
-        });
-    }
-
-    private void loadImageToView(Uri url) {
-        Picasso.with(this).load(url).into((Target) mPhotoView.getTag());
-    }
-
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        //prepareRegionsSelector();
         prepareLabelsList();
     }
 
@@ -745,117 +575,120 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
         }
 
         return labels;
-        //Test String
-/*
-        String s = "{\"Felafel\":[],\"Cheese\":{\"Herbs\":[\"Paneer\",\"Yoghurt\"],\"Halloom\":{},\"Cake\":[\"Choco\",\"Vanilla\"]},\"Mastaw\":[],\"Sedan\":{\"Cruze\":[],\"Malibu\":[\"2015\",\"2016\"]}}";
-        s = "[\"Falefel\", \"Cheese\", \"Dolama\", \"Doner\", \"Kabab\", \"Burger\", \"Pizza\", \"Cake\", \"Honey\", \"Milk Shake\", \"Top Occluded Iris\", \"Bottom Occluded Iris\"]";
-        List<Label> ret = new ArrayList<>();
-        if (s.trim().charAt(0) == '[') {
-            try {
-                JSONArray a = new JSONArray(s);
-                for (int i = 0; i < a.length(); i++) {
-                    Label l = new Label();
-                    l.setLabel(a.getString(i));
-                    ret.add(l);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-                Crashlytics.logException(e);
-            }
-            return ret;
-        }
-        //todo fix nested taxonomies
-        return ret;
-
-        JSONTokener tokener = new JSONTokener(s);
-        while (tokener.more()) {
-            try {
-                Object o = tokener.nextValue();
-                if(o instanceof JSONObject) { //nested
-
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-                Crashlytics.logException(e);
-            }
-        }
-*/
-
     }
-
-    //@todo NOT USED NOW
-    /*private void prepareRegionsSelector() {
-        mRegionsPickerAdapter = new RegionsAdapter(this, R.layout.regions_list_item, mDrawingView.getDrawnRegions());
-        mRegionsPicker = findViewById(R.id.regions_list);
-        mRegionsPicker.setAdapter(mRegionsPickerAdapter);
-    }*/
 
     private void sendAnswer() {
         final Answer a = getAnswer();
         if (a == null) {
-            nextImage();
             return;
         }
-        a.setSubmittedAt(new Date().getTime());
-        saveAnswer(a);
-        Call call = Api.getInstance().endpoints.postAnswer(assignment.getId(), a);
-        call.enqueue(new Callback() {
+        Call<SuccessResponse> call = Api.getInstance().endpoints.postAnswer(assignment.getId(), a);
+        call.enqueue(new Callback<SuccessResponse>() {
             @Override
-            public void onResponse(Call call, Response response) {
-                deleteAnswer(a);
-                //Snackbar.make(findViewById(android.R.id.content),"Submitted",Snackbar.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailure(Call call, Throwable t) {
-                //Toast.makeText(WorkActivity.this, "Failed to submit answer", Toast.LENGTH_SHORT).show();
-                Crashlytics.logException(t);
-            }
-        });
-
-        nextImage();
-    }
-
-    private void deleteAnswer(final Answer a) {
-        if (a == null) return;
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                db.answersDao().deleteAnswer(a);
-            }
-        });
-
-        t.start();
-    }
-
-    private void saveAnswer(final Answer a) {
-        if (a == null) return;
-        if (a.getTaskId() == null || a.getAssignmentId() == null) return;
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (a.getDbId() == null) {
-                    db.answersDao().saveAnswer(a);
+            public void onResponse(Call<SuccessResponse> call, Response<SuccessResponse> response) {
+                SuccessResponse s = response.body();
+                String mesg;
+                if (s != null) {
+                    mesg = s.getMessage();
                 } else {
-                    db.answersDao().updateAnswer(a);
+                    mesg = "Unknown error from server";
                 }
+                Toast.makeText(mContext, mesg, Toast.LENGTH_SHORT).show();
+                deleteTaskUrl(assignment.getId());
+                loadTask();
+            }
+
+            @Override
+            public void onFailure(Call<SuccessResponse> call, Throwable t) {
+
             }
         });
-
-        t.start();
     }
 
-    private LiveData<List<Answer>> loadAnswerFromDb(Task t) {
-        final Long taskId = t.getId();
-        final Long assignmentId = assignment.getId();
-        return db.answersDao().getAnswer(assignmentId, taskId);
+    private void parseAnswer(String dataString) {
+        mCurrentAnswer = new Answer(assignment.getId(), mCurrentTask.getId());
+        try {
+            JSONObject data = new JSONObject(dataString);
+
+            JSONArray regionsJson = data.optJSONArray("regions");
+//            JSONArray flagsJson = data.optJSONArray("image_flags");
+//            JSONObject linksJson = data.optJSONObject("links");
+
+//            if (linksJson != null) {
+//                Iterator<String> iterator = linksJson.keys();
+//                List<Link> linksArray = new ArrayList<>();
+//                while (iterator.hasNext()) {
+//                    Link link = new Link();
+//                    String linkId = iterator.next();
+//                    JSONArray regionIds = linksJson.getJSONArray(linkId);
+//                    for (int i = 0; i < regionIds.length(); i++) {
+//                        String regionId = regionIds.getString(i);
+//                        link.regionIds.add(regionId);
+//                    }
+//                    link.id = linkId;
+//                    linksArray.add(link);
+//                }
+//                mDrawingView.setLinks(linksArray.toArray(new Link[0]));
+//            }
+            if (regionsJson != null) {
+                List<Region> regionsArray = new ArrayList<>();
+                for (int i = 0; i < regionsJson.length(); i++) {
+                    Region r = Region.fromJSONObject(regionsJson.getJSONObject(i));
+                    r.setLocked(true);
+                    regionsArray.add(r);
+                }
+
+                if (mDrawingView.getRegionsCount() == 0 || assignment.forValidator())
+                    mDrawingView.addRegions(regionsArray);
+            }
+
+//            if (flagsJson != null) {
+//                for (int i = 0; i < flagsJson.length(); i++) {
+//                    String flag = flagsJson.getString(i);
+//                    currentImageFlags.add(flag);
+//                }
+//            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Crashlytics.logException(e);
+        }
     }
 
-    private void skipAnswer() {
-        final Answer a = getAnswer();
-        saveAnswer(a);
-        skippedTasks.add(mCurrentTask.getId());
-        nextImage();
+    private Answer getAnswer() {
+        List<Region> regions = mDrawingView.getNormalizedRegions();
+        Link[] links = mDrawingView.getLinks();
+
+        JSONArray annotations = new JSONArray();
+        JSONArray flagsJson = new JSONArray(currentImageFlags);
+        for (Region r : regions) {
+            annotations.put(r.toJSONObject());
+        }
+        if (regions.size() == 0 && currentImageFlags.size() == 0) {
+            Toast.makeText(this, "Empty Answer", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+
+        JSONObject jsonLinks = new JSONObject();
+        JSONObject data = new JSONObject();
+        try {
+            for (Link l : links) {
+                jsonLinks.put(l.id, l.toJsonArray());
+            }
+            data.put("image_width", currentImageWidth);
+            data.put("image_height", currentImageHeight);
+            data.put("image_name", "Test name");
+            if (currentImageFlags.size() > 0)
+                data.put("image_flags", flagsJson);
+            if (regions.size() > 0 || assignment.forValidator()) {
+                data.put("regions", annotations);
+                data.put("links", jsonLinks);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        mCurrentAnswer.setData(data.toString());
+        return mCurrentAnswer;
     }
 
     private void showInstructionsDialog() {
@@ -887,7 +720,6 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
         ProgressDetails pd = new ProgressDetails();
         pd.imageDims = currentImageWidth + "x" + currentImageHeight;
         pd.imageName = mCurrentTask.getFileName();
-        pd.timeTaken = Utils.getFormattedDuration(mTimeTaken);
         pd.totalTime = Utils.getFormattedDuration(mTotalSessionTime);
         pd.noOfRegions = mDrawingView.getRegionsCount() + "";
 
@@ -901,12 +733,6 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
         detailsDialog.setProgressDetails(pd);
         detailsDialog.show(getSupportFragmentManager(),
                 "WORK_DETAILS_FRAG");
-    }
-
-    private void refreshImage() {
-        if (isLoadingImage) return;
-        isRefreshingImage = true;
-        loadTask(mTaskIndex);
     }
 
     @Override
@@ -936,33 +762,6 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
             regionAttribute.setEnabled(false);
             regionLink.setEnabled(false);
         }
-    }
-
-    private void deleteAnswerFromDb() {
-        if (mCurrentAnswer == null) return;
-        if (mCurrentAnswer.getDbId() == null) return;
-        if (deleteAnswerAlert == null) {
-            AlertDialog.Builder b = new AlertDialog.Builder(this);
-            b.setTitle("Delete Answer");
-            b.setIcon(R.drawable.ic_delete_forever);
-            b.setMessage("Are you sure you want to delete your answer from local database?");
-            b.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    mDrawingView.clearAll();
-                    deleteAnswer(mCurrentAnswer);
-                    dialog.dismiss();
-                }
-            });
-            b.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
-            deleteAnswerAlert = b.create();
-        }
-        deleteAnswerAlert.show();
     }
 
     private void clearRegions() {
@@ -1059,8 +858,6 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
             openTools();
         } else if (id == R.id.action_regions) {
             openRegions();
-        } else if (id == R.id.action_refresh) {
-            refreshImage();
         } else if (id == R.id.action_details) {
             showDetailsDialog();
         } else if (id == R.id.action_instructions) {
@@ -1071,8 +868,8 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
     }
 
     private NavigationView.OnNavigationItemSelectedListener getToolsDrawerListener() {
-        mToolsDrawer.getMenu().findItem(R.id.tools_cont_drawing).getActionView().setClickable(false);
-        final MenuItem m = mToolsDrawer.getMenu().findItem(R.id.tools_zoom);
+        mNavigation.getMenu().findItem(R.id.tools_cont_drawing).getActionView().setClickable(false);
+        final MenuItem m = mNavigation.getMenu().findItem(R.id.tools_zoom);
         mZoomToggle = (SwitchCompat) m.getActionView();
         mZoomToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -1175,26 +972,23 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
 
                 //todo fix this
                 if (id == R.id.tools_hide) {
-                    Menu m = mToolsDrawer.getMenu();
-                    //menuItem.getSubMenu().setHeaderTitle("TITLE");
+                    Menu m = mNavigation.getMenu();
                     boolean isVisible = m.hasVisibleItems();
                     m.setGroupVisible(R.id.tools_group, !isVisible);
                     menuItem.setIcon(isVisible ? R.drawable.ic_collapse_white : R.drawable.ic_expand_white);
                 } else if (id == R.id.tools_zoom) {
                     SwitchCompat s = (SwitchCompat) menuItem.getActionView();
                     s.toggle();
-                    //s.setChecked(!s.isChecked());
+                } else if (id == R.id.tools_skip) {
+                    skipTask();
+                    closeTools();
                 } else if (id == R.id.tools_send) {
                     sendAnswer();
-                    closeTools();
-                } else if (id == R.id.tools_skip) {
-                    skipAnswer();
                     closeTools();
                 } else if (id == R.id.tools_clear) {
                     clearRegions();
                     closeTools();
                 } else if (id == R.id.tools_delete_from_db) {
-                    deleteAnswerFromDb();
                     closeTools();
                 } else if (id == R.id.tools_flag) {
                     displayFlaggingDialog();
@@ -1210,15 +1004,36 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
 
                 return true;
             }
-        }
-
-                ;
+        };
     }
 
     private void toggleZoom(boolean enabled) {
         mZoomEnabled = enabled;
         mPhotoView.setEnabled(enabled);
         mDrawingView.setActive(!enabled);
+    }
+
+    private void skipTask() {
+        Call<SuccessResponse> call = Api.getInstance().endpoints.skipTask(mCurrentTask.getId());
+        call.enqueue(new Callback<SuccessResponse>() {
+            @Override
+            public void onResponse(Call<SuccessResponse> call, Response<SuccessResponse> response) {
+                SuccessResponse successResponse = response.body();
+                if (successResponse != null) {
+                    Toast.makeText(mContext, successResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                    if (successResponse.getSuccess()) {
+                        deleteTaskUrl(assignment.getId());
+                        loadTask();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SuccessResponse> call, Throwable t) {
+
+            }
+        });
+
     }
 
     private NavigationView.OnNavigationItemSelectedListener getRegionsDrawerListener() {
@@ -1269,44 +1084,19 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
         };
     }
 
-    private void closeTools() {
-        mDrawer.closeDrawer(GravityCompat.START);
-    }
-
-    private void closeRegions() {
-        mDrawer.closeDrawer(GravityCompat.END);
-    }
-
     private void openTools() {
         mDrawer.openDrawer(GravityCompat.START);
+    }
+
+    private void closeTools() {
+        mDrawer.closeDrawer(GravityCompat.START);
     }
 
     private void openRegions() {
         mDrawer.openDrawer(GravityCompat.END);
     }
-
-    public com.google.android.gms.tasks.Task<PaginatedResponse<Task>> getTasks(Long assignmentId, Long page) {
-        final TaskCompletionSource<PaginatedResponse<Task>> task = new TaskCompletionSource<>();
-
-        Call<PaginatedResponse<Task>> call = Api.getInstance().endpoints.getTasksPaginated(assignmentId, page);
-        call.enqueue(new Callback<PaginatedResponse<Task>>() {
-            @Override
-            public void onResponse(Call<PaginatedResponse<Task>> call, Response<PaginatedResponse<Task>> response) {
-                task.setResult(response.body());
-            }
-
-            @Override
-            public void onFailure(Call<PaginatedResponse<Task>> call, Throwable t) {
-                if (t instanceof ApiError) {
-                    task.setException((ApiError) t);
-                } else {
-                    Crashlytics.logException(t);
-                    task.setException(new ApiError(500, "Unknown error occurred!"));
-                }
-            }
-        });
-
-        return task.getTask();
+    private void closeRegions() {
+        mDrawer.closeDrawer(GravityCompat.END);
     }
 }
 

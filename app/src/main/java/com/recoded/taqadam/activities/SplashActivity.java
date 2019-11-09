@@ -279,10 +279,6 @@ public class SplashActivity extends AppCompatActivity {
             Intent i = new Intent(this, SigninActivity.class);
             startActivity(i);
             finish();
-        } else if (this.user.getProfile() == null) {
-            Intent i = new Intent(SplashActivity.this, ConfirmProfileActivity.class);
-            startActivity(i);
-            finish();
         } else {
             Intent i = new Intent(SplashActivity.this, MainActivity.class);
             startActivity(i);

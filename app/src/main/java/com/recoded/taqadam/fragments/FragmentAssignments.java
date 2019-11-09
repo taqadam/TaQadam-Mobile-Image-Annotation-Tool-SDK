@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,15 +49,15 @@ public class FragmentAssignments extends Fragment {
         if(savedInstanceState != null && savedInstanceState.containsKey("assignments")){
             assignments = (List<Assignment>) savedInstanceState.getSerializable("assignments");
         }
-        if(assignments == null) {
-            fetchAssignments();
-        } else {
-            mAdapter.setDataset(assignments);
-            mRecyclerView.setVisibility(View.VISIBLE);
-            mProgressBar.setVisibility(View.GONE);
-            mRecyclerView.setScrollY(savedInstanceState != null? savedInstanceState.getInt("scroll", 0):0);
-        }
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        mProgressBar.setVisibility(View.VISIBLE);
+        Log.d(TAG, "onResume");
+        fetchAssignments();
+        super.onResume();
     }
 
     @Override

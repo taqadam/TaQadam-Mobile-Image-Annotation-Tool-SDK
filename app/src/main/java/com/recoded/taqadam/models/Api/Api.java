@@ -37,9 +37,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Api {
     public static final String TAG = Api.class.getSimpleName();
 
-    public static final String MEDIA_ROOT = "http://192.168.0.101:8000/media/";
+    public static final String ROOT = "http://192.168.0.101:8000/";
+//    public static final String ROOT = "http://104.248.207.70:8000/";
 
-    public static final String BASE = "http://192.168.0.101:8000/api/";
+    public static final String MEDIA_ROOT = ROOT + "media/";
+
+    public static final String BASE =  ROOT + "api/";
     public static final String LOGIN = "user/login";
     public static final String REGISTER = "user/mobile/register";
     public static final String REFRESH = "user/refresh";
@@ -59,8 +62,9 @@ public class Api {
     private static Api instance = null;
 
     public static Api getInstance() {
-        if(instance == null){
-            initiate(UserAuthHandler.getInstance().getAuth());
+        Auth auth = UserAuthHandler.getInstance().getAuth();
+        if(instance == null || auth == null){
+            initiate(auth);
         }
         return instance;
     }
@@ -87,86 +91,7 @@ public class Api {
                 if (token != null) {
                     b.addHeader("Authorization", "Token " + token);
                 }
-
                 Response response = chain.proceed(b.build());
-
-
-//                int responseCode = response.code();
-//                if (responseCode >= 400) {
-//                    String responseBody = response.body().string();
-//                    ApiError ex = new ApiError(responseCode, responseBody);
-//                    try {
-//                        JSONObject res = new JSONObject(responseBody);
-//                        String msg = res.getString("message");
-//                        if(responseCode == 503) {
-//                            //Server is down for maintenance
-//                            if(msg.isEmpty())
-//                                msg = "We will be right back!";
-//                        }
-//                        ex.setMessage(msg);
-//                        if (msg.toLowerCase().contains("invalid parameters")) {
-//                            JSONObject errors = (JSONObject) res.get("errors");
-//                            ex = new InvalidException(responseCode, msg, errors.toString());
-//                        } else if (msg.toLowerCase().contains("unauthenticated")) {
-//                            UserAuthHandler.getInstance().refresh();
-//                            ex = new UnauthenticatedException(responseCode, msg);
-//                        } else if (msg.toLowerCase().contains("unauthorized")) {
-//                            ex = new UnauthenticatedException(responseCode, msg);
-//                        }
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//
-//                    throw ex;
-//                } else if (responseCode >= 200) {
-//                    //We want to modify the response object and bring the resource to main level for GSON to deserialize properly
-//                    MediaType contentType = response.body().contentType();
-//                    String responseBody = response.body().string();
-//                    String newRes;
-//                    List<String> requestPath = request.url().pathSegments();
-//                    try {
-//                        JSONObject res = new JSONObject(responseBody);
-//                        List<String> keys = new ArrayList<>();
-//                        if (res.has("success")) { //typical responses
-//                            res.remove("success");
-//                            Iterator<String> iterator = res.keys();
-//                            while (iterator.hasNext()) {
-//                                keys.add(iterator.next());
-//                            }
-//                            if (keys.size() == 1 && !keys.get(0).equalsIgnoreCase("message")) {
-//                                //get the resource object and put it on top
-//                                newRes = res.getJSONObject(keys.get(0)).toString();
-//                            } else {
-//                                //rare case would occur only on login and registration calls
-//                                //like login response contains token next to user object
-//                                newRes = res.toString();
-//                            }
-//                        } else if (res.has("data")) { //collection response no success
-//                            if (res.has("meta") || res.has("links")) { //check if paginated
-//                                //try to get resource name from request
-//                                //String resourceName = requestPath.get(requestPath.size() - 1);
-//                                //JSONObject paginatedResponse = new JSONObject();
-//                                //paginatedResponse.put("meta", res.optJSONObject("meta"));
-//                                //paginatedResponse.put("links", res.optJSONObject("links"));
-//                                //paginatedResponse.put(resourceName, res.getJSONArray("data"));
-//
-//                                //newRes = new JSONObject().put("paginated_response", paginatedResponse).toString();
-//                                newRes = res.toString();
-//                            } else { //only data
-//                                newRes = res.getJSONArray("data").toString();
-//                            }
-//                        } else { //no success and no data and not response code < 400 means fault in the api we would log it.
-//                            newRes = res.toString();
-//                            Log.d(TAG, "encountered invalid success response: " + newRes);
-//                            Crashlytics.log(6, TAG, "encountered invalid success response: " + newRes);
-//                        }
-//
-//                        ResponseBody body = ResponseBody.create(contentType, newRes);
-//                        return response.newBuilder().body(body).build();
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
                 return response;
             }
         });

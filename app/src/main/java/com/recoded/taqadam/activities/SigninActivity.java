@@ -169,15 +169,9 @@ public class SigninActivity extends BaseActivity {
     }
 
     private void exit() {
-        if (mAuth.getCurrentUser().getProfile() != null) {
-            Intent i = new Intent(this, MainActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-            startActivity(i);
-            finish();
-        } else {
-            Intent i = new Intent(this, ConfirmProfileActivity.class);
-            startActivity(i);
-            finish();
-        }
+        Intent i = new Intent(this, MainActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(i);
+        finish();
     }
 }

@@ -322,7 +322,6 @@
                             style="@style/AppTheme.ProfileDetailsText"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="@{User.emailString}"
                             app:layout_constraintBottom_toBottomOf="@id/tv_user_email_line"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="@id/tv_user_email_line"

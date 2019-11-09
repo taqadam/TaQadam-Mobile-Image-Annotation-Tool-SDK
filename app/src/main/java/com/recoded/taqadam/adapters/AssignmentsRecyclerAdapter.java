@@ -12,6 +12,7 @@ import com.recoded.taqadam.R;
 import com.recoded.taqadam.activities.workActivity.WorkActivity;
 import com.recoded.taqadam.databinding.AssignmentItemBinding;
 import com.recoded.taqadam.objects.Assignment;
+import com.recoded.taqadam.objects.Job;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,8 +40,12 @@ public class AssignmentsRecyclerAdapter extends RecyclerView.Adapter<Assignments
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Assignment assignment = dataset.get(position);
+        final Job job = assignment.getJob();
         holder.binding.setAssignment(assignment);
-        holder.binding.imagesCount.setText(assignment.getJob().getDataset().getSize().toString());
+        holder.binding.totalImage.setText(ctx.getString(R.string.total_image, job.getTotalImage()));
+        holder.binding.totalLocked.setText(ctx.getString(R.string.total_locked_image, job.getTotalLockedImage()));
+        holder.binding.totalAnnotated.setText(ctx.getString(R.string.total_annotated_image, job.getTotalAnnotatedImage()));
+        holder.binding.totalValidated.setText(ctx.getString(R.string.total_validated_image, job.getTotalValidatedimage()));
         holder.binding.jobReward.setImageResource(assignment.getJob().getService().getTypeOfService().getDrawable());
         holder.binding.getRoot().setOnClickListener(new View.OnClickListener() {
             @Override

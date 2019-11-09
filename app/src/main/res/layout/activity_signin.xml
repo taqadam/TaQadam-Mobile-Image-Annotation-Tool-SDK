@@ -79,7 +79,7 @@
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="8dp"
                         android:contentDescription="@string/email_content_desc"
-                        android:src="?attr/ic_email"/>
+                        android:src="?attr/ic_person"/>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/et_email"
@@ -91,8 +91,7 @@
                             android:id="@+id/eti_email"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/email_content_desc"
-                            android:inputType="textEmailAddress"/>
+                            android:hint="@string/input_name"/>
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
             </LinearLayout>

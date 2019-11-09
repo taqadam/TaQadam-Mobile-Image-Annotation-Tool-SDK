@@ -39,18 +39,6 @@ public class ProfileActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         binding.setUser(user);
 
-        indicateVerificationStatus();
-
-        binding.fabEditProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(ProfileActivity.this, ConfirmProfileActivity.class);
-                i.putExtra("EDIT_MODE", true);
-                startActivity(i);
-                finish();
-            }
-        });
-
         Picasso.with(this).load(user.getProfile().getAvatar()).into(binding.ivDisplayImage);
 
         binding.agreementCard.setWebViewClient(new WebViewClient());
@@ -99,25 +87,6 @@ public class ProfileActivity extends BaseActivity {
                 frag.show(getSupportFragmentManager(), ImageViewerFragment.class.getSimpleName());
             }
         });
-    }
-
-    private void indicateVerificationStatus() {
-        if (user.getIsApproved()) {
-            binding.tvVerifiedIndicator.setText(R.string.verified);
-            binding.tvVerifiedIndicator.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_verified_user_green, 0);
-        }
-        if (user.getIsEmailVerified()) {
-            binding.ivEmailVerified.setImageResource(R.drawable.ic_check_green);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                binding.ivEmailVerified.setTooltipText(getString(R.string.verified_contact_method));
-            }
-        }
-        /*if (user.isPhoneNumberVerified()) {
-            binding.ivPhoneVerified.setImageResource(R.drawable.ic_check_green);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                binding.ivPhoneVerified.setTooltipText(getString(R.string.verified_contact_method));
-            }
-        }*/
     }
 
     @Override

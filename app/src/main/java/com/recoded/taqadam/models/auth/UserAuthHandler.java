@@ -80,7 +80,6 @@ public class UserAuthHandler {
 
     public Task<User> login(String email, String password) {
         final TaskCompletionSource<User> task = new TaskCompletionSource<>();
-
         Call<Auth> call = Api.getInstance().endpoints.login(new Login(email, password));
         call.enqueue(new Callback<Auth>() {
             @Override
@@ -150,7 +149,7 @@ public class UserAuthHandler {
             @Override
             public void onResponse(@NonNull Call<Auth> call, @NonNull retrofit2.Response<Auth> response) {
                 int code = response.code();
-                if (code == 200) {
+                if (code == 201) {
                     Auth auth = response.body();
                     UserAuthHandler.this.auth = auth;
                     Api.initiate(auth);

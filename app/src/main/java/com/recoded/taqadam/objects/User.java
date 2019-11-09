@@ -26,80 +26,30 @@ public class User extends Model {
     private static final String TAG = User.class.getSimpleName();
 
     @Expose
-    private Channel channel;
-    @Expose
     private String email;
-    @Expose
-    private Boolean isApproved = false;
-    @Expose
-    private Boolean isEmailVerified = true;
     @Expose
     private String username;
     @Expose
-    private List<Team> teams;
-    @Expose
     private Profile profile;
-
-    public Channel getChannel() {
-        return channel;
-    }
 
     public String getEmail() {
         return email;
-    }
-
-    public String getEmailString() {
-        String ret = email.concat(" ");
-        if (isEmailVerified) {
-            ret += "(Verified)";
-        } else {
-            ret += "(Not Verified)";
-        }
-        return ret;
-    }
-
-    public Boolean getIsApproved() {
-        return isApproved;
-    }
-
-    public Boolean getIsEmailVerified() {
-        return isEmailVerified;
     }
 
     public String getName() {
         return username;
     }
 
-    public List<Team> getTeams() {
-        return teams;
-    }
-
     public Profile getProfile() {
         return profile;
-    }
-
-    public void setChannel(Channel channel) {
-        this.channel = channel;
     }
 
     public void setEmail(String email) {
         this.email = email;
     }
 
-    public void setApproved(Boolean approved) {
-        isApproved = approved;
-    }
-
-    public void setEmailVerified(Boolean emailVerified) {
-        isEmailVerified = emailVerified;
-    }
-
     public void setName(String name) {
         this.username = name;
-    }
-
-    public void setTeams(List<Team> teams) {
-        this.teams = teams;
     }
 
     public void setProfile(Profile profile) {

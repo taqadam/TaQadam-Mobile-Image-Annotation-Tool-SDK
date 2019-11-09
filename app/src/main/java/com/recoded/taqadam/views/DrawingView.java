@@ -15,6 +15,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.github.chrisbanes.photoview.PhotoView;
 import com.recoded.taqadam.R;
@@ -43,6 +44,7 @@ public class DrawingView extends View {
 
     public static final int POINT_RADIUS = 8; //The radius for point handle in dp
     private static final float MIN_SHAPE_RECT_SIZE = 2; //in dp
+    private static final int TEXT_SIZE_PX = 16;
 
     private final PointF mDownTouch = new PointF();
     private List<Region> drawnRegions;
@@ -73,6 +75,8 @@ public class DrawingView extends View {
     private Paint mPointPaint;
 
     private int mColorNormal, mColorSelected, mColorNotLabeled, mColorLinking;
+
+    private float textSize;
 
     /**
      * The radius of the touch zone (in pixels) around a given Handle.
@@ -118,6 +122,8 @@ public class DrawingView extends View {
         mLinePaint = getNewPaint(mPointRadius / 5, mColorNormal);
 
         drawnRegions = new ArrayList<>();
+
+        textSize = TEXT_SIZE_PX * context.getResources().getDisplayMetrics().scaledDensity;
 
         createGestureDetector();
     }
@@ -306,6 +312,7 @@ public class DrawingView extends View {
     private void drawRegions(Canvas c) {
         Region r;
         boolean selected;
+        Paint paintForText = getPaintForText();
         for (int i = -1; i < drawnRegions.size(); i++) {
             if (i == -1) {
                 if (mCurrentDrawingShape != null) {
@@ -360,9 +367,37 @@ public class DrawingView extends View {
                     drawPoint((Point) r, c, selected);
                     break;
             }
+            writeText(r, c, paintForText);
         }
+
     }
 
+    private Paint getPaintForText() {
+        Paint paint = new Paint();
+        paint.setColor(Color.WHITE);
+        paint.setTextSize(textSize);
+        return paint;
+    }
+
+
+    private void writeText(Region r, Canvas c, Paint paint) {
+        String text = "";
+        Map<String, String> regionAttributes = r.getRegionAttributes();
+        for (String key : regionAttributes.keySet()) {
+            if (!key.equals("__object_id")) {
+                text = text + regionAttributes.get(key);
+            }
+        }
+
+        float displaceX = 0f, displaceY = 0f;
+        if (mBoundingRectangle != null) {
+            displaceX = mBoundingRectangle.left;
+            displaceY = mBoundingRectangle.top;
+        }
+        float left = r.getPoint(0).x + displaceX;
+        float top = r.getPoint(0).y + displaceY;
+        c.drawText(text, left, top, paint);
+    }
     /**
      * Creates the Paint object for given thickness and color.
      */
