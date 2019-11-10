@@ -62,7 +62,7 @@ public class Api {
     private static Api instance = null;
 
     public static Api getInstance() {
-        Auth auth = UserAuthHandler.getInstance().getAuth();
+        Auth auth = UserAuthHandler.getAuthOfClass();
         if(instance == null || auth == null){
             initiate(auth);
         }

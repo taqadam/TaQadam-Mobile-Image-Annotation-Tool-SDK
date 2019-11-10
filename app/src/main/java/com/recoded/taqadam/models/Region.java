@@ -473,4 +473,8 @@ public abstract class Region implements Parcelable {
             return new Region[size];
         }
     };
+
+    public void changeId() {
+        id = Utils.getRandomString(5);
+    }
 }

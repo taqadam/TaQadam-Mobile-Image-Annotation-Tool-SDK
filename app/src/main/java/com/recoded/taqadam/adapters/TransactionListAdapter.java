@@ -9,15 +9,15 @@ import android.view.ViewGroup;
 
 import com.recoded.taqadam.R;
 import com.recoded.taqadam.databinding.TransactionItemBinding;
-import com.recoded.taqadam.models.Transaction;
+import com.recoded.taqadam.objects.WorkResult;
 
 import java.util.List;
 
 public class TransactionListAdapter extends RecyclerView.Adapter<TransactionListAdapter.ViewHolder> {
-    List<Transaction> transactions;
+    List<WorkResult> transactions;
     TransactionClickListener listener;
 
-    public TransactionListAdapter(List<Transaction> data) {
+    public TransactionListAdapter(List<WorkResult> data) {
         this.transactions = data;
     }
 
@@ -37,7 +37,14 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
 
     @Override
     public void onBindViewHolder(@NonNull TransactionListAdapter.ViewHolder holder, int position) {
-        holder.setItem(transactions.get(position));
+        final WorkResult workResult = transactions.get(position);
+        holder.binding.projectName.setText(workResult.getProjectName());
+        holder.binding.estimatedPayment.setText("Not validated payment:" + workResult.getEstimatedPayment());
+        holder.binding.validatedPayment.setText("Validated Payment:" + workResult.getValidatedPayment());
+        holder.binding.totalLayer.setText("New layer:" + workResult.getTotalNewLayer());
+        holder.binding.totalValidatedLayer.setText("Validated layer:" + workResult.getTotalValidatedLayer());
+        holder.binding.totalObj.setText("New object:" + workResult.getTotalnewObject());
+        holder.binding.totalValidatedObj.setText("Validated object:" + workResult.getTotalValidatedObject());
     }
 
     @Override
@@ -51,10 +58,6 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
         public ViewHolder(View itemView) {
             super(itemView);
             binding = DataBindingUtil.bind(itemView);
-        }
-
-        public void setItem(Transaction t) {
-            binding.setTransact(t);
         }
     }
 

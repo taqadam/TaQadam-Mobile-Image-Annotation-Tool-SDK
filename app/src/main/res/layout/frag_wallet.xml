@@ -30,6 +30,7 @@
                     android:text="@string/balance" />
 
                 <TextView
+                    android:id="@+id/validated_balance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -41,15 +42,6 @@
                     android:textSize="26sp"
                     android:textStyle="bold" />
 
-                <Button
-                    style="@style/Widget.AppCompat.Button.Borderless.Colored"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end|center_vertical"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:padding="16dp"
-                    android:text="@string/redeem" />
             </androidx.cardview.widget.CardView>
 
 
@@ -68,7 +60,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
-                        android:text="Recent Transactions" />
+                        android:text="Projects" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recent_transactions"

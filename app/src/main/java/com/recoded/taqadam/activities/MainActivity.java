@@ -99,12 +99,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         navigationView.setNavigationItemSelectedListener(this);
 
         drawerHeader = navigationView.inflateHeaderView(R.layout.activity_main_drawer);
-        drawerHeader.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
-            }
-        });
         initHeader();
     }
 
@@ -214,12 +208,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private void initHeader() {
         TextView tv = drawerHeader.findViewById(R.id.tv_display_name);
-        ImageView iv = drawerHeader.findViewById(R.id.iv_display_image);
-        try {
-            Picasso.with(this).load(user.getProfile().getAvatar()).into(iv);
-        } catch (Exception e) {
-
-        }
         tv.setText(user.getName());
     }
 

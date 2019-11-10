@@ -14,6 +14,7 @@ import com.recoded.taqadam.objects.Task;
 import com.recoded.taqadam.objects.User;
 import com.recoded.taqadam.models.auth.Login;
 import com.recoded.taqadam.models.auth.Register;
+import com.recoded.taqadam.objects.WorkResult;
 
 import java.util.List;
 
@@ -61,12 +62,14 @@ public interface ApiEndpoints {
     @GET("user/skip/{taskId}")
     Call<SuccessResponse> skipTask(@Path("taskId") Long taskId);
 
-    @GET("user/validate/{taskId}")
-    Call<SuccessResponse> validateTask(@Path("taskId") Long taskId);
+    @GET("user/validate/{projectId}/{taskId}")
+    Call<SuccessResponse> validateTask(@Path("projectId") Long projectId, @Path("taskId") Long taskId);
 
-    @GET("user/reject/{taskId}")
-    Call<SuccessResponse> rejectTask(@Path("taskId") Long taskId);
+    @GET("user/reject/{projectId}/{taskId}")
+    Call<SuccessResponse> rejectTask(@Path("projectId") Long projectId, @Path("taskId") Long taskId);
 
+    @GET("user/result")
+    Call<List<WorkResult>> getWorkResult();
 
     //Post photo
     @Multipart

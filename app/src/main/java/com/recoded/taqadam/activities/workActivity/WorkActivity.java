@@ -279,7 +279,7 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
         validate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Call<SuccessResponse> call = Api.getInstance().endpoints.validateTask(mCurrentTask.getId());
+                Call<SuccessResponse> call = Api.getInstance().endpoints.validateTask(assignment.getId(), mCurrentTask.getId());
                 call.enqueue(new Callback<SuccessResponse>() {
                     @Override
                     public void onResponse(Call<SuccessResponse> call, Response<SuccessResponse> response) {
@@ -300,7 +300,7 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
         reject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Call<SuccessResponse> call = Api.getInstance().endpoints.rejectTask(mCurrentTask.getId());
+                Call<SuccessResponse> call = Api.getInstance().endpoints.rejectTask(assignment.getId(), mCurrentTask.getId());
                 call.enqueue(new Callback<SuccessResponse>() {
                     @Override
                     public void onResponse(Call<SuccessResponse> call, Response<SuccessResponse> response) {
@@ -525,6 +525,9 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
 
     private void loadImageToView(Uri url) {
         Picasso.with(this).load(url).into((Target) mPhotoView.getTag());
+        if (assignment.forAnnotator()) {
+            mDrawingView.changeIdOfRegions();
+        }
     }
 
     private void noMoreTasks() {

@@ -63,8 +63,6 @@ public class User extends Model {
         u.username = fbUser.getName();
 
         Profile p = new Profile();
-        p.setFirstName(fbUser.getFirstName());
-        p.setLastName(fbUser.getFirstName());
 
         String g = fbUser.getGender();
         p.setGender(g);

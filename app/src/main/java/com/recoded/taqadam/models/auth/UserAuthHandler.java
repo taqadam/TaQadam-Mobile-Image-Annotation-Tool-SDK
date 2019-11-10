@@ -28,7 +28,7 @@ public class UserAuthHandler {
     private static final String TAG = UserAuthHandler.class.getSimpleName();
     private static UserAuthHandler instance;
 
-    private Auth auth;
+    static private Auth auth;
     private Task<User> initTask;
     private SharedPreferences sharedPreferences;
 
@@ -245,6 +245,10 @@ public class UserAuthHandler {
         if (auth == null) {
             getToken();
         }
+        return auth;
+    }
+
+    public static Auth getAuthOfClass() {
         return auth;
     }
 }

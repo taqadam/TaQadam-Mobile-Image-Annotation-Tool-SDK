@@ -389,6 +389,10 @@ public class DrawingView extends View {
             }
         }
 
+        if (text.isEmpty()) {
+            text = r.getLabel();
+        }
+
         float displaceX = 0f, displaceY = 0f;
         if (mBoundingRectangle != null) {
             displaceX = mBoundingRectangle.left;
@@ -942,4 +946,10 @@ public class DrawingView extends View {
     }
 
     //endregion
+
+    public void changeIdOfRegions() {
+        for (Region r : drawnRegions) {
+            r.changeId();
+        }
+    }
 }
