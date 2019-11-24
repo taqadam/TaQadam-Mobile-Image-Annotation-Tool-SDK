@@ -36,4 +36,5 @@
     <color name="button_attributes_bg">#80424242</color>
     <color name="button_attributes_bg_pressed">#ff424242</color>
     <color name="colorTransparentOverlay">#aa000000</color>
+    <color name="colorLinking">#dfda43</color>
 </resources>

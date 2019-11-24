@@ -104,6 +104,16 @@ public class Ellipse extends Region {
     }
 
     @Override
+    public int getPointIn(RectF rect) {
+        sortPoints();
+        PointF topPoint = new PointF(center.x, center.y - radiusY);
+        PointF rightPoint = new PointF(center.x + radiusX, center.y);
+        if(rect.contains(topPoint.x, topPoint.y)) return 0;
+        if(rect.contains(rightPoint.x, rightPoint.y)) return 1;
+        return -1;
+    }
+
+    @Override
     public void offsetPoint(int index, float dx, float dy) {
         if (index == 0) {
 

@@ -1,6 +1,7 @@
 package com.recoded.taqadam.models;
 
 import android.graphics.PointF;
+import android.graphics.RectF;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,6 +11,8 @@ import org.json.JSONObject;
  */
 
 public class Rectangle extends Region {
+
+    public final static int LEFT=3,TOP=4,RIGHT=5,BOTTOM=6;
 
     public Rectangle() {
         super(Shape.RECTANGLE);
@@ -38,6 +41,22 @@ public class Rectangle extends Region {
     public boolean contains(PointF p) {
         return rectContains(p);
     }
+
+    /*@Override //if you activate, make sure to add offset point override
+    public int getPointIn(RectF rect) {
+        float left = Math.min(points.get(0).x, points.get(1).x);
+        float top = Math.min(points.get(0).y, points.get(1).y);
+        float right = Math.max(points.get(0).x, points.get(1).x);
+        float bottom = Math.max(points.get(0).y, points.get(1).y);
+        float hw = shapeRect.width()/2;
+        float hh = shapeRect.height()/2;
+        if(rect.contains(left, top + hh)) return LEFT;
+        if(rect.contains(left+hw, top)) return TOP;
+        if(rect.contains(right, top+hh)) return RIGHT;
+        if(rect.contains(left+hw, bottom)) return BOTTOM;
+
+        return -1;
+    }*/
 
     @Override
     public void calculateShapeRect() {

@@ -34,10 +34,4 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         tools:text="Wisso Mechano"/>
 
-    <TextView
-        android:id="@+id/tv_wallet_amount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/wallet_amunt"/>
-
 </LinearLayout>

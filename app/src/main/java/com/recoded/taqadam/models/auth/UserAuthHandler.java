@@ -2,7 +2,7 @@ package com.recoded.taqadam.models.auth;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.crashlytics.android.Crashlytics;
 import com.facebook.AccessToken;
@@ -12,9 +12,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
 import com.recoded.taqadam.models.Api.Api;
 import com.recoded.taqadam.models.Api.ApiError;
-import com.recoded.taqadam.models.Auth;
+import com.recoded.taqadam.objects.Auth;
 import com.recoded.taqadam.models.Responses.SuccessResponse;
-import com.recoded.taqadam.models.User;
+import com.recoded.taqadam.objects.User;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,7 +28,7 @@ public class UserAuthHandler {
     private static final String TAG = UserAuthHandler.class.getSimpleName();
     private static UserAuthHandler instance;
 
-    private Auth auth;
+    static private Auth auth;
     private Task<User> initTask;
     private SharedPreferences sharedPreferences;
 
@@ -80,16 +80,19 @@ public class UserAuthHandler {
 
     public Task<User> login(String email, String password) {
         final TaskCompletionSource<User> task = new TaskCompletionSource<>();
-
         Call<Auth> call = Api.getInstance().endpoints.login(new Login(email, password));
         call.enqueue(new Callback<Auth>() {
             @Override
             public void onResponse(@NonNull Call<Auth> call, @NonNull retrofit2.Response<Auth> response) {
                 Auth auth = response.body();
-                UserAuthHandler.this.auth = auth;
-                Api.initiate(auth);
-                UserAuthHandler.this.saveToken(auth);
-                task.setResult(auth.getUser());
+                if (auth != null) {
+                    UserAuthHandler.this.auth = auth;
+                    Api.initiate(auth);
+                    UserAuthHandler.this.saveToken(auth);
+                    task.setResult(auth.getUser());
+                } else {
+                    task.setException(new ApiError(response.code(), "Unable to log in with provided credentials"));
+                }
             }
 
             @Override
@@ -107,26 +110,6 @@ public class UserAuthHandler {
     }
 
     public Task<User> login(AccessToken token) {
-        /*final TaskCompletionSource<User> task = new TaskCompletionSource<>();
-
-        Call<Auth> call = Api.getInstance().endpoints.login("","");
-        call.enqueue(new Callback<Auth>() {
-            @Override
-            public void onResponse(@NonNull Call<Auth> call, @NonNull retrofit2.Response<Auth> response) {
-                Auth auth = response.body();
-                UserAuthHandler.this.auth = auth;
-                Api.initiate(auth);
-                UserAuthHandler.this.saveToken(auth);
-                task.setResult(auth.getUser());
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<Auth> call, @NonNull Throwable t) {
-                if(t instanceof ApiError) {                    task.setException((ApiError) t);                } else {                    Crashlytics.logException(t);                    task.setException(new ApiError(500, "Unknown error occurred!"));                }
-            }
-        });
-
-        return task.getTask();*/
         return null;
     }
 
@@ -137,8 +120,11 @@ public class UserAuthHandler {
         call.enqueue(new Callback<Auth>() {
             @Override
             public void onResponse(@NonNull Call<Auth> call, @NonNull Response<Auth> response) {
-                UserAuthHandler.this.auth = response.body();
-                task.setResult(response.body());
+                Auth auth = response.body();
+                if (auth != null) {
+                    UserAuthHandler.this.auth = auth;
+                    task.setResult(auth);
+                }
             }
 
             @Override
@@ -162,11 +148,16 @@ public class UserAuthHandler {
         call.enqueue(new Callback<Auth>() {
             @Override
             public void onResponse(@NonNull Call<Auth> call, @NonNull retrofit2.Response<Auth> response) {
-                Auth auth = response.body();
-                UserAuthHandler.this.auth = auth;
-                Api.initiate(auth);
-                UserAuthHandler.this.saveToken(auth);
-                task.setResult(auth.getUser());
+                int code = response.code();
+                if (code == 201) {
+                    Auth auth = response.body();
+                    UserAuthHandler.this.auth = auth;
+                    Api.initiate(auth);
+                    UserAuthHandler.this.saveToken(auth);
+                    task.setResult(auth.getUser());
+                } else {
+                    task.setException(new ApiError(code, "Email or username exist"));
+                }
             }
 
             @Override
@@ -219,7 +210,6 @@ public class UserAuthHandler {
         if (this.sharedPreferences != null && this.sharedPreferences.contains("token")) {
             this.auth = new Auth();
             auth.setToken(this.sharedPreferences.getString("token", null));
-            auth.setType(this.sharedPreferences.getString("token_type", null));
         }
     }
 
@@ -227,7 +217,6 @@ public class UserAuthHandler {
         if (this.sharedPreferences != null) {
             SharedPreferences.Editor editor = this.sharedPreferences.edit();
             editor.putString("token", auth.getToken());
-            editor.putString("token_type", auth.getType());
             editor.commit();
         }
     }
@@ -236,7 +225,6 @@ public class UserAuthHandler {
         if (this.sharedPreferences != null) {
             SharedPreferences.Editor editor = this.sharedPreferences.edit();
             editor.remove("token");
-            editor.remove("token_type");
             editor.commit();
         }
     }
@@ -257,6 +245,10 @@ public class UserAuthHandler {
         if (auth == null) {
             getToken();
         }
+        return auth;
+    }
+
+    public static Auth getAuthOfClass() {
         return auth;
     }
 }

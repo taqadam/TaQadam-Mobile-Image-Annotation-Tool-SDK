@@ -2,6 +2,7 @@
 package com.recoded.taqadam.models;
 
 import com.google.gson.annotations.Expose;
+import com.recoded.taqadam.objects.User;
 
 import java.util.List;
 

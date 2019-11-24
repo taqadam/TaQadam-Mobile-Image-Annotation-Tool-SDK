@@ -12,8 +12,6 @@ public class Dataset extends Model {
     @Expose
     private String name;
     @Expose
-    private User owner;
-    @Expose
     private Long size;
 
     public String getName() {
@@ -22,14 +20,6 @@ public class Dataset extends Model {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public User getOwner() {
-        return owner;
-    }
-
-    public void setOwner(User owner) {
-        this.owner = owner;
     }
 
     public Long getSize() {

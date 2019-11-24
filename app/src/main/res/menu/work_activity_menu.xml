@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_regions"
+        android:icon="@drawable/ic_regions"
+        android:orderInCategory="1"
+        android:title="Drawings"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_zoom"
+        android:icon="@drawable/ic_coord"
+        android:title="Toggle Zoom"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_refresh"
+        android:icon="@drawable/ic_refresh"
+        android:title="Refresh Image"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_details"
+        android:icon="@drawable/ic_info_white"
+        android:title="Task Details"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_instructions"
+        android:icon="@drawable/ic_help"
+        android:title="Instructions"
+        app:showAsAction="ifRoom" />
+</menu>

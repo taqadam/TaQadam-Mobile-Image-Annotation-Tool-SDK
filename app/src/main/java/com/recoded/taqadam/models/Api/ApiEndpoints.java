@@ -1,20 +1,20 @@
 package com.recoded.taqadam.models.Api;
 
 import com.recoded.taqadam.models.Answer;
-import com.recoded.taqadam.models.Api.Api;
 import com.recoded.taqadam.models.AppVersion;
-import com.recoded.taqadam.models.Assignment;
-import com.recoded.taqadam.models.Auth;
+import com.recoded.taqadam.objects.Assignment;
+import com.recoded.taqadam.objects.Auth;
 import com.recoded.taqadam.models.Comment;
 import com.recoded.taqadam.models.Post;
 import com.recoded.taqadam.models.Profile;
 import com.recoded.taqadam.models.Responses.AvatarResponse;
 import com.recoded.taqadam.models.Responses.PaginatedResponse;
 import com.recoded.taqadam.models.Responses.SuccessResponse;
-import com.recoded.taqadam.models.Task;
-import com.recoded.taqadam.models.User;
+import com.recoded.taqadam.objects.Task;
+import com.recoded.taqadam.objects.User;
 import com.recoded.taqadam.models.auth.Login;
 import com.recoded.taqadam.models.auth.Register;
+import com.recoded.taqadam.objects.WorkResult;
 
 import java.util.List;
 
@@ -44,6 +44,33 @@ public interface ApiEndpoints {
     @POST(Api.REFRESH)
     Call<Auth> refresh();
 
+    //Logout
+    @POST(Api.LOGOUT)
+    Call<SuccessResponse> logout();
+
+    //assignments
+    @GET(Api.ASSIGNMENTS)
+    Call<List<Assignment>> getAssignments();
+
+    @GET(Api.ASSIGNMENTS + "/{assignmentId}/task")
+    Call<Task> getTask(@Path("assignmentId") Long assignmentId);
+
+    //post answer
+    @POST(Api.ASSIGNMENTS + "/{assignmentId}/answer")
+    Call<SuccessResponse> postAnswer(@Path("assignmentId") Long assignmentId, @Body Answer answer);
+
+    @GET("user/skip/{taskId}")
+    Call<SuccessResponse> skipTask(@Path("taskId") Long taskId);
+
+    @GET("user/validate/{projectId}/{taskId}")
+    Call<SuccessResponse> validateTask(@Path("projectId") Long projectId, @Path("taskId") Long taskId);
+
+    @GET("user/reject/{projectId}/{taskId}")
+    Call<SuccessResponse> rejectTask(@Path("projectId") Long projectId, @Path("taskId") Long taskId);
+
+    @GET("user/result")
+    Call<List<WorkResult>> getWorkResult();
+
     //Post photo
     @Multipart
     @POST(Api.AVATARS)
@@ -57,13 +84,7 @@ public interface ApiEndpoints {
     @PUT(Api.ME)
     Call<User> putProfile(@Body Profile profile);
 
-    //Logout
-    @POST(Api.LOGOUT)
-    Call<SuccessResponse> logout();
 
-    //assignments
-    @GET(Api.ASSIGNMENTS)
-    Call<List<Assignment>> getAssignments();
 
     //one assignment
     @GET(Api.ASSIGNMENTS + "/{assignmentId}")
@@ -75,9 +96,7 @@ public interface ApiEndpoints {
     @GET(Api.ASSIGNMENTS + "/{assignmentId}/" + Api.TASKS)
     Call<PaginatedResponse<Task>> getTasksPaginated(@Path("assignmentId") Long assignmentId, @Query("page") Long page);
 
-    //post answer
-    @POST(Api.ASSIGNMENTS + "/{assignmentId}/" + Api.ANSWERS)
-    Call<Answer> postAnswer(@Path("assignmentId") Long assignmentId, @Body Answer answer);
+
 
     //get all posts
     @GET(Api.POSTS)

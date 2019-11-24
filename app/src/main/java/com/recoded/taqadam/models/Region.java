@@ -6,6 +6,9 @@ import android.graphics.RectF;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.recoded.taqadam.R;
+import com.recoded.taqadam.utils.Utils;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -14,7 +17,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * Created by wisam on Jan 18 18.
@@ -22,16 +24,18 @@ import java.util.UUID;
 
 public abstract class Region implements Parcelable {
     public static final String ID_KEY = "ID";
-    protected final RectF shapeRect = new RectF(); //will be used for drawing
-    protected Shape shape;
-    protected List<PointF> points;
-    protected HashMap<String, String> regionAttributes;
-    protected boolean closed;
-    private final Matrix mTransformMatrix = new Matrix();
-    //private float scale = 1f;
-    //protected RectF imageRect;
 
-    //protected float pointRadius;
+    final RectF shapeRect = new RectF(); //will be used for drawing
+
+    protected Shape shape;
+    List<PointF> points;
+    private boolean isLocked = false;
+    private HashMap<String, String> regionAttributes;
+    boolean closed;
+    private final Matrix mTransformMatrix = new Matrix();
+    private String label;
+    private String linkId;
+    private String id = Utils.getRandomString(5);
 
     protected Region(Shape shape) {
         this.shape = shape;
@@ -49,7 +53,19 @@ public abstract class Region implements Parcelable {
             out.close();
         }
         out.setRegionAttributes(in.regionAttributes);
+        out.setLocked(in.isLocked);
+        out.setLabel(in.label);
+        out.setLinkedBy(in.linkId);
+        out.setId(in.id);
         return out;
+    }
+
+    public void setLinkedBy(String linkedBy) {
+        this.linkId = linkedBy;
+    }
+
+    public String linkedBy() {
+        return linkId;
     }
 
     protected boolean rectContains(PointF p) {
@@ -62,13 +78,17 @@ public abstract class Region implements Parcelable {
         switch (shape) {
             case POLYGON:
                 return new Polygon();
-
             case ELLIPSE:
                 return new Ellipse();
             case CIRCLE:
                 return new Circle();
             case RECTANGLE:
                 return new Rectangle();
+            case POINT:
+                return new Point();
+            case ARC:
+            case LINE:
+            case SPLINE:
             default:
                 return new Polygon();
         }
@@ -91,6 +111,9 @@ public abstract class Region implements Parcelable {
                 case "circle":
                     r = Circle.makeRegionFromJson(shape);
                     break;
+                case "point":
+                    r = Point.makeRegionFromJson(shape);
+                    break;
                 default:
                     r = null;
                     break;
@@ -101,7 +124,15 @@ public abstract class Region implements Parcelable {
                 for (Iterator<String> iter = attribute.keys(); iter.hasNext(); ) {
                     String attr = iter.next();
                     String val = attribute.getString(attr);
-                    r.addRegionAttribute(attr, val);
+                    if (attr.equalsIgnoreCase("label")) {
+                        r.setLabel(val);
+                    } else if (attr.equalsIgnoreCase(ID_KEY)) {
+                        r.setId(val);
+                    } else if (attr.equalsIgnoreCase("linked_by")) {
+                        r.setLinkedBy(val);
+                    } else {
+                        r.addRegionAttribute(attr, val);
+                    }
                 }
             }
 
@@ -154,7 +185,11 @@ public abstract class Region implements Parcelable {
         try {
             shapeAndRegionAttr = new JSONObject();
             shapeAndRegionAttr.put("shape_attributes", getShapeAttributes());
-            shapeAndRegionAttr.put("region_attributes", new JSONObject(getRegionAttributes()));
+            JSONObject regionAttr = new JSONObject(getRegionAttributes());
+            regionAttr.put("linked_by", linkId);
+            regionAttr.put("id", id);
+
+            shapeAndRegionAttr.put("region_attributes", regionAttr);
         } catch (JSONException e) {
             e.printStackTrace();
             shapeAndRegionAttr = null;
@@ -166,6 +201,7 @@ public abstract class Region implements Parcelable {
         return regionAttributes;
     }
 
+    @Deprecated
     public int getPointUnder(PointF p, float pointRadius) {
         int index = -1;
         final RectF pointRect = new RectF();
@@ -185,6 +221,16 @@ public abstract class Region implements Parcelable {
         }
 
         return index;
+    }
+
+    public int getPointIn(RectF rect) {
+        for (int i = 0; i < points.size(); i++) {
+            PointF p = points.get(i);
+            if (rect.contains(p.x, p.y))
+                return i;
+        }
+
+        return -1;
     }
 
     public RectF getShapeRect() {
@@ -245,11 +291,58 @@ public abstract class Region implements Parcelable {
     }
 
     public String getId() {
-        return regionAttributes.get(ID_KEY);
+        return id;
     }
 
     public void setId(String id) {
-        regionAttributes.put(ID_KEY, id);
+        this.id = id;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public String getLabel() {
+        if (this.label != null) {
+            return label;
+        } else {
+            return "NO LABEL";
+        }
+    }
+
+    public String getTitle() {
+        return "Region " + getId() + ": " + getLabel();
+    }
+
+    public int getIcon() {
+        switch (shape) {
+            case POINT:
+                return R.drawable.ic_point;
+            case SPLINE:
+                return R.drawable.ic_spline;
+            case ARC:
+                return R.drawable.ic_arc;
+            case LINE:
+                return R.drawable.ic_line;
+            case CIRCLE:
+                return R.drawable.ic_circle;
+            case ELLIPSE:
+                return R.drawable.ic_ellipse_new;
+            case POLYGON:
+                return R.drawable.ic_polygon_new;
+            case RECTANGLE:
+                return R.drawable.ic_rect_new;
+            default:
+                return R.drawable.ic_polygon_new;
+        }
+    }
+
+    public void setLocked(boolean locked) {
+        isLocked = locked;
+    }
+
+    public boolean isLocked() {
+        return isLocked;
     }
 
     /*
@@ -270,7 +363,11 @@ public abstract class Region implements Parcelable {
         RECTANGLE("rect"),
         CIRCLE("circle"),
         ELLIPSE("ellipse"),
-        POLYGON("polygon");
+        POLYGON("polygon"),
+        POINT("point"),
+        LINE("line"),
+        ARC("arc"),
+        SPLINE("spline");
 
         private String shapeName;
 
@@ -316,10 +413,14 @@ public abstract class Region implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.shape == null ? -1 : this.shape.ordinal());
-        dest.writeTypedList(this.points);
-        dest.writeByte(this.closed ? (byte) 1 : (byte) 0);
-        dest.writeSerializable(this.regionAttributes);
+        dest.writeInt(this.shape == null ? -1 : this.shape.ordinal()); //1
+        dest.writeTypedList(this.points); //2
+        dest.writeByte(this.closed ? (byte) 1 : (byte) 0); //3
+        dest.writeSerializable(this.regionAttributes); //4
+        dest.writeByte(this.isLocked ? (byte) 1 : (byte) 0); //5
+        dest.writeString(label == null ? "NO_LABEL" : label); //6
+        dest.writeString(id == null? "NO_ID":id); //7
+        dest.writeString(linkId == null? "NO_LINK":linkId); //8
         //dest.writeFloat(this.scale);
     }
 
@@ -334,6 +435,21 @@ public abstract class Region implements Parcelable {
         }
 
         r.setRegionAttributes((HashMap<String, String>) in.readSerializable()); //4 attributes
+
+        if(in.readByte() != 0) { //5 locked
+            r.isLocked = true;
+        } else {
+            r.isLocked = false;
+        }
+
+        String label = in.readString(); //6 label
+        String id = in.readString(); //7 id
+        String link = in.readString(); //8 link
+
+        if(!label.equalsIgnoreCase("NO_LABEL")) r.label = label;
+        if(!id.equalsIgnoreCase("NO_ID")) r.id = id;
+        if(!link.equalsIgnoreCase("NO_LINK")) r.linkId = link;
+
         //r.setScale(in.readFloat()); //5 scale
         //if (r.getScale() != 1f) {
         //    r.transform(r.getScale());
@@ -353,4 +469,8 @@ public abstract class Region implements Parcelable {
             return new Region[size];
         }
     };
+
+    public void changeId() {
+        id = Utils.getRandomString(5);
+    }
 }

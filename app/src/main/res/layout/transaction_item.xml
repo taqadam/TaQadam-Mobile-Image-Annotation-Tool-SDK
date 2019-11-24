@@ -1,45 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
 
         <variable
-            name="Transact"
-            type="com.recoded.taqadam.models.Transaction" />
+            name="WorkResult"
+            type="com.recoded.taqadam.objects.WorkResult" />
     </data>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_margin="@dimen/margin8dp"
-            android:src="@{Transact.transactionAmount>=0?@drawable/ic_wallet_c : @drawable/ic_wallet_d}" />
-
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="6"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/projectName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{Transact.transactionAmount>=0?@string/deposit:@string/withdrawal}"
+                android:layout_marginLeft="3dp"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/validatedPayment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{Transact.transactionDescription}" />
+                android:layout_marginLeft="3dp"
+                android:textColor="#60D660"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/estimatedPayment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:textColor="#A25A5A"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+
         </LinearLayout>
 
         <LinearLayout
@@ -48,26 +56,34 @@
             android:layout_weight="2"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginRight="3dp"
             android:orientation="vertical">
-
             <TextView
+                android:id="@+id/totalLayer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{Transact.transactionAmountFriendly}"
-                android:textColor="@{Transact.transactionAmount>=0?@color/colorPwStrong:@color/colorPwWeak}"
-                android:textSize="18sp"
-                android:layout_marginRight="8dp"
-                android:layout_marginEnd="8dp"
-                android:gravity="end"
+                android:textSize="12sp"
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/totalValidatedLayer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{Transact.transactionTimeString}"
-                android:layout_marginRight="8dp"
-                android:layout_marginEnd="8dp"
-                android:gravity="end" />
+                android:textColor="#60D660"
+                android:textSize="12sp"/>
+
+            <TextView
+                android:id="@+id/totalObj"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="12sp"/>
+            <TextView
+                android:id="@+id/totalValidatedObj"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#60D660"
+                android:textSize="12sp"/>
         </LinearLayout>
 
     </LinearLayout>

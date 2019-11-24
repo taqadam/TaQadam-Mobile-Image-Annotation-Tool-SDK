@@ -7,7 +7,7 @@
 
     <include layout="@layout/toolbar_appbar"/>
 
-    <com.recoded.taqadam.LockableViewPager
+    <com.recoded.taqadam.views.LockableViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

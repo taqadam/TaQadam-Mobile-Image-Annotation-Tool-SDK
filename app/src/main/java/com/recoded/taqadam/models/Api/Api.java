@@ -1,8 +1,7 @@
 package com.recoded.taqadam.models.Api;
 
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.util.Log;
+import androidx.annotation.NonNull;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.tasks.Task;
@@ -10,23 +9,17 @@ import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.GsonBuilder;
 import com.recoded.taqadam.BuildConfig;
-import com.recoded.taqadam.models.Auth;
+import com.recoded.taqadam.objects.Auth;
 import com.recoded.taqadam.models.Comment;
 import com.recoded.taqadam.models.Post;
 import com.recoded.taqadam.models.Profile;
 import com.recoded.taqadam.models.Responses.AvatarResponse;
-import com.recoded.taqadam.models.User;
+import com.recoded.taqadam.objects.User;
 import com.recoded.taqadam.models.auth.UserAuthHandler;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import okhttp3.Interceptor;
@@ -36,7 +29,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
@@ -44,18 +36,21 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Api {
     public static final String TAG = Api.class.getSimpleName();
-    public static final String BASE = "https://taqadam.io/api/";
-    public static final String LOGIN = "login";
-    public static final String REGISTER = "register";
-    public static final String REFRESH = "refresh";
+
+    public static final String ROOT = "http://portal.taqadam.io/";
+//    public static final String ROOT = "http://192.168.0.101:8000/";
+
+    public static final String BASE =  ROOT + "api/";
+    public static final String LOGIN = "user/login";
+    public static final String REGISTER = "user/mobile/register";
+    public static final String REFRESH = "user/refresh";
+    public static final String ASSIGNMENTS = "user/assignments";
+
     public static final String AVATARS = "avatars";
-    public static final String LOGOUT = "logout";
+    public static final String LOGOUT = "user/logout";
     public static final String USERS = "users";
     public static final String ME = "me";
-    public static final String ASSIGNMENTS = "assignments";
     public static final String TASKS = "tasks";
-    public static final String ANSWERS = "answers";
-    public static final String DATE_FORMAT = "yyyy-MM-dd";
     public static final String POSTS = "posts";
     public static final String COMMENTS = "comments";
     public static final String VERSIONS = "app_versions";
@@ -63,115 +58,36 @@ public class Api {
     private static Api instance = null;
 
     public static Api getInstance() {
-        if(instance == null){
-            initiate(UserAuthHandler.getInstance().getAuth());
+        Auth auth = UserAuthHandler.getAuthOfClass();
+        if(instance == null || auth == null){
+            initiate(auth);
         }
         return instance;
     }
 
     public static void initiate(Auth auth) {
         if (auth != null)
-            instance = new Api(auth.getToken(), auth.getType());
-        else instance = new Api(null, null);
+            instance = new Api(auth.getToken());
+        else instance = new Api(null);
     }
 
     private Retrofit api = null;
     public ApiEndpoints endpoints;
 
-    public Api(final String token, final String token_type) {
+    public Api(final String token) {
         OkHttpClient.Builder client = new OkHttpClient.Builder();
-        //client.retryOnConnectionFailure(false);
+
         client.addInterceptor(new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {
                 Request request = chain.request();
                 Request.Builder b = request.newBuilder()
                         .addHeader("Accept", "application/json")
-                        .addHeader("Content-Type", "application/json")
-                        .addHeader("User-Agent", "TaQadam4AndroidMobile/" + BuildConfig.VERSION_NAME + " " + System.getProperty("http.agent"));
+                        .addHeader("Content-Type", "application/json");
                 if (token != null) {
-                    b.addHeader("Authorization", token_type + " " + token);
+                    b.addHeader("Authorization", "Token " + token);
                 }
-
                 Response response = chain.proceed(b.build());
-
-
-                int responceCode = response.code();
-                if (responceCode >= 400) {
-                    String responseBody = response.body().string();
-                    ApiError ex = new ApiError(responceCode, responseBody);
-                    try {
-                        JSONObject res = new JSONObject(responseBody);
-                        String msg = res.getString("message");
-                        if(responceCode == 503) {
-                            //Server is down for maintenance
-                            if(msg.isEmpty())
-                                msg = "We will be right back!";
-                        }
-                        ex.setMessage(msg);
-                        if (msg.toLowerCase().contains("invalid parameters")) {
-                            JSONObject errors = (JSONObject) res.get("errors");
-                            ex = new InvalidException(responceCode, msg, errors.toString());
-                        } else if (msg.toLowerCase().contains("unauthenticated")) {
-                            UserAuthHandler.getInstance().refresh();
-                            ex = new UnauthenticatedException(responceCode, msg);
-                        } else if (msg.toLowerCase().contains("unauthorized")) {
-                            ex = new UnauthenticatedException(responceCode, msg);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    throw ex;
-                } else if (responceCode >= 200) {
-                    //We want to modify the response object and bring the resource to main level for GSON to deserialize properly
-                    MediaType contentType = response.body().contentType();
-                    String responseBody = response.body().string();
-                    String newRes = "";
-                    List<String> requestPath = request.url().pathSegments();
-                    try {
-                        JSONObject res = new JSONObject(responseBody);
-                        List<String> keys = new ArrayList<>();
-                        if (res.has("success")) { //typical responses
-                            res.remove("success");
-                            Iterator<String> iterator = res.keys();
-                            while (iterator.hasNext()) {
-                                keys.add(iterator.next());
-                            }
-                            if (keys.size() == 1 && !keys.get(0).equalsIgnoreCase("message")) {
-                                //get the resource object and put it on top
-                                newRes = res.getJSONObject(keys.get(0)).toString();
-                            } else {
-                                //rare case would occur only on login and registration calls
-                                //like login response contains token next to user object
-                                newRes = res.toString();
-                            }
-                        } else if (res.has("data")) { //collection response no success
-                            if (res.has("meta") || res.has("links")) { //check if paginated
-                                //try to get resource name from request
-                                //String resourceName = requestPath.get(requestPath.size() - 1);
-                                //JSONObject paginatedResponse = new JSONObject();
-                                //paginatedResponse.put("meta", res.optJSONObject("meta"));
-                                //paginatedResponse.put("links", res.optJSONObject("links"));
-                                //paginatedResponse.put(resourceName, res.getJSONArray("data"));
-
-                                //newRes = new JSONObject().put("paginated_response", paginatedResponse).toString();
-                                newRes = res.toString();
-                            } else { //only data
-                                newRes = res.getJSONArray("data").toString();
-                            }
-                        } else { //no success and no data and not response code < 400 means fault in the api we would log it.
-                            newRes = res.toString();
-                            Log.d(TAG, "encountered invalid success response: " + newRes);
-                            Crashlytics.log(6, TAG, "encountered invalid success response: " + newRes);
-                        }
-
-                        ResponseBody body = ResponseBody.create(contentType, newRes);
-                        return response.newBuilder().body(body).build();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
                 return response;
             }
         });
@@ -183,6 +99,7 @@ public class Api {
                         new GsonBuilder()
                                 .setDateFormat("yyyy-MM-dd")
                                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                                .excludeFieldsWithoutExposeAnnotation()
                                 .create()))
                 .client(client.build())
                 .build();

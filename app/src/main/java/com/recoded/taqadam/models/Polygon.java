@@ -46,7 +46,7 @@ public class Polygon extends Region {
         float dx = p.x - last.x;
         float dy = p.y - last.y;
 
-        return ((float) Math.hypot(dx, dy) >= 150);//pointRadius * 2);
+        return ((float) Math.hypot(dx, dy) >= 250);//pointRadius * 2);
 
     }
 

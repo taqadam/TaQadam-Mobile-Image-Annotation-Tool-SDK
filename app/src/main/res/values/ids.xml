@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--TOOLS DRAWER IDS-->
+    <item name="tools_zoom_toogle" type="id"/>
+    <item name="tools_send_answer" type="id"/>
+    <item name="tools_toggle" type="id"/>
+    <item name="tools_rect" type="id"/>
+    <item name="tools_ellipse" type="id"/>
+    <item name="tools_polygon" type="id"/>
+    <item name="tools_line" type="id"/>
+    <item name="tools_arc" type="id"/>
+    <item name="tools_spline" type="id"/>
+    <item name="tools_point" type="id"/>
+    <item name="tools_clear_regions" type="id"/>
+    <item name="tools_flag" type="id"/>
+    <item name="tools_attribute" type="id"/>
+</resources>

@@ -11,16 +11,16 @@
             android:id="@+id/toolbar_layout"
             layout="@layout/toolbar_appbar"/>
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/posts_recycler_view"
             android:layout_below="@id/toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="8dp">
 
-        </android.support.v7.widget.RecyclerView>
+        </androidx.recyclerview.widget.RecyclerView>
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_add_post"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -1,9 +1,10 @@
 package com.recoded.taqadam.models;
 
 import android.net.Uri;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
+import com.recoded.taqadam.objects.User;
 
 import java.util.Date;
 

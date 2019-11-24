@@ -8,7 +8,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.recoded.taqadam.AssignmentActivity">
+        tools:context="com.recoded.taqadam.activities.AssignmentActivity">
 
         <it.sephiroth.android.library.imagezoom.ImageViewTouch
             android:id="@+id/iv_task_image"
@@ -38,7 +38,7 @@
             android:layout_gravity="bottom|center_horizontal"
             android:layout_marginBottom="12dp">
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 app:cardBackgroundColor="#ff000000"
@@ -46,7 +46,7 @@
                 android:layout_gravity="bottom"
                 app:cardElevation="8dp">
 
-                <android.support.v4.widget.NestedScrollView
+                <androidx.core.widget.NestedScrollView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
@@ -64,8 +64,8 @@
                             app:alignItems="stretch"
                             app:flexWrap="wrap" />
                     </ScrollView>
-                </android.support.v4.widget.NestedScrollView>
-            </android.support.v7.widget.CardView>
+                </androidx.core.widget.NestedScrollView>
+            </androidx.cardview.widget.CardView>
 
         </LinearLayout>
 

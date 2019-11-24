@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context="com.recoded.taqadam.AssignmentActivity">
+        tools:context="com.recoded.taqadam.activities.AssignmentActivity">
 
         <include layout="@layout/toolbar_appbar"/>
 
@@ -33,7 +33,7 @@
                 android:layout_marginTop="40dp"/>
         </FrameLayout>
 
-        <com.recoded.taqadam.LockableViewPager
+        <com.recoded.taqadam.views.LockableViewPager
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

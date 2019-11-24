@@ -262,4 +262,9 @@
     <string name="deposit">Deposit</string>
     <string name="withdrawal">Withdrawal</string>
     <string name="redeem">Redeem</string>
+    <string name="task_image">Task Image</string>
+    <string name="total_image">Total image:%1$d</string>
+    <string name="total_locked_image">Locked:%1$d</string>
+    <string name="total_annotated_image">Annotated:%1$d (new)</string>
+    <string name="total_validated_image">Validated:%1$d</string>
 </resources>
