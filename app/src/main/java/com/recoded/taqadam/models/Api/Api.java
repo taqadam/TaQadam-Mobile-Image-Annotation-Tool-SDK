@@ -37,10 +37,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Api {
     public static final String TAG = Api.class.getSimpleName();
 
-    public static final String ROOT = "http://192.168.0.101:8000/";
-//    public static final String ROOT = "http://104.248.207.70:8000/";
-
-    public static final String MEDIA_ROOT = ROOT + "media/";
+    public static final String ROOT = "http://portal.taqadam.io/";
+//    public static final String ROOT = "http://192.168.0.101:8000/";
 
     public static final String BASE =  ROOT + "api/";
     public static final String LOGIN = "user/login";
@@ -53,8 +51,6 @@ public class Api {
     public static final String USERS = "users";
     public static final String ME = "me";
     public static final String TASKS = "tasks";
-    public static final String ANSWERS = "answers";
-    public static final String DATE_FORMAT = "yyyy-MM-dd";
     public static final String POSTS = "posts";
     public static final String COMMENTS = "comments";
     public static final String VERSIONS = "app_versions";

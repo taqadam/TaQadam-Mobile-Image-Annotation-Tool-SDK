@@ -30,7 +30,7 @@ public class Task extends Model {
     }
 
     public Uri getUrl() {
-        return Uri.parse(Api.MEDIA_ROOT + url);
+        return Uri.parse(url);
     }
 
     public void setUrl(String url) {

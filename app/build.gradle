@@ -11,8 +11,8 @@ android {
         applicationId "com.recoded.taqadam"
         minSdkVersion 17
         targetSdkVersion 28
-        versionCode 22
-        versionName "2.1.1"
+        versionCode 1
+        versionName "1.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

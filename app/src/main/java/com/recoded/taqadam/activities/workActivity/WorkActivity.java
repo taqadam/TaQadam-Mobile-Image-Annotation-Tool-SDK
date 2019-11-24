@@ -564,7 +564,10 @@ public class WorkActivity extends AppCompatActivity implements DrawingView.OnDra
             public void onLabelClick(Label label, int position) {
                 Region selectedRegion = mDrawingView.getSelectedRegion();
                 if (selectedRegion != null)
-                    selectedRegion.setLabel(label.getLabel());
+                    selectedRegion.addRegionAttribute(
+                            assignment.getJob().getAttributeName(),
+                            label.getLabel()
+                    );
             }
         });
     }

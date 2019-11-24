@@ -46,7 +46,6 @@ public class AssignmentsRecyclerAdapter extends RecyclerView.Adapter<Assignments
         holder.binding.totalLocked.setText(ctx.getString(R.string.total_locked_image, job.getTotalLockedImage()));
         holder.binding.totalAnnotated.setText(ctx.getString(R.string.total_annotated_image, job.getTotalAnnotatedImage()));
         holder.binding.totalValidated.setText(ctx.getString(R.string.total_validated_image, job.getTotalValidatedimage()));
-        holder.binding.jobReward.setImageResource(assignment.getJob().getService().getTypeOfService().getDrawable());
         holder.binding.getRoot().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

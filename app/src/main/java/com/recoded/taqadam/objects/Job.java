@@ -22,6 +22,9 @@ public class Job extends Model {
     @Expose
     private String instructions;
     @Expose
+    @SerializedName("attribute_name")
+    private String attributeName;
+    @Expose
     private List<String> options;
     @Expose
     private Service service;
@@ -118,5 +121,13 @@ public class Job extends Model {
 
     public void setTotalValidatedimage(int totalValidatedimage) {
         this.totalValidatedimage = totalValidatedimage;
+    }
+
+    public String getAttributeName() {
+        return attributeName;
+    }
+
+    public void setAttributeName(String attributeName) {
+        this.attributeName = attributeName;
     }
 }

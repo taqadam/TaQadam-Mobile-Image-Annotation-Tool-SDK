@@ -186,10 +186,6 @@ public abstract class Region implements Parcelable {
             shapeAndRegionAttr = new JSONObject();
             shapeAndRegionAttr.put("shape_attributes", getShapeAttributes());
             JSONObject regionAttr = new JSONObject(getRegionAttributes());
-            if (label != null) {
-                regionAttr.put("label", label);
-            }
-
             regionAttr.put("linked_by", linkId);
             regionAttr.put("id", id);
 
